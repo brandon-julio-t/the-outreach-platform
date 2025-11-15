@@ -8,16 +8,19 @@ export async function ensureUserWithOrgId({
   ctx: QueryCtx | MutationCtx;
 }) {
   const userId = await getAuthUserId(ctx);
+  console.log("userId", userId);
   if (!userId) {
     throw new ConvexError("User not authenticated");
   }
 
   const user = await ctx.db.get(userId);
+  console.log("user", user);
   if (!user) {
     throw new ConvexError("User not found");
   }
 
   const organizationId = user.organizationId;
+  console.log("organizationId", organizationId);
   if (!organizationId) {
     throw new ConvexError("User is not associated with an organization");
   }
