@@ -34,6 +34,7 @@ import {
   MegaphoneIcon,
   MessagesSquareIcon,
   SendIcon,
+  SettingsIcon,
   User2Icon,
   UsersIcon,
 } from "lucide-react";
@@ -48,6 +49,11 @@ export const navItems = [
     title: "Home",
     url: "/",
     icon: Home,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: SettingsIcon,
   },
   {
     title: "Contacts",
