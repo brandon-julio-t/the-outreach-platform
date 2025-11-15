@@ -14,7 +14,7 @@ export const getTwilioSettings = query({
 
     return await ctx.db
       .query("twilioSettings")
-      .withIndex("by_organizationId_accountSid", (q) =>
+      .withIndex("by_organizationId", (q) =>
         q.eq("organizationId", user.organizationId),
       )
       .first();

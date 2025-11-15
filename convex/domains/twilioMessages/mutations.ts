@@ -17,7 +17,7 @@ export const sendWhatsAppMessageViaTwilio = mutation({
 
     const twilioSettings = await ctx.db
       .query("twilioSettings")
-      .withIndex("by_organizationId_accountSid", (q) =>
+      .withIndex("by_organizationId", (q) =>
         q.eq("organizationId", user.organizationId),
       )
       .first();

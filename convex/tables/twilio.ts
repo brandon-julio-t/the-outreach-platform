@@ -7,7 +7,7 @@ export const twilioSettings = defineTable({
   accountSid: v.string(),
   authToken: v.string(),
   phoneNumber: v.string(),
-}).index("by_organizationId_accountSid", ["organizationId", "accountSid"]);
+}).index("by_organizationId", ["organizationId"]);
 
 export const twilioMessages = defineTable({
   organizationId: v.id("organizations"),

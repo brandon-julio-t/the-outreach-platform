@@ -13,10 +13,8 @@ export const upsertTwilioSettings = mutation({
 
     const existing = await ctx.db
       .query("twilioSettings")
-      .withIndex("by_organizationId_accountSid", (q) =>
-        q
-          .eq("organizationId", user.organizationId)
-          .eq("accountSid", args.accountSid),
+      .withIndex("by_organizationId", (q) =>
+        q.eq("organizationId", user.organizationId),
       )
       .first();
 
