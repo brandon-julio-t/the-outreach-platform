@@ -1,4 +1,5 @@
 import { paginationOptsValidator } from "convex/server";
+import { workflow } from "../..";
 import { query } from "../../_generated/server";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
 
@@ -23,8 +24,13 @@ export const getTwilioMessages = query({
         paginated.page.map(async (message) => {
           return {
             ...message,
+
             contact: message.contactId
               ? await ctx.db.get(message.contactId)
+              : null,
+
+            workflowStatus: message.workflowId
+              ? await workflow.status(ctx, message.workflowId)
               : null,
           };
         }),

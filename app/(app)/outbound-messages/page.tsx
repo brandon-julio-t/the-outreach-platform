@@ -125,7 +125,10 @@ export default function OutboundMessagesPage() {
                           </Tooltip>
                         </TableCell>
                         <TableCell>
-                          <Badge>{twilioMessage.status}</Badge>
+                          <Badge>
+                            {twilioMessage.workflowStatus?.type} /{" "}
+                            {twilioMessage.status}
+                          </Badge>
 
                           {twilioMessage.errorCode && (
                             <div className="text-destructive">

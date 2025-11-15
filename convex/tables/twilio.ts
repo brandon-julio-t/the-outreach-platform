@@ -1,3 +1,4 @@
+import { vWorkflowId } from "@convex-dev/workflow";
 import { defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -28,7 +29,7 @@ export const twilioMessages = defineTable({
 
   lastUpdatedAt: v.optional(v.number()),
   rawResponseJson: v.optional(v.any()),
-  workflowId: v.optional(v.string()),
+  workflowId: v.optional(vWorkflowId),
 })
   .index("by_accountSid_messageSid", ["accountSid", "messageSid"])
   .index("by_organizationId", ["organizationId"]);
