@@ -106,7 +106,7 @@ const ContactsPage = () => {
         </Item>
 
         <Item>
-          <ItemContent>
+          <ItemContent className="w-full">
             {contactsQuery.isLoading ? (
               <Empty>
                 <EmptyHeader>
