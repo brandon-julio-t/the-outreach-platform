@@ -66,7 +66,7 @@ export function LoginForm({
     },
     (error) => {
       console.error(error);
-      toast.error("Failed to submit form", {
+      toast.error("Failed to login", {
         description: "Please check your form and try again.",
       });
     },

@@ -1,9 +1,11 @@
 "use client";
 
+import { ProgressProvider } from "@bprogress/next/app";
 import { ConvexAuthNextjsProvider } from "@convex-dev/auth/nextjs";
+import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { ConvexReactClient } from "convex/react";
 import { ReactNode } from "react";
-import { ProgressProvider } from "@bprogress/next/app";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -13,19 +15,21 @@ export default function ConvexClientProvider({
   children: ReactNode;
 }) {
   return (
-    <ConvexAuthNextjsProvider client={convex}>
-      <ProgressProvider
-        height="2px"
-        color="var(--primary)"
-        options={
-          {
-            //
-          }
+    <ProgressProvider
+      height="2px"
+      color="var(--primary)"
+      options={
+        {
+          //
         }
-        shallowRouting
-      >
-        {children}
-      </ProgressProvider>
-    </ConvexAuthNextjsProvider>
+      }
+      shallowRouting
+    >
+      <ConvexAuthNextjsProvider client={convex}>
+        <ConvexQueryCacheProvider>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </ConvexQueryCacheProvider>
+      </ConvexAuthNextjsProvider>
+    </ProgressProvider>
   );
 }
