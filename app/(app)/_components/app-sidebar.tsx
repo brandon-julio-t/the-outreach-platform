@@ -150,7 +150,10 @@ export function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton className="group">
-                    <CommandIcon /> {currentOrganization?.name}
+                    <CommandIcon />
+                    <span className="truncate">
+                      {currentOrganization?.name}
+                    </span>
                     <ChevronDownIcon className="ml-auto transition-transform group-data-[state=open]:rotate-180" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -183,7 +186,7 @@ export function AppSidebar() {
                             .unwrap();
                         }}
                       >
-                        <span>{organization.name}</span>
+                        <span className="truncate">{organization.name}</span>
                         {isActive && <CheckIcon className="ml-auto" />}
                       </DropdownMenuItem>
                     );
