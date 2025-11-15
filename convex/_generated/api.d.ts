@@ -17,10 +17,13 @@ import type * as domains_organizationMembers_internalCrud from "../domains/organ
 import type * as domains_organizations_internalCrud from "../domains/organizations/internalCrud.js";
 import type * as domains_organizations_mutations from "../domains/organizations/mutations.js";
 import type * as domains_organizations_queries from "../domains/organizations/queries.js";
+import type * as domains_twilioSettings_mutations from "../domains/twilioSettings/mutations.js";
+import type * as domains_twilioSettings_queries from "../domains/twilioSettings/queries.js";
 import type * as domains_users_internalCrud from "../domains/users/internalCrud.js";
 import type * as http from "../http.js";
 import type * as tables_contacts from "../tables/contacts.js";
 import type * as tables_organizations from "../tables/organizations.js";
+import type * as tables_twilioSettings from "../tables/twilioSettings.js";
 
 import type {
   ApiFromModules,
@@ -38,10 +41,13 @@ declare const fullApi: ApiFromModules<{
   "domains/organizations/internalCrud": typeof domains_organizations_internalCrud;
   "domains/organizations/mutations": typeof domains_organizations_mutations;
   "domains/organizations/queries": typeof domains_organizations_queries;
+  "domains/twilioSettings/mutations": typeof domains_twilioSettings_mutations;
+  "domains/twilioSettings/queries": typeof domains_twilioSettings_queries;
   "domains/users/internalCrud": typeof domains_users_internalCrud;
   http: typeof http;
   "tables/contacts": typeof tables_contacts;
   "tables/organizations": typeof tables_organizations;
+  "tables/twilioSettings": typeof tables_twilioSettings;
 }>;
 
 /**
