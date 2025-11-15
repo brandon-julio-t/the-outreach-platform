@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,12 +18,13 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "@bprogress/next/app";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useMutation } from "convex/react";
 import { useQuery } from "convex-helpers/react/cache/hooks";
+import { useMutation } from "convex/react";
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -38,7 +38,6 @@ import {
   User2Icon,
   UsersIcon,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -82,8 +81,7 @@ export const navItems = [
 }[];
 
 export function AppSidebar() {
-  const { theme, setTheme } = useTheme();
-
+  const { setOpenMobile } = useSidebar();
   const { signOut } = useAuthActions();
 
   const currentUser = useQuery(api.auth.getCurrentUser);
@@ -123,7 +121,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
+      <SidebarHeader className="border-b">
         <SidebarMenu>
           <SidebarMenuItem>
             {isLoading ? (
@@ -195,7 +193,11 @@ export function AppSidebar() {
 
                     return (
                       <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild isActive={isActive}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={isActive}
+                          onClick={() => setOpenMobile(false)}
+                        >
                           <Link href={item.url}>
                             <item.icon />
                             <span>{item.title}</span>
@@ -211,14 +213,6 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <ThemeSwitcher
-              className="w-fit"
-              defaultValue="system"
-              onChange={setTheme}
-              value={theme as "light" | "dark" | "system"}
-            />
-          </SidebarMenuItem>
           <SidebarMenuItem>
             {isLoading ? (
               <SidebarMenuSkeleton />

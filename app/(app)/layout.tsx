@@ -1,5 +1,6 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
+import AppHeader from "./_components/app-header";
 import { AppSidebar } from "./_components/app-sidebar";
 
 const AppLayout = async ({ children }: LayoutProps<"/">) => {
@@ -10,7 +11,11 @@ const AppLayout = async ({ children }: LayoutProps<"/">) => {
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
 
-      <SidebarInset className="size-full min-w-0">{children}</SidebarInset>
+      <SidebarInset className="size-full min-w-0">
+        <AppHeader />
+
+        {children}
+      </SidebarInset>
     </SidebarProvider>
   );
 };
