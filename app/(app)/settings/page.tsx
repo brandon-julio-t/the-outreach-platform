@@ -7,13 +7,13 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
-import { TwilioSettingsSection } from "./twilio-settings-section";
 import { TestTwilioSection } from "./test-twilio-section";
+import { TwilioSettingsSection } from "./twilio-settings-section";
 
 export default function SettingsPage() {
   return (
     <main className="container mx-auto">
-      <ItemGroup className="gap-6">
+      <ItemGroup className="gap-4">
         <Item>
           <ItemContent>
             <ItemTitle>Settings</ItemTitle>

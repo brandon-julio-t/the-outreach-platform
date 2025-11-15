@@ -67,7 +67,7 @@ export function TwilioSettingsSection() {
   );
 
   return (
-    <Item variant="outline">
+    <Item variant="outline" className="mx-4">
       <ItemContent>
         <ItemTitle>
           Twilio Settings {twilioSettings === undefined && <Spinner />}
