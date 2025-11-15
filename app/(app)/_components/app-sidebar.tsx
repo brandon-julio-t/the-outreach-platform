@@ -34,6 +34,7 @@ import {
   Home,
   LogOutIcon,
   MegaphoneIcon,
+  MessageSquareIcon,
   MessagesSquareIcon,
   SendIcon,
   SettingsIcon,
@@ -63,6 +64,11 @@ export const navItems = [
         title: "Contacts",
         url: "/contacts",
         icon: ContactIcon,
+      },
+      {
+        title: "Message Templates",
+        url: "/message-templates",
+        icon: MessageSquareIcon,
       },
       {
         title: "Broadcasts",

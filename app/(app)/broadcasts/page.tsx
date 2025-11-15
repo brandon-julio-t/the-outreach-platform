@@ -1,7 +1,5 @@
-import React from "react";
+"use client";
 
-const DummyPage = () => {
-  return <div>DummyPage</div>;
-};
-
-export default DummyPage;
+export default function BroadcastsPage() {
+  return <div>BroadcastsPage</div>;
+}
