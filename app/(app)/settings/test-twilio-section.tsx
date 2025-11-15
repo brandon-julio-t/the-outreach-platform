@@ -42,18 +42,25 @@ export function TestTwilioSection() {
     },
   });
 
-  const sendTestMessage = useMutation(
-    api.domains.twilioSettings.mutations.sendTestMessage,
+  const sendWhatsAppMessageViaTwilio = useMutation(
+    api.domains.twilioMessages.mutations.sendWhatsAppMessageViaTwilio,
   );
 
   const onSubmit = form.handleSubmit(
     async (data) => {
       await toast
-        .promise(sendTestMessage(data), {
-          loading: "Sending test message...",
-          success: "Test message sent successfully",
-          error: "Failed to send test message",
-        })
+        .promise(
+          sendWhatsAppMessageViaTwilio({
+            receiverPhoneNumber: data.receiverPhoneNumber,
+            contentSid: data.contentSid,
+            contentVariables: {},
+          }),
+          {
+            loading: "Sending test message...",
+            success: "Test message sent successfully",
+            error: "Failed to send test message",
+          },
+        )
         .unwrap();
     },
     (error) => {
