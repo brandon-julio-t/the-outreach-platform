@@ -1,6 +1,6 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "./_components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
+import { AppSidebar } from "./_components/app-sidebar";
 
 const AppLayout = async ({ children }: LayoutProps<"/">) => {
   const cookieStore = await cookies();
@@ -9,10 +9,8 @@ const AppLayout = async ({ children }: LayoutProps<"/">) => {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        {children}
-      </main>
+
+      <SidebarInset className="size-full min-w-0">{children}</SidebarInset>
     </SidebarProvider>
   );
 };

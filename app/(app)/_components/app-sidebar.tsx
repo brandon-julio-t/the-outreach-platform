@@ -40,7 +40,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-const items = [
+export const navItems = [
   {
     title: "Home",
     url: "/",
@@ -176,7 +176,7 @@ export function AppSidebar() {
                       <SidebarMenuSkeleton />
                     </SidebarMenuItem>
                   ))
-                : items.map((item) => {
+                : navItems.map((item) => {
                     const isActive =
                       item.url === "/"
                         ? pathname === item.url
