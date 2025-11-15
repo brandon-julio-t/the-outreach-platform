@@ -2,15 +2,11 @@
 
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { navItems } from "./_components/app-sidebar";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 const AppPage = () => {
   return (
@@ -24,18 +20,6 @@ const AppPage = () => {
             broadcast, contact, or chat.
           </EmptyDescription>
         </EmptyHeader>
-        <EmptyContent>
-          <div className="flex flex-row flex-wrap justify-center gap-2">
-            {navItems.map((item) => (
-              <Button asChild key={item.title} variant="outline">
-                <Link href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </Link>
-              </Button>
-            ))}
-          </div>
-        </EmptyContent>
       </Empty>
     </main>
   );

@@ -8,6 +8,10 @@ export const getTwilioSettings = query({
   handler: async (ctx) => {
     const user = await ensureUserWithOrgId({ ctx });
 
+    if (!user) {
+      return null;
+    }
+
     return await ctx.db
       .query("twilioSettings")
       .withIndex("by_organizationId_accountSid", (q) =>

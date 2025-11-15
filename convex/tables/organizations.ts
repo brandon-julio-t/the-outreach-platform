@@ -8,4 +8,6 @@ export const organizations = defineTable({
 export const organizationMembers = defineTable({
   organizationId: v.id("organizations"),
   userId: v.id("users"),
-}).index("by_userId", ["userId"]);
+})
+  .index("by_userId", ["userId"])
+  .index("by_organizationId", ["organizationId"]);

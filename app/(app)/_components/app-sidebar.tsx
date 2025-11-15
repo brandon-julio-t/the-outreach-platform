@@ -12,6 +12,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -29,6 +30,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   CommandIcon,
+  ContactIcon,
   Home,
   LogOutIcon,
   MegaphoneIcon,
@@ -45,39 +47,57 @@ import { toast } from "sonner";
 
 export const navItems = [
   {
-    title: "Home",
-    url: "/",
-    icon: Home,
+    groupLabel: "Outreach",
+    groupItems: [
+      {
+        title: "Home",
+        url: "/",
+        icon: Home,
+      },
+      {
+        title: "Settings",
+        url: "/settings",
+        icon: SettingsIcon,
+      },
+      {
+        title: "Contacts",
+        url: "/contacts",
+        icon: ContactIcon,
+      },
+      {
+        title: "Broadcasts",
+        url: "/broadcasts",
+        icon: MegaphoneIcon,
+      },
+      {
+        title: "Chats",
+        url: "/chats",
+        icon: MessagesSquareIcon,
+      },
+      {
+        title: "Outbound Messages",
+        url: "/outbound-messages",
+        icon: SendIcon,
+      },
+    ],
   },
   {
-    title: "Settings",
-    url: "/settings",
-    icon: SettingsIcon,
-  },
-  {
-    title: "Contacts",
-    url: "/contacts",
-    icon: UsersIcon,
-  },
-  {
-    title: "Broadcasts",
-    url: "/broadcasts",
-    icon: MegaphoneIcon,
-  },
-  {
-    title: "Chats",
-    url: "/chats",
-    icon: MessagesSquareIcon,
-  },
-  {
-    title: "Outbound Messages",
-    url: "/outbound-messages",
-    icon: SendIcon,
+    groupLabel: "Organization",
+    groupItems: [
+      {
+        title: "Members",
+        url: "/organizations/members",
+        icon: UsersIcon,
+      },
+    ],
   },
 ] satisfies {
-  title: string;
-  url: React.ComponentProps<typeof Link>["href"];
-  icon: React.ElementType;
+  groupLabel: string;
+  groupItems: {
+    title: string;
+    url: React.ComponentProps<typeof Link>["href"];
+    icon: React.ElementType;
+  }[];
 }[];
 
 export function AppSidebar() {
@@ -176,39 +196,46 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {isLoading
-                ? Array.from({ length: 10 }).map((_, index) => (
-                    <SidebarMenuItem key={index}>
-                      <SidebarMenuSkeleton />
-                    </SidebarMenuItem>
-                  ))
-                : navItems.map((item) => {
-                    const isActive =
-                      item.url === "/"
-                        ? pathname === item.url
-                        : pathname.startsWith(item.url);
+        {isLoading
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <SidebarGroup key={index}>
+                <SidebarGroupContent>
+                  <SidebarMenuItem>
+                    <SidebarMenuSkeleton />
+                  </SidebarMenuItem>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))
+          : navItems.map((item) => (
+              <SidebarGroup key={item.groupLabel}>
+                <SidebarGroupLabel>{item.groupLabel}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {item.groupItems.map((item) => {
+                      const isActive =
+                        item.url === "/"
+                          ? pathname === item.url
+                          : pathname.startsWith(item.url);
 
-                    return (
-                      <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={isActive}
-                          onClick={() => setOpenMobile(false)}
-                        >
-                          <Link href={item.url}>
-                            <item.icon />
-                            <span>{item.title}</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                      return (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={isActive}
+                            onClick={() => setOpenMobile(false)}
+                          >
+                            <Link href={item.url}>
+                              <item.icon />
+                              <span>{item.title}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
       </SidebarContent>
 
       <SidebarFooter>

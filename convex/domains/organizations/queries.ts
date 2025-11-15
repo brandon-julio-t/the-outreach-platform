@@ -1,16 +1,24 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { query } from "../../_generated/server";
+import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
 export const getCurrentUserActiveOrganization = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
+    const user = await getAuthUserWithOrgId({ ctx });
+    if (!user) {
       return null;
     }
 
-    const user = await ctx.db.get(userId);
-    if (!user?.organizationId) {
+    const organizationMembers = await ctx.db
+      .query("organizationMembers")
+      .withIndex("by_userId", (q) => q.eq("userId", user._id))
+      .collect();
+
+    const isUserInOrganization = organizationMembers.some(
+      (member) => member.organizationId === user.organizationId,
+    );
+
+    if (!isUserInOrganization) {
       return null;
     }
 
@@ -21,14 +29,14 @@ export const getCurrentUserActiveOrganization = query({
 export const getCurrentUserOrganizations = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
+    const user = await getAuthUserWithOrgId({ ctx });
+    if (!user) {
       return null;
     }
 
     const organizationMembers = await ctx.db
       .query("organizationMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .withIndex("by_userId", (q) => q.eq("userId", user._id))
       .collect();
 
     const organizations = await Promise.all(
