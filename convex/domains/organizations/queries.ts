@@ -1,3 +1,4 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { query } from "../../_generated/server";
 import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
@@ -29,14 +30,14 @@ export const getCurrentUserActiveOrganization = query({
 export const getCurrentUserOrganizations = query({
   args: {},
   handler: async (ctx) => {
-    const user = await getAuthUserWithOrgId({ ctx });
-    if (!user) {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
       return null;
     }
 
     const organizationMembers = await ctx.db
       .query("organizationMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
       .collect();
 
     const organizations = await Promise.all(
