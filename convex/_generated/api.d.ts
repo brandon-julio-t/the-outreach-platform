@@ -22,6 +22,7 @@ import type * as domains_twilioMessages_http from "../domains/twilioMessages/htt
 import type * as domains_twilioMessages_internalCrud from "../domains/twilioMessages/internalCrud.js";
 import type * as domains_twilioMessages_internalMutations from "../domains/twilioMessages/internalMutations.js";
 import type * as domains_twilioMessages_mutations from "../domains/twilioMessages/mutations.js";
+import type * as domains_twilioMessages_queries from "../domains/twilioMessages/queries.js";
 import type * as domains_twilioMessages_workflows from "../domains/twilioMessages/workflows.js";
 import type * as domains_twilioSettings_actions from "../domains/twilioSettings/actions.js";
 import type * as domains_twilioSettings_mutations from "../domains/twilioSettings/mutations.js";
@@ -54,6 +55,7 @@ declare const fullApi: ApiFromModules<{
   "domains/twilioMessages/internalCrud": typeof domains_twilioMessages_internalCrud;
   "domains/twilioMessages/internalMutations": typeof domains_twilioMessages_internalMutations;
   "domains/twilioMessages/mutations": typeof domains_twilioMessages_mutations;
+  "domains/twilioMessages/queries": typeof domains_twilioMessages_queries;
   "domains/twilioMessages/workflows": typeof domains_twilioMessages_workflows;
   "domains/twilioSettings/actions": typeof domains_twilioSettings_actions;
   "domains/twilioSettings/mutations": typeof domains_twilioSettings_mutations;

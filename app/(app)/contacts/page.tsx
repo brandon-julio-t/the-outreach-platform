@@ -107,7 +107,7 @@ const ContactsPage = () => {
 
         <Item>
           <ItemContent className="w-full">
-            {contactsQuery.isLoading ? (
+            {contactsQuery.status === "LoadingFirstPage" ? (
               <Empty>
                 <EmptyHeader>
                   <EmptyMedia variant="icon">
@@ -122,9 +122,6 @@ const ContactsPage = () => {
             ) : contactsQuery.results.length === 0 ? (
               <Empty className="border">
                 <EmptyHeader>
-                  <EmptyMedia variant="icon">
-                    <SearchIcon />
-                  </EmptyMedia>
                   <EmptyTitle>No contacts found.</EmptyTitle>
                   <EmptyDescription>
                     You don&apos;t have any contacts yet. You can add a new
