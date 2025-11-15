@@ -1,10 +1,11 @@
 import { createAccount } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import { internalAction } from "../../_generated/server";
 import { internal } from "../../_generated/api";
+import { internalAction } from "../../_generated/server";
 
 export const createUser = internalAction({
   args: {
+    name: v.string(),
     email: v.string(),
     password: v.string(),
   },
@@ -17,13 +18,14 @@ export const createUser = internalAction({
       },
       profile: {
         email: args.email,
+        name: args.name,
       },
     });
 
     const organization = await ctx.runMutation(
       internal.domains.organizations.internalCrud.create,
       {
-        name: "Personal",
+        name: `${args.name}'s Organization`,
       },
     );
 
@@ -41,5 +43,7 @@ export const createUser = internalAction({
         organizationId: organization._id,
       },
     });
+
+    return response;
   },
 });
