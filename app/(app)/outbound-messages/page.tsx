@@ -51,7 +51,7 @@ export default function OutboundMessagesPage() {
 
   return (
     <main className="container mx-auto">
-      <ItemGroup className="gap-6">
+      <ItemGroup>
         <Item>
           <ItemContent>
             <ItemTitle>Outbound Messages</ItemTitle>
