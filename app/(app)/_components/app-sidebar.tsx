@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +36,7 @@ import {
   User2Icon,
   UsersIcon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -73,6 +75,8 @@ export const navItems = [
 }[];
 
 export function AppSidebar() {
+  const { theme, setTheme } = useTheme();
+
   const { signOut } = useAuthActions();
 
   const currentUser = useQuery(api.auth.getCurrentUser);
@@ -200,6 +204,14 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <ThemeSwitcher
+              className="w-fit"
+              defaultValue="system"
+              onChange={setTheme}
+              value={theme as "light" | "dark" | "system"}
+            />
+          </SidebarMenuItem>
           <SidebarMenuItem>
             {isLoading ? (
               <SidebarMenuSkeleton />
