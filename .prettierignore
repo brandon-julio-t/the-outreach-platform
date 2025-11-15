@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+bun.lock
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Generated files
+convex/_generated
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+

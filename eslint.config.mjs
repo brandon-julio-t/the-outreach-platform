@@ -1,0 +1,33 @@
+import { defineConfig } from "eslint/config";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
+import convexPlugin from "@convex-dev/eslint-plugin";
+
+export default defineConfig([
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  ...convexPlugin.configs.recommended,
+  {
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "next/router",
+              importNames: ["useRouter"],
+              message:
+                "Importing useRouter from 'next/router' is not allowed. Import from `@bprogress/next/app` instead.",
+            },
+            {
+              name: "next/navigation",
+              importNames: ["useRouter"],
+              message:
+                "Importing useRouter from 'next/navigation' is not allowed. Import from `@bprogress/next/app` instead.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+]);
