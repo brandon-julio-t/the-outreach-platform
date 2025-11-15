@@ -2,7 +2,7 @@ import { paginationOptsValidator, PaginationResult } from "convex/server";
 import { v } from "convex/values";
 import { Doc } from "../../_generated/dataModel";
 import { query } from "../../_generated/server";
-import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
+import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
 export const getContacts = query({
   args: {
@@ -10,7 +10,14 @@ export const getContacts = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await ensureUserWithOrgId({ ctx });
+    const user = await getAuthUserWithOrgId({ ctx });
+    if (!user) {
+      return {
+        page: [],
+        isDone: true,
+        continueCursor: "",
+      } satisfies PaginationResult<Doc<"contacts">>;
+    }
 
     const search = args.search ?? "";
     if (search) {
