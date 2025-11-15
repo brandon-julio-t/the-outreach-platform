@@ -1,4 +1,3 @@
-import { createAccount } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { internal } from "../../_generated/api";
 import { internalAction } from "../../_generated/server";
@@ -10,17 +9,14 @@ export const addOrganizationMemberAction = internalAction({
     name: v.string(),
   },
   handler: async (ctx, args) => {
-    const response = await createAccount(ctx, {
-      provider: "password",
-      account: {
-        id: args.email,
-        secret: args.email,
-      },
-      profile: {
-        email: args.email,
+    const response = await ctx.runAction(
+      internal.admin.console.functions.createUser,
+      {
         name: args.name,
+        email: args.email,
+        password: args.email,
       },
-    });
+    );
 
     await ctx.runMutation(
       internal.domains.organizationMembers.internalCrud.create,
