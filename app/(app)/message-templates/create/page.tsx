@@ -14,13 +14,15 @@ import {
   FieldTitle,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Item, ItemContent, ItemGroup } from "@/components/ui/item";
+import { Item, ItemContent, ItemGroup, ItemHeader } from "@/components/ui/item";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -75,6 +77,13 @@ export default function CreateMessageTemplatePage() {
     <form onSubmit={onSubmit} className="container mx-auto">
       <ItemGroup>
         <Item>
+          <ItemHeader>
+            <Button variant="ghost" asChild>
+              <Link href="/message-templates">
+                <ArrowLeftIcon /> Go back
+              </Link>
+            </Button>
+          </ItemHeader>
           <ItemContent>
             <FieldGroup>
               <FieldSet>

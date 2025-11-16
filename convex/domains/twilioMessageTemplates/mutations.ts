@@ -47,3 +47,19 @@ export const createTwilioMessageTemplate = mutation({
     );
   },
 });
+
+export const deleteTwilioMessageTemplate = mutation({
+  args: {
+    id: v.id("twilioMessageTemplates"),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    console.log("args", args);
+
+    const user = await ensureUserWithOrgId({ ctx });
+
+    console.log("user", user);
+
+    throw new ConvexError("Not implemented");
+  },
+});
