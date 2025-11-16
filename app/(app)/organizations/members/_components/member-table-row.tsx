@@ -38,31 +38,31 @@ export function MemberTableRow({ member }: { member: RowData }) {
   const deleteOrganizationMember = useMutation(
     api.domains.organizationMembers.mutations.deleteOrganizationMember,
   );
-  const [isDeleting, startDeleting] = React.useTransition();
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   const onDelete = () => {
-    startDeleting(async () => {
-      await toast
-        .promise(
-          deleteOrganizationMember({ organizationMemberId: member._id }),
-          {
-            loading: "Deleting member...",
-            success: "Member deleted successfully",
-            error: (error) => {
-              return {
-                message: "Failed to delete member",
-                description:
-                  error instanceof ConvexError
-                    ? error.data
-                    : "Please try again.",
-              };
-            },
-          },
-        )
-        .unwrap();
+    setIsDeleting(true);
 
-      setOpenDelete(false);
-    });
+    toast.promise(
+      deleteOrganizationMember({ organizationMemberId: member._id }),
+      {
+        loading: "Deleting member...",
+        success: () => {
+          setOpenDelete(false);
+          return "Member deleted successfully";
+        },
+        error: (error) => {
+          return {
+            message: "Failed to delete member",
+            description:
+              error instanceof ConvexError ? error.data : "Please try again.",
+          };
+        },
+        finally: () => {
+          setIsDeleting(false);
+        },
+      },
+    );
   };
   return (
     <>

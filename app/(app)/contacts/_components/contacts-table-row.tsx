@@ -19,11 +19,11 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { FunctionReturnType } from "convex/server";
+import { format } from "date-fns";
 import { MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { EditContactDialog } from "./edit-contact-dialog";
-import { format } from "date-fns";
 
 type RowData = FunctionReturnType<
   typeof api.domains.contacts.queries.getContacts
@@ -37,19 +37,21 @@ export function ContactsTableRow({ contact }: { contact: RowData }) {
     api.domains.contacts.mutations.deleteContact,
   );
 
-  const [isDeleting, startDeleting] = React.useTransition();
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   const onDelete = () => {
-    startDeleting(async () => {
-      await toast
-        .promise(deleteContact({ id: contact._id }), {
-          loading: "Deleting contact...",
-          success: "Contact deleted successfully",
-          error: "Failed to delete contact",
-        })
-        .unwrap();
+    setIsDeleting(true);
 
-      setOpenDelete(false);
+    toast.promise(deleteContact({ id: contact._id }), {
+      loading: "Deleting contact...",
+      success: () => {
+        setOpenDelete(false);
+        return "Contact deleted successfully";
+      },
+      error: "Failed to delete contact",
+      finally: () => {
+        setIsDeleting(false);
+      },
     });
   };
 
