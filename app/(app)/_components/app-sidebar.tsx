@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -22,6 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { api } from "@/convex/_generated/api";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useRouter } from "@bprogress/next/app";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex-helpers/react/cache/hooks";
@@ -145,6 +147,8 @@ export function AppSidebar() {
 
   const isLoading = currentUser === undefined;
 
+  const isMobile = useIsMobile();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="h-(--header-height) border-b">
@@ -167,6 +171,8 @@ export function AppSidebar() {
                   side="top"
                   className="w-(--radix-dropdown-menu-trigger-width)"
                 >
+                  <DropdownMenuLabel>Organizations</DropdownMenuLabel>
+
                   {organizations?.map((organization) => {
                     const isActive =
                       organization._id === currentOrganization?._id;
@@ -261,8 +267,8 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  side="top"
                   className="w-(--radix-dropdown-menu-trigger-width)"
+                  side={isMobile ? "top" : "right"}
                 >
                   <DropdownMenuItem onClick={onSignOut}>
                     <LogOutIcon />
