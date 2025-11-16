@@ -91,6 +91,11 @@ export default function CreateMessageTemplatePage() {
                           aria-invalid={fieldState.invalid}
                           id={field.name}
                         />
+                        <FieldDescription>
+                          WhatsApp template name can only contain lowercase
+                          alphanumeric characters and underscores ( _ ). No
+                          other characters or white space are allowed.
+                        </FieldDescription>
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
