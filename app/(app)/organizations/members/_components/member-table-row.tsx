@@ -74,18 +74,18 @@ export function MemberTableRow({ member }: { member: RowData }) {
             format(member.user?._creationTime, "PPPpp")}
         </TableCell>
         <TableCell>
-          {!isSelf && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <MoreVerticalIcon />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setOpenEdit(true)}>
-                  <PencilIcon />
-                  Edit
-                </DropdownMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVerticalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setOpenEdit(true)}>
+                <PencilIcon />
+                Edit
+              </DropdownMenuItem>
+              {!isSelf && (
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => setOpenDelete(true)}
@@ -93,9 +93,9 @@ export function MemberTableRow({ member }: { member: RowData }) {
                   <TrashIcon />
                   Delete
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </TableCell>
       </TableRow>
 
