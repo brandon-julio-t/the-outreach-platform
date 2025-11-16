@@ -34,7 +34,7 @@ export const sendWhatsAppMessageViaTwilio = mutation({
         organizationId: user.organizationId,
         userId: user._id,
         displayName: user.email ?? user.phone ?? "Unknown",
-        role: "user",
+        role: "assistant",
 
         accountSid: twilioSettings.accountSid,
         authToken: twilioSettings.authToken,

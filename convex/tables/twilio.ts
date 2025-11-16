@@ -7,7 +7,9 @@ export const twilioSettings = defineTable({
   accountSid: v.string(),
   authToken: v.string(),
   phoneNumber: v.string(),
-}).index("by_organizationId", ["organizationId"]);
+})
+  .index("by_organizationId", ["organizationId"])
+  .index("by_accountSid", ["accountSid"]);
 
 export const twilioMessageTemplates = defineTable({
   organizationId: v.id("organizations"),
@@ -47,9 +49,9 @@ export const twilioMessageBroadcasts = defineTable({
 
 export const twilioMessages = defineTable({
   organizationId: v.id("organizations"),
-  userId: v.id("users"),
   displayName: v.string(),
   role: v.union(v.literal("user"), v.literal("assistant")),
+  userId: v.optional(v.id("users")),
   contactId: v.optional(v.id("contacts")),
   twilioMessageBroadcastId: v.optional(v.id("twilioMessageBroadcasts")),
 

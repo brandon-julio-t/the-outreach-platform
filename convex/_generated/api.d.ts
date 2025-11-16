@@ -11,6 +11,7 @@
 import type * as admin_console_functions from "../admin/console/functions.js";
 import type * as auth from "../auth.js";
 import type * as domains_contacts_internalCrud from "../domains/contacts/internalCrud.js";
+import type * as domains_contacts_internalQueries from "../domains/contacts/internalQueries.js";
 import type * as domains_contacts_mutations from "../domains/contacts/mutations.js";
 import type * as domains_contacts_queries from "../domains/contacts/queries.js";
 import type * as domains_core_ensureUserWithOrgId from "../domains/core/ensureUserWithOrgId.js";
@@ -38,6 +39,7 @@ import type * as domains_twilioMessages_mutations from "../domains/twilioMessage
 import type * as domains_twilioMessages_queries from "../domains/twilioMessages/queries.js";
 import type * as domains_twilioMessages_workflows from "../domains/twilioMessages/workflows.js";
 import type * as domains_twilioSettings_actions from "../domains/twilioSettings/actions.js";
+import type * as domains_twilioSettings_internalQueries from "../domains/twilioSettings/internalQueries.js";
 import type * as domains_twilioSettings_mutations from "../domains/twilioSettings/mutations.js";
 import type * as domains_twilioSettings_queries from "../domains/twilioSettings/queries.js";
 import type * as domains_users_internalCrud from "../domains/users/internalCrud.js";
@@ -57,6 +59,7 @@ declare const fullApi: ApiFromModules<{
   "admin/console/functions": typeof admin_console_functions;
   auth: typeof auth;
   "domains/contacts/internalCrud": typeof domains_contacts_internalCrud;
+  "domains/contacts/internalQueries": typeof domains_contacts_internalQueries;
   "domains/contacts/mutations": typeof domains_contacts_mutations;
   "domains/contacts/queries": typeof domains_contacts_queries;
   "domains/core/ensureUserWithOrgId": typeof domains_core_ensureUserWithOrgId;
@@ -84,6 +87,7 @@ declare const fullApi: ApiFromModules<{
   "domains/twilioMessages/queries": typeof domains_twilioMessages_queries;
   "domains/twilioMessages/workflows": typeof domains_twilioMessages_workflows;
   "domains/twilioSettings/actions": typeof domains_twilioSettings_actions;
+  "domains/twilioSettings/internalQueries": typeof domains_twilioSettings_internalQueries;
   "domains/twilioSettings/mutations": typeof domains_twilioSettings_mutations;
   "domains/twilioSettings/queries": typeof domains_twilioSettings_queries;
   "domains/users/internalCrud": typeof domains_users_internalCrud;

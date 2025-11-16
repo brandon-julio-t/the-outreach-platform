@@ -91,6 +91,7 @@ export default function OutboundMessagesPage() {
                     <TableRow>
                       <TableHead>From</TableHead>
                       <TableHead>To</TableHead>
+                      <TableHead>Contact</TableHead>
                       <TableHead>Body</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Created At</TableHead>
@@ -101,15 +102,8 @@ export default function OutboundMessagesPage() {
                     {twilioMessagesQuery.results.map((twilioMessage) => (
                       <TableRow key={twilioMessage._id}>
                         <TableCell>{twilioMessage.from}</TableCell>
-                        <TableCell>
-                          <div>{twilioMessage.to}</div>
-
-                          {twilioMessage.contact && (
-                            <div className="text-muted-foreground text-sm">
-                              {twilioMessage.contact.name}
-                            </div>
-                          )}
-                        </TableCell>
+                        <TableCell>{twilioMessage.to}</TableCell>
+                        <TableCell>{twilioMessage.contact?.name}</TableCell>
                         <TableCell>
                           <Tooltip>
                             <TooltipTrigger asChild>

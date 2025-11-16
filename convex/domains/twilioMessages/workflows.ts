@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";
 
@@ -81,5 +81,81 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
         },
       },
     );
+  },
+});
+
+export const handleIncomingWhatsAppMessageWorkflow = workflow.define({
+  args: {
+    from: v.string(),
+    to: v.string(),
+    messageText: v.string(),
+    profileName: v.string(),
+    accountSid: v.string(),
+    messageSid: v.string(),
+    apiVersion: v.string(),
+  },
+  handler: async (step, args): Promise<void> => {
+    console.log("args", args);
+    console.log("step", step);
+
+    const twilioSettings = await step.runQuery(
+      internal.domains.twilioSettings.internalQueries
+        .getTwilioSettingsByAccountSid,
+      {
+        accountSid: args.accountSid,
+      },
+    );
+
+    console.log("twilioSettings", twilioSettings);
+
+    if (!twilioSettings) {
+      throw new ConvexError("Twilio settings not found");
+    }
+
+    const normalizedFromPhone = args.from.replace("whatsapp:", "");
+
+    let contact = await step.runQuery(
+      internal.domains.contacts.internalQueries.getContactByPhone,
+      {
+        phone: normalizedFromPhone,
+      },
+    );
+
+    console.log("contact", contact);
+
+    if (!contact) {
+      contact = await step.runMutation(
+        internal.domains.contacts.internalCrud.create,
+        {
+          organizationId: twilioSettings.organizationId,
+          name: args.profileName,
+          phone: normalizedFromPhone,
+        },
+      );
+    }
+
+    const twilioMessage = await step.runMutation(
+      internal.domains.twilioMessages.internalCrud.create,
+      {
+        organizationId: twilioSettings.organizationId,
+        displayName: args.profileName,
+        role: "user",
+        contactId: contact._id,
+
+        from: args.from,
+        to: args.to,
+        body: args.messageText,
+        messageSid: args.messageSid,
+        accountSid: args.accountSid,
+        apiVersion: args.apiVersion,
+        direction: "inbound-api",
+        status: "received",
+
+        workflowId: step.workflowId,
+        lastUpdatedAt: Date.now(),
+      },
+    );
+
+    console.log("twilioMessage", twilioMessage);
   },
 });

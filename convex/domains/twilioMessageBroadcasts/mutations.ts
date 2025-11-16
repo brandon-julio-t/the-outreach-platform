@@ -67,7 +67,7 @@ export const broadcastWhatsAppMessagesViaTwilio = mutation({
           organizationId: user.organizationId,
           userId: user._id,
           displayName: user.email ?? user.phone ?? "Unknown",
-          role: "user",
+          role: "assistant",
           contactId: contactId,
           twilioMessageBroadcastId,
 
