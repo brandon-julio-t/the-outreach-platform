@@ -8,7 +8,8 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     userId: v.id("users"),
     displayName: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),
-    twilioMessageId: v.id("twilioMessages"),
+    contactId: v.optional(v.id("contacts")),
+    twilioMessageBroadcastId: v.optional(v.id("twilioMessageBroadcasts")),
 
     accountSid: v.string(),
     authToken: v.string(),
@@ -21,16 +22,31 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     console.log("step.workflowId", step.workflowId);
     console.log("args", args);
 
-    await step.runMutation(
-      internal.domains.twilioMessages.internalCrud.update,
+    const twilioMessage = await step.runMutation(
+      internal.domains.twilioMessages.internalCrud.create,
       {
-        id: args.twilioMessageId,
-        patch: {
-          workflowId: step.workflowId,
-          lastUpdatedAt: Date.now(),
-        },
+        organizationId: args.organizationId,
+        userId: args.userId,
+        displayName: args.displayName,
+        role: args.role,
+        contactId: args.contactId,
+        twilioMessageBroadcastId: args.twilioMessageBroadcastId,
+
+        from: args.from,
+        to: args.to,
+        body: args.contentSid,
+        messageSid: "",
+        accountSid: args.accountSid,
+        apiVersion: "",
+        direction: "",
+        status: "queued",
+
+        workflowId: step.workflowId,
+        lastUpdatedAt: Date.now(),
       },
     );
+
+    console.log("twilioMessage", twilioMessage);
 
     const response = await step.runAction(
       internal.domains.twilioSettings.actions
@@ -50,7 +66,7 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     await step.runMutation(
       internal.domains.twilioMessages.internalCrud.update,
       {
-        id: args.twilioMessageId,
+        id: twilioMessage._id,
         patch: {
           body: response.body,
           messageSid: response.sid,

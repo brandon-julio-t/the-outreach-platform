@@ -37,12 +37,22 @@ export const twilioMessageTemplates = defineTable({
   workflowId: v.optional(vWorkflowId),
 }).index("by_organizationId", ["organizationId"]);
 
+export const twilioMessageBroadcasts = defineTable({
+  organizationId: v.id("organizations"),
+  userId: v.id("users"),
+  twilioMessageTemplateId: v.id("twilioMessageTemplates"),
+  contentSid: v.string(),
+  contentVariables: v.record(v.string(), v.string()),
+  workflowIds: v.array(vWorkflowId),
+}).index("by_organizationId", ["organizationId"]);
+
 export const twilioMessages = defineTable({
   organizationId: v.id("organizations"),
   userId: v.id("users"),
   displayName: v.string(),
   role: v.union(v.literal("user"), v.literal("assistant")),
   contactId: v.optional(v.id("contacts")),
+  twilioMessageBroadcastId: v.optional(v.id("twilioMessageBroadcasts")),
 
   from: v.string(),
   to: v.string(),

@@ -10,6 +10,7 @@
 
 import type * as admin_console_functions from "../admin/console/functions.js";
 import type * as auth from "../auth.js";
+import type * as domains_contacts_internalCrud from "../domains/contacts/internalCrud.js";
 import type * as domains_contacts_mutations from "../domains/contacts/mutations.js";
 import type * as domains_contacts_queries from "../domains/contacts/queries.js";
 import type * as domains_core_ensureUserWithOrgId from "../domains/core/ensureUserWithOrgId.js";
@@ -53,6 +54,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   "admin/console/functions": typeof admin_console_functions;
   auth: typeof auth;
+  "domains/contacts/internalCrud": typeof domains_contacts_internalCrud;
   "domains/contacts/mutations": typeof domains_contacts_mutations;
   "domains/contacts/queries": typeof domains_contacts_queries;
   "domains/core/ensureUserWithOrgId": typeof domains_core_ensureUserWithOrgId;

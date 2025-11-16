@@ -4,6 +4,7 @@ import { v } from "convex/values";
 import { contacts } from "./tables/contacts";
 import { organizationMembers, organizations } from "./tables/organizations";
 import {
+  twilioMessageBroadcasts,
   twilioMessages,
   twilioMessageTemplates,
   twilioSettings,
@@ -35,5 +36,6 @@ export default defineSchema({
 
   twilioSettings: twilioSettings,
   twilioMessageTemplates: twilioMessageTemplates,
+  twilioMessageBroadcasts: twilioMessageBroadcasts,
   twilioMessages: twilioMessages,
 });
