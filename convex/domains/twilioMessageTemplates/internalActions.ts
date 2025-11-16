@@ -238,3 +238,61 @@ export const fetchWhatsAppApprovalStatusAction = internalAction({
     };
   },
 });
+
+/*
+		{
+			"name": "Delete Content V2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "",
+						"password": "",
+						"showPassword": false
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "https://content.twilio.com/v1/Content/YOUR_CONTENT_SID"
+			},
+			"response": []
+		}
+*/
+export const deleteTwilioMessageTemplateAction = internalAction({
+  args: {
+    accountSid: v.string(),
+    authToken: v.string(),
+    twilioContentSid: v.string(),
+  },
+  handler: async (_ctx, args) => {
+    console.log("args", args);
+
+    const response = await fetch(
+      `https://content.twilio.com/v1/Content/${args.twilioContentSid}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`${args.accountSid}:${args.authToken}`)}`,
+        },
+      },
+    );
+
+    console.log("response", response);
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+    };
+  },
+});

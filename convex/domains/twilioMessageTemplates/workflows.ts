@@ -101,3 +101,59 @@ export const createTwilioMessageTemplateWorkflow = workflow.define({
     );
   },
 });
+
+export const deleteTwilioMessageTemplateWorkflow = workflow.define({
+  args: {
+    accountSid: v.string(),
+    authToken: v.string(),
+    twilioMessageTemplateId: v.id("twilioMessageTemplates"),
+  },
+  handler: async (step, args) => {
+    console.log("args", args);
+    console.log("step", step);
+
+    const twilioMessageTemplate = await step.runQuery(
+      internal.domains.twilioMessageTemplates.internalCrud.read,
+      {
+        id: args.twilioMessageTemplateId,
+      },
+    );
+
+    console.log("twilioMessageTemplate", twilioMessageTemplate);
+
+    if (!twilioMessageTemplate) {
+      console.error("twilioMessageTemplate not found", {
+        twilioMessageTemplateId: args.twilioMessageTemplateId,
+      });
+      return;
+    }
+
+    const twilioContentSid = twilioMessageTemplate.twilioContentSid;
+
+    console.log("twilioContentSid", twilioContentSid);
+
+    if (!twilioContentSid) {
+      console.error("twilioContentSid is undefined", { twilioContentSid });
+      return;
+    }
+
+    const deleteResponse = await step.runAction(
+      internal.domains.twilioMessageTemplates.internalActions
+        .deleteTwilioMessageTemplateAction,
+      {
+        accountSid: args.accountSid,
+        authToken: args.authToken,
+        twilioContentSid: twilioContentSid,
+      },
+    );
+
+    console.log("deleteResponse", deleteResponse);
+
+    await step.runMutation(
+      internal.domains.twilioMessageTemplates.internalCrud.destroy,
+      {
+        id: args.twilioMessageTemplateId,
+      },
+    );
+  },
+});

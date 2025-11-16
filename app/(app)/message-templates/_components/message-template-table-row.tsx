@@ -50,14 +50,14 @@ export function MessageTemplateTableRow({
     setIsDeleting(true);
 
     toast.promise(deleteMessageTemplate({ id: messageTemplate._id }), {
-      loading: "Deleting message template...",
+      loading: "Submitting deletion request...",
 
       success: () => {
         setOpenDelete(false);
-        return "Message template deleted successfully";
+        return "Deletion request submitted successfully";
       },
 
-      error: "Failed to delete message template",
+      error: "Failed to submit deletion request",
 
       finally: () => {
         setIsDeleting(false);

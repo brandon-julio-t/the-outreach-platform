@@ -60,6 +60,26 @@ export const deleteTwilioMessageTemplate = mutation({
 
     console.log("user", user);
 
-    throw new ConvexError("Not implemented");
+    const twilioSettings = await getOrgTwilioSettings({
+      ctx,
+      organizationId: user.organizationId,
+    });
+
+    if (!twilioSettings) {
+      throw new ConvexError("Twilio settings not found");
+    }
+
+    const jobId = await workflow.start(
+      ctx,
+      internal.domains.twilioMessageTemplates.workflows
+        .deleteTwilioMessageTemplateWorkflow,
+      {
+        accountSid: twilioSettings.accountSid,
+        authToken: twilioSettings.authToken,
+        twilioMessageTemplateId: args.id,
+      },
+    );
+
+    console.log("jobId", jobId);
   },
 });
