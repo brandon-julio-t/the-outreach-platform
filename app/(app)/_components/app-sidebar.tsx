@@ -147,7 +147,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b">
+      <SidebarHeader className="h-(--header-height) border-b">
         <SidebarMenu>
           <SidebarMenuItem>
             {isLoading ? (

@@ -8,7 +8,10 @@ const AppLayout = async ({ children }: LayoutProps<"/">) => {
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
+    <SidebarProvider
+      defaultOpen={defaultOpen}
+      className="[--header-height:--spacing(12)]"
+    >
       <AppSidebar />
 
       <SidebarInset className="size-full min-w-0">

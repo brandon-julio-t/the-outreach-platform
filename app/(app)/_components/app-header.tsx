@@ -8,11 +8,11 @@ export default function AppHeader() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="flex flex-row items-center justify-between border-b p-2">
+    <header className="bg-background sticky top-0 z-10 flex h-(--header-height) flex-row items-center justify-between border-b p-2">
       <SidebarTrigger />
 
       <ThemeSwitcher
-        className="w-fit"
+        className="hidden w-fit"
         defaultValue="system"
         onChange={setTheme}
         value={theme as "light" | "dark" | "system"}
