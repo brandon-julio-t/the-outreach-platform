@@ -24,6 +24,8 @@ import type * as domains_organizationMembers_queries from "../domains/organizati
 import type * as domains_organizations_internalCrud from "../domains/organizations/internalCrud.js";
 import type * as domains_organizations_mutations from "../domains/organizations/mutations.js";
 import type * as domains_organizations_queries from "../domains/organizations/queries.js";
+import type * as domains_twilioMessageBroadcasts_mutations from "../domains/twilioMessageBroadcasts/mutations.js";
+import type * as domains_twilioMessageBroadcasts_queries from "../domains/twilioMessageBroadcasts/queries.js";
 import type * as domains_twilioMessageTemplates_internalActions from "../domains/twilioMessageTemplates/internalActions.js";
 import type * as domains_twilioMessageTemplates_internalCrud from "../domains/twilioMessageTemplates/internalCrud.js";
 import type * as domains_twilioMessageTemplates_mutations from "../domains/twilioMessageTemplates/mutations.js";
@@ -68,6 +70,8 @@ declare const fullApi: ApiFromModules<{
   "domains/organizations/internalCrud": typeof domains_organizations_internalCrud;
   "domains/organizations/mutations": typeof domains_organizations_mutations;
   "domains/organizations/queries": typeof domains_organizations_queries;
+  "domains/twilioMessageBroadcasts/mutations": typeof domains_twilioMessageBroadcasts_mutations;
+  "domains/twilioMessageBroadcasts/queries": typeof domains_twilioMessageBroadcasts_queries;
   "domains/twilioMessageTemplates/internalActions": typeof domains_twilioMessageTemplates_internalActions;
   "domains/twilioMessageTemplates/internalCrud": typeof domains_twilioMessageTemplates_internalCrud;
   "domains/twilioMessageTemplates/mutations": typeof domains_twilioMessageTemplates_mutations;

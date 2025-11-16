@@ -95,7 +95,8 @@ export default function CreateBroadcastPage() {
   });
 
   const broadcastWhatsAppMessagesViaTwilio = useMutation(
-    api.domains.twilioMessages.mutations.broadcastWhatsAppMessagesViaTwilio,
+    api.domains.twilioMessageBroadcasts.mutations
+      .broadcastWhatsAppMessagesViaTwilio,
   );
 
   const router = useRouter();
