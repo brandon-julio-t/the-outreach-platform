@@ -19,15 +19,8 @@ export const sendWhatsAppMessageViaTwilioAction = internalAction({
     const body = {
       To: isVirtualPhone ? args.to : "whatsapp:" + args.to,
       From: isVirtualPhone ? args.from : "whatsapp:" + args.from,
-      ...(isVirtualPhone
-        ? {
-            Body: args.contentSid,
-          }
-        : {
-            ContentSid: args.contentSid,
-            ContentVariables: JSON.stringify(args.contentVariables),
-          }),
-
+      ContentSid: args.contentSid,
+      ContentVariables: JSON.stringify(args.contentVariables),
       StatusCallback: `${process.env.OVERRIDE_CONVEX_SITE_URL ?? process.env.CONVEX_SITE_URL}/webhooks/twilio/message-status`,
     };
 
