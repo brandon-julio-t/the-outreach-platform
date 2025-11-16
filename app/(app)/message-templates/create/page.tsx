@@ -19,6 +19,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "@bprogress/next/app";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
 import { ArrowLeftIcon } from "lucide-react";
@@ -54,6 +55,8 @@ export default function CreateMessageTemplatePage() {
     api.domains.twilioMessageTemplates.mutations.createTwilioMessageTemplate,
   );
 
+  const router = useRouter();
+
   const onSubmit = form.handleSubmit(
     async (data) => {
       await toast
@@ -64,6 +67,8 @@ export default function CreateMessageTemplatePage() {
           error: "Failed to submit create message template request",
         })
         .unwrap();
+
+      router.push("/message-templates");
     },
     (error) => {
       console.error("error", error);
