@@ -8,7 +8,7 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     userId: v.id("users"),
     displayName: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),
-    contactId: v.optional(v.id("contacts")),
+    twilioMessageId: v.id("twilioMessages"),
 
     accountSid: v.string(),
     authToken: v.string(),
@@ -20,6 +20,17 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
   handler: async (step, args): Promise<void> => {
     console.log("step.workflowId", step.workflowId);
     console.log("args", args);
+
+    await step.runMutation(
+      internal.domains.twilioMessages.internalCrud.update,
+      {
+        id: args.twilioMessageId,
+        patch: {
+          workflowId: step.workflowId,
+          lastUpdatedAt: Date.now(),
+        },
+      },
+    );
 
     const response = await step.runAction(
       internal.domains.twilioSettings.actions
@@ -34,28 +45,24 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
       },
     );
 
+    console.log("response", response);
+
     await step.runMutation(
-      internal.domains.twilioMessages.internalCrud.create,
+      internal.domains.twilioMessages.internalCrud.update,
       {
-        organizationId: args.organizationId,
-        userId: args.userId,
-        displayName: args.displayName,
-        role: args.role,
-        contactId: args.contactId,
+        id: args.twilioMessageId,
+        patch: {
+          body: response.body,
+          messageSid: response.sid,
+          apiVersion: response.api_version,
+          direction: response.direction,
+          errorCode: response.error_code?.toString() ?? undefined,
+          errorMessage: response.error_message ?? undefined,
+          status: response.status,
 
-        accountSid: args.accountSid,
-        from: args.from,
-        to: args.to,
-        body: response.body,
-        messageSid: response.sid,
-        apiVersion: response.api_version,
-        direction: response.direction,
-        errorCode: response.error_code?.toString() ?? undefined,
-        errorMessage: response.error_message ?? undefined,
-        status: response.status,
-
-        rawResponseJson: response,
-        workflowId: step.workflowId,
+          rawResponseJson: response,
+          lastUpdatedAt: Date.now(),
+        },
       },
     );
   },

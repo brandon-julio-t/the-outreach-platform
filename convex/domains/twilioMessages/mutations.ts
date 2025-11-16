@@ -3,9 +3,11 @@ import { workflow } from "../..";
 import { internal } from "../../_generated/api";
 import { mutation } from "../../_generated/server";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
+import { getOrgTwilioSettings } from "../core/getOrgTwilioSettings";
 
 export const sendWhatsAppMessageViaTwilio = mutation({
   args: {
+    contactId: v.optional(v.id("contacts")),
     receiverPhoneNumber: v.string(),
     contentSid: v.string(),
     contentVariables: v.record(v.string(), v.string()),
@@ -15,16 +17,33 @@ export const sendWhatsAppMessageViaTwilio = mutation({
 
     const user = await ensureUserWithOrgId({ ctx });
 
-    const twilioSettings = await ctx.db
-      .query("twilioSettings")
-      .withIndex("by_organizationId", (q) =>
-        q.eq("organizationId", user.organizationId),
-      )
-      .first();
+    const twilioSettings = await getOrgTwilioSettings({
+      ctx,
+      organizationId: user.organizationId,
+    });
 
     if (!twilioSettings) {
       throw new ConvexError("Twilio settings not found");
     }
+
+    const twilioMessageId = await ctx.db.insert("twilioMessages", {
+      organizationId: user.organizationId,
+      userId: user._id,
+      displayName: user.email ?? user.phone ?? "Unknown",
+      role: "user",
+      contactId: args.contactId,
+
+      from: twilioSettings.phoneNumber,
+      to: args.receiverPhoneNumber,
+      body: args.contentSid,
+      messageSid: "",
+      accountSid: twilioSettings.accountSid,
+      apiVersion: "",
+      direction: "",
+      status: "queued",
+    });
+
+    console.log("twilioMessageId", twilioMessageId);
 
     await workflow.start(
       ctx,
@@ -35,6 +54,7 @@ export const sendWhatsAppMessageViaTwilio = mutation({
         userId: user._id,
         displayName: user.email ?? user.phone ?? "Unknown",
         role: "user",
+        twilioMessageId,
 
         accountSid: twilioSettings.accountSid,
         authToken: twilioSettings.authToken,

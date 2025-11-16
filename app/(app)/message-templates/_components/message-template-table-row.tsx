@@ -68,7 +68,12 @@ export function MessageTemplateTableRow({
   return (
     <>
       <TableRow key={messageTemplate._id}>
-        <TableCell>{messageTemplate.name}</TableCell>
+        <TableCell>
+          <div>{messageTemplate.name}</div>
+          <div className="text-muted-foreground font-mono text-xs">
+            {messageTemplate.twilioContentSid}
+          </div>
+        </TableCell>
         <TableCell>
           <Badge
             variant={getTwilioMessageCategoryBadgeVariant(
