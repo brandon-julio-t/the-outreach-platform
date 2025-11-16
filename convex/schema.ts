@@ -1,6 +1,7 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { aiAssistantSettings } from "./tables/aiAssistant";
 import { contacts } from "./tables/contacts";
 import { organizationMembers, organizations } from "./tables/organizations";
 import {
@@ -38,4 +39,6 @@ export default defineSchema({
   twilioMessageTemplates: twilioMessageTemplates,
   twilioMessageBroadcasts: twilioMessageBroadcasts,
   twilioMessages: twilioMessages,
+
+  aiAssistantSettings: aiAssistantSettings,
 });

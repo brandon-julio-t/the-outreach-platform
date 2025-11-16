@@ -10,6 +10,9 @@
 
 import type * as admin_console_functions from "../admin/console/functions.js";
 import type * as auth from "../auth.js";
+import type * as domains_aiAssistantSettings_internalQueries from "../domains/aiAssistantSettings/internalQueries.js";
+import type * as domains_aiAssistantSettings_mutations from "../domains/aiAssistantSettings/mutations.js";
+import type * as domains_aiAssistantSettings_queries from "../domains/aiAssistantSettings/queries.js";
 import type * as domains_contacts_internalCrud from "../domains/contacts/internalCrud.js";
 import type * as domains_contacts_internalQueries from "../domains/contacts/internalQueries.js";
 import type * as domains_contacts_mutations from "../domains/contacts/mutations.js";
@@ -47,6 +50,7 @@ import type * as domains_twilioSettings_queries from "../domains/twilioSettings/
 import type * as domains_users_internalCrud from "../domains/users/internalCrud.js";
 import type * as http from "../http.js";
 import type * as index from "../index.js";
+import type * as tables_aiAssistant from "../tables/aiAssistant.js";
 import type * as tables_contacts from "../tables/contacts.js";
 import type * as tables_organizations from "../tables/organizations.js";
 import type * as tables_twilio from "../tables/twilio.js";
@@ -60,6 +64,9 @@ import type {
 declare const fullApi: ApiFromModules<{
   "admin/console/functions": typeof admin_console_functions;
   auth: typeof auth;
+  "domains/aiAssistantSettings/internalQueries": typeof domains_aiAssistantSettings_internalQueries;
+  "domains/aiAssistantSettings/mutations": typeof domains_aiAssistantSettings_mutations;
+  "domains/aiAssistantSettings/queries": typeof domains_aiAssistantSettings_queries;
   "domains/contacts/internalCrud": typeof domains_contacts_internalCrud;
   "domains/contacts/internalQueries": typeof domains_contacts_internalQueries;
   "domains/contacts/mutations": typeof domains_contacts_mutations;
@@ -97,6 +104,7 @@ declare const fullApi: ApiFromModules<{
   "domains/users/internalCrud": typeof domains_users_internalCrud;
   http: typeof http;
   index: typeof index;
+  "tables/aiAssistant": typeof tables_aiAssistant;
   "tables/contacts": typeof tables_contacts;
   "tables/organizations": typeof tables_organizations;
   "tables/twilio": typeof tables_twilio;

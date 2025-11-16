@@ -23,7 +23,8 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     console.log("step.workflowId", step.workflowId);
     console.log("args", args);
 
-    const shouldWhatsApp = args.contactId;
+    const virtualPhone = "+18777804236";
+    const shouldWhatsApp = args.contactId && args.to !== virtualPhone;
     const normalizedFrom =
       shouldWhatsApp && !args.from.startsWith("whatsapp:")
         ? "whatsapp:" + args.from

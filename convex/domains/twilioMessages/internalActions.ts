@@ -24,8 +24,27 @@ export const generateAssistantReply = internalAction({
       },
     );
 
+    console.log("pastMessages", pastMessages);
+
+    const aiAssistantSettings = await ctx.runQuery(
+      internal.domains.aiAssistantSettings.internalQueries
+        .getAiAssistantSettingsByOrganizationId,
+      {
+        organizationId: args.organizationId,
+      },
+    );
+
+    console.log("aiAssistantSettings", aiAssistantSettings);
+
+    if (!aiAssistantSettings) {
+      console.warn(
+        "AI assistant settings not found for organization",
+        args.organizationId,
+      );
+    }
+
     const response = await generateText({
-      model: openai("gpt-5.1"),
+      model: openai(aiAssistantSettings?.modelId ?? "gpt-5.1"),
 
       providerOptions: {
         openai: {
@@ -33,7 +52,9 @@ export const generateAssistantReply = internalAction({
         } satisfies OpenAIResponsesProviderOptions,
       },
 
-      system: `You are a helpful assistant that can answer questions and help with tasks.`,
+      system:
+        aiAssistantSettings?.systemPrompt ??
+        `You are a helpful assistant that can answer questions and help with tasks.`,
 
       messages: pastMessages.map((message) => ({
         role: message.role,

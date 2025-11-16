@@ -7,12 +7,13 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
+import { AiAssistantSection } from "./ai-assistant-section";
 import { TestTwilioSection } from "./test-twilio-section";
 import { TwilioSettingsSection } from "./twilio-settings-section";
 
 export default function SettingsPage() {
   return (
-    <main className="container mx-auto">
+    <main className="container mx-auto pb-6">
       <ItemGroup className="gap-4">
         <Item>
           <ItemContent>
@@ -26,6 +27,8 @@ export default function SettingsPage() {
         <TwilioSettingsSection />
 
         <TestTwilioSection />
+
+        <AiAssistantSection />
       </ItemGroup>
     </main>
   );
