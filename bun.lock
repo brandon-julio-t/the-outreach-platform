@@ -6,6 +6,7 @@
       "name": "farmio-outreach-platform",
       "dependencies": {
         "@bprogress/next": "^3.2.12",
+        "@convex-dev/action-retrier": "^0.3.0",
         "@convex-dev/auth": "^0.0.90",
         "@convex-dev/workflow": "^0.3.1",
         "@hookform/resolvers": "^5.2.2",
@@ -127,6 +128,8 @@
     "@bprogress/next": ["@bprogress/next@3.2.12", "", { "dependencies": { "@bprogress/core": "^1.3.4", "@bprogress/react": "^1.2.7" }, "peerDependencies": { "next": ">=13.0.0", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-/ZvNwbAd0ty9QiQwCfT2AfwWVdAaEyCPx5RUz3CfiiJS/OLBohhDz/IC/srhwK9GnXeXavvtiUrpKzN5GJDwlw=="],
 
     "@bprogress/react": ["@bprogress/react@1.2.7", "", { "dependencies": { "@bprogress/core": "^1.3.4" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-MqJfHW+R5CQeWqyqrLxUjdBRHk24Xl63OkBLo5DMWqUqocUikRTfCIc/jtQQbPk7BRfdr5OP3Lx7YlfQ9QOZMQ=="],
+
+    "@convex-dev/action-retrier": ["@convex-dev/action-retrier@0.3.0", "", { "peerDependencies": { "convex": "^1.24.8" } }, "sha512-opBNsgOPSuVY3qSARNub98XqPzSpSS7Jga0oGeWFhO+DcWBMt2gD3ssUeEA1Gi7wTNiZBX+T6OBfBnqMfv6Tuw=="],
 
     "@convex-dev/auth": ["@convex-dev/auth@0.0.90", "", { "dependencies": { "@oslojs/crypto": "^1.0.1", "@oslojs/encoding": "^1.1.0", "cookie": "^1.0.1", "is-network-error": "^1.1.0", "jose": "^5.2.2", "jwt-decode": "^4.0.0", "lucia": "^3.2.0", "oauth4webapi": "^3.1.2", "path-to-regexp": "^6.3.0", "server-only": "^0.0.1" }, "peerDependencies": { "@auth/core": "^0.37.0", "convex": "^1.17.0", "react": "^18.2.0 || ^19.0.0-0" }, "optionalPeers": ["react"], "bin": { "auth": "dist/bin.cjs" } }, "sha512-aqw88EB042HvnaF4wcf/f/wTocmT2Bus2VDQRuV79cM0+8kORM0ICK/ByZ6XsHgQ9qr6TmidNbXm6QAgndrdpQ=="],
 

@@ -46,7 +46,8 @@ export const sendWhatsAppMessageViaTwilioAction = internalAction({
 
     console.log("response", response);
 
-    const json = await response.json();
+    const json =
+      (await response.json()) as SendWhatsAppMessageViaTwilioResponse;
 
     console.log("json", json);
 

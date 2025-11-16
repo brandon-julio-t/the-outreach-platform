@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
+    "@convex-dev/action-retrier": "^0.3.0",
     "@convex-dev/auth": "^0.0.90",
     "@convex-dev/workflow": "^0.3.1",
     "@hookform/resolvers": "^5.2.2",

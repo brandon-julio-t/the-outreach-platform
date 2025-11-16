@@ -3,7 +3,11 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { contacts } from "./tables/contacts";
 import { organizationMembers, organizations } from "./tables/organizations";
-import { twilioMessages, twilioSettings } from "./tables/twilio";
+import {
+  twilioMessages,
+  twilioMessageTemplates,
+  twilioSettings,
+} from "./tables/twilio";
 
 // The schema is normally optional, but Convex Auth
 // requires indexes defined on `authTables`.
@@ -30,5 +34,6 @@ export default defineSchema({
   contacts: contacts,
 
   twilioSettings: twilioSettings,
+  twilioMessageTemplates: twilioMessageTemplates,
   twilioMessages: twilioMessages,
 });
