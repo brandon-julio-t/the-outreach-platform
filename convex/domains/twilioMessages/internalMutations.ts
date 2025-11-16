@@ -1,5 +1,10 @@
-import { ConvexError, v } from "convex/values";
+import { ConvexError, Infer, v } from "convex/values";
 import { internalMutation } from "../../_generated/server";
+import schema from "../../schema";
+
+type MessageStatus = Infer<
+  typeof schema.tables.twilioMessages.validator.fields.status
+>;
 
 export const updateTwilioMessageStatusFromWebhook = internalMutation({
   args: {
@@ -24,7 +29,7 @@ export const updateTwilioMessageStatusFromWebhook = internalMutation({
     }
 
     await ctx.db.patch(twilioMessage._id, {
-      status: args.messageStatus,
+      status: args.messageStatus as MessageStatus,
       errorCode: args.errorCode ?? undefined,
       errorMessage: args.errorMessage ?? undefined,
       lastUpdatedAt: Date.now(),

@@ -20,6 +20,19 @@ export type SendWhatsAppMessageViaTwilioResponse = {
   price: number | null;
   price_unit: string;
   sid: string;
-  status: string;
+  status:
+    | "queued"
+    | "sending"
+    | "sent"
+    | "failed"
+    | "delivered"
+    | "undelivered"
+    | "receiving"
+    | "received"
+    | "accepted"
+    | "scheduled"
+    | "read"
+    | "partially_delivered"
+    | "canceled";
   to: string;
 };
