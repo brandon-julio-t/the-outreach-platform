@@ -44,21 +44,24 @@ export function MessageTemplateTableRow({
     api.domains.twilioMessageTemplates.mutations.deleteTwilioMessageTemplate,
   );
 
-  const [isDeleting, startDeleting] = React.useTransition();
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   const onDelete = () => {
-    startDeleting(async () => {
-      await toast
-        .promise(deleteMessageTemplate({ id: messageTemplate._id }), {
-          loading: "Deleting message template...",
-          success: "Message template deleted successfully",
-          error: "Failed to delete message template",
-        })
-        .unwrap()
-        .then(() => {
-          setOpenDelete(false);
-        })
-        .catch(console.error);
+    setIsDeleting(true);
+
+    toast.promise(deleteMessageTemplate({ id: messageTemplate._id }), {
+      loading: "Deleting message template...",
+
+      success: () => {
+        setOpenDelete(false);
+        return "Message template deleted successfully";
+      },
+
+      error: "Failed to delete message template",
+
+      finally: () => {
+        setIsDeleting(false);
+      },
     });
   };
 
