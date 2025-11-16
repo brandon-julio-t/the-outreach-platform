@@ -83,4 +83,8 @@ export const twilioMessages = defineTable({
   workflowId: v.optional(vWorkflowId),
 })
   .index("by_accountSid_messageSid", ["accountSid", "messageSid"])
-  .index("by_organizationId", ["organizationId"]);
+  .index("by_organizationId", ["organizationId"])
+  .index("by_organizationId_twilioMessageBroadcastId", [
+    "organizationId",
+    "twilioMessageBroadcastId",
+  ]);

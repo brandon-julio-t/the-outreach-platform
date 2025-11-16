@@ -1,37 +1,13 @@
-"use client";
+import { Id } from "@/convex/_generated/dataModel";
+import BroadcastDetailsPageView from "./_components/page-view";
 
-import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemHeader,
-  ItemTitle,
-} from "@/components/ui/item";
-import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
-
-export default function BroadcastDetailsPage() {
+export default async function BroadcastDetailsPage(
+  props: PageProps<"/broadcasts/[broadcastId]">,
+) {
+  const params = await props.params;
   return (
-    <main className="container mx-auto">
-      <ItemGroup>
-        <Item>
-          <ItemHeader>
-            <Button variant="ghost" asChild>
-              <Link href="/broadcasts">
-                <ArrowLeftIcon /> Back to broadcasts
-              </Link>
-            </Button>
-          </ItemHeader>
-          <ItemContent>
-            <ItemTitle>Broadcast Details</ItemTitle>
-            <ItemDescription>
-              View the details of the broadcast.
-            </ItemDescription>
-          </ItemContent>
-        </Item>
-      </ItemGroup>
-    </main>
+    <BroadcastDetailsPageView
+      broadcastId={params.broadcastId as Id<"twilioMessageBroadcasts">}
+    />
   );
 }
