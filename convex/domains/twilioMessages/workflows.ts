@@ -5,9 +5,9 @@ import { internal } from "../../_generated/api";
 export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
   args: {
     organizationId: v.id("organizations"),
-    userId: v.id("users"),
     displayName: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),
+    userId: v.optional(v.id("users")),
     contactId: v.optional(v.id("contacts")),
     twilioMessageBroadcastId: v.optional(v.id("twilioMessageBroadcasts")),
 
@@ -15,12 +15,23 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     authToken: v.string(),
     from: v.string(),
     to: v.string(),
-    contentSid: v.string(),
-    contentVariables: v.record(v.string(), v.string()),
+    body: v.optional(v.string()),
+    contentSid: v.optional(v.string()),
+    contentVariables: v.optional(v.record(v.string(), v.string())),
   },
   handler: async (step, args): Promise<void> => {
     console.log("step.workflowId", step.workflowId);
     console.log("args", args);
+
+    const shouldWhatsApp = args.contactId;
+    const normalizedFrom =
+      shouldWhatsApp && !args.from.startsWith("whatsapp:")
+        ? "whatsapp:" + args.from
+        : args.from;
+    const normalizedTo =
+      shouldWhatsApp && !args.to.startsWith("whatsapp:")
+        ? "whatsapp:" + args.to
+        : args.to;
 
     const twilioMessage = await step.runMutation(
       internal.domains.twilioMessages.internalCrud.create,
@@ -32,9 +43,9 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
         contactId: args.contactId,
         twilioMessageBroadcastId: args.twilioMessageBroadcastId,
 
-        from: args.from,
-        to: args.to,
-        body: args.contentSid,
+        from: normalizedFrom,
+        to: normalizedTo,
+        body: args.body ?? args.contentSid ?? "",
         messageSid: "",
         accountSid: args.accountSid,
         apiVersion: "",
@@ -54,8 +65,9 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
       {
         accountSid: args.accountSid,
         authToken: args.authToken,
-        from: args.from,
-        to: args.to,
+        from: normalizedFrom,
+        to: normalizedTo,
+        body: args.body,
         contentSid: args.contentSid,
         contentVariables: args.contentVariables,
       },
@@ -157,5 +169,17 @@ export const handleIncomingWhatsAppMessageWorkflow = workflow.define({
     );
 
     console.log("twilioMessage", twilioMessage);
+
+    await step.runAction(
+      internal.domains.twilioMessages.internalActions.generateAssistantReply,
+      {
+        contactId: contact._id,
+        contactPhone: normalizedFromPhone,
+        organizationId: twilioSettings.organizationId,
+        accountSid: twilioSettings.accountSid,
+        authToken: twilioSettings.authToken,
+        senderPhone: twilioSettings.phoneNumber,
+      },
+    );
   },
 });

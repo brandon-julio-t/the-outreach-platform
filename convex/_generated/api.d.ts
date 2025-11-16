@@ -33,8 +33,10 @@ import type * as domains_twilioMessageTemplates_mutations from "../domains/twili
 import type * as domains_twilioMessageTemplates_queries from "../domains/twilioMessageTemplates/queries.js";
 import type * as domains_twilioMessageTemplates_workflows from "../domains/twilioMessageTemplates/workflows.js";
 import type * as domains_twilioMessages_http from "../domains/twilioMessages/http.js";
+import type * as domains_twilioMessages_internalActions from "../domains/twilioMessages/internalActions.js";
 import type * as domains_twilioMessages_internalCrud from "../domains/twilioMessages/internalCrud.js";
 import type * as domains_twilioMessages_internalMutations from "../domains/twilioMessages/internalMutations.js";
+import type * as domains_twilioMessages_internalQueries from "../domains/twilioMessages/internalQueries.js";
 import type * as domains_twilioMessages_mutations from "../domains/twilioMessages/mutations.js";
 import type * as domains_twilioMessages_queries from "../domains/twilioMessages/queries.js";
 import type * as domains_twilioMessages_workflows from "../domains/twilioMessages/workflows.js";
@@ -81,8 +83,10 @@ declare const fullApi: ApiFromModules<{
   "domains/twilioMessageTemplates/queries": typeof domains_twilioMessageTemplates_queries;
   "domains/twilioMessageTemplates/workflows": typeof domains_twilioMessageTemplates_workflows;
   "domains/twilioMessages/http": typeof domains_twilioMessages_http;
+  "domains/twilioMessages/internalActions": typeof domains_twilioMessages_internalActions;
   "domains/twilioMessages/internalCrud": typeof domains_twilioMessages_internalCrud;
   "domains/twilioMessages/internalMutations": typeof domains_twilioMessages_internalMutations;
+  "domains/twilioMessages/internalQueries": typeof domains_twilioMessages_internalQueries;
   "domains/twilioMessages/mutations": typeof domains_twilioMessages_mutations;
   "domains/twilioMessages/queries": typeof domains_twilioMessages_queries;
   "domains/twilioMessages/workflows": typeof domains_twilioMessages_workflows;

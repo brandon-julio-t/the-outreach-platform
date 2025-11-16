@@ -89,4 +89,5 @@ export const twilioMessages = defineTable({
   .index("by_organizationId_twilioMessageBroadcastId", [
     "organizationId",
     "twilioMessageBroadcastId",
-  ]);
+  ])
+  .index("by_organizationId_contactId", ["organizationId", "contactId"]);

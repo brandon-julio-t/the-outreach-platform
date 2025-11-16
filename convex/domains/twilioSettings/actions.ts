@@ -8,21 +8,30 @@ export const sendWhatsAppMessageViaTwilioAction = internalAction({
     authToken: v.string(),
     from: v.string(),
     to: v.string(),
-    contentSid: v.string(),
-    contentVariables: v.record(v.string(), v.string()),
+    body: v.optional(v.string()),
+    contentSid: v.optional(v.string()),
+    contentVariables: v.optional(v.record(v.string(), v.string())),
   },
   handler: async (_ctx, args) => {
     console.log("args", args);
 
-    const isVirtualPhone = args.to === "+18777804236";
+    const body = new URLSearchParams();
+    body.set("To", args.to);
+    body.set("From", args.from);
+    body.set(
+      "StatusCallback",
+      `${process.env.OVERRIDE_CONVEX_SITE_URL ?? process.env.CONVEX_SITE_URL}/webhooks/twilio/message-status`,
+    );
 
-    const body = {
-      To: isVirtualPhone ? args.to : "whatsapp:" + args.to,
-      From: isVirtualPhone ? args.from : "whatsapp:" + args.from,
-      ContentSid: args.contentSid,
-      ContentVariables: JSON.stringify(args.contentVariables),
-      StatusCallback: `${process.env.OVERRIDE_CONVEX_SITE_URL ?? process.env.CONVEX_SITE_URL}/webhooks/twilio/message-status`,
-    };
+    if (args.body) {
+      body.set("Body", args.body);
+    }
+    if (args.contentSid) {
+      body.set("ContentSid", args.contentSid);
+    }
+    if (args.contentVariables) {
+      body.set("ContentVariables", JSON.stringify(args.contentVariables));
+    }
 
     console.log("body", body);
 
@@ -33,7 +42,7 @@ export const sendWhatsAppMessageViaTwilioAction = internalAction({
         headers: {
           Authorization: `Basic ${btoa(`${args.accountSid}:${args.authToken}`)}`,
         },
-        body: new URLSearchParams(body),
+        body: body,
       },
     );
 

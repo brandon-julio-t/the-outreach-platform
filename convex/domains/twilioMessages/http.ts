@@ -123,7 +123,7 @@ export function twilioMessagesHttpRoutes(http: HttpRouter) {
           from: body.get("From"),
           to: body.get("To"),
           messageText: body.get("Body"),
-          profileName: body.get("ProfileName"),
+          profileName: body.get("ProfileName") ?? body.get("From"),
           accountSid: body.get("AccountSid"),
           messageSid: body.get("MessageSid"),
           apiVersion: body.get("ApiVersion"),
