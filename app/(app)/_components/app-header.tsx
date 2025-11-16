@@ -12,7 +12,7 @@ export default function AppHeader() {
       <SidebarTrigger />
 
       <ThemeSwitcher
-        className="hidden w-fit"
+        className="w-fit"
         defaultValue="system"
         onChange={setTheme}
         value={theme as "light" | "dark" | "system"}
