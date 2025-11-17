@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "farmio-outreach-platform",
+      "name": "the-outreach-platform",
       "dependencies": {
         "@ai-sdk/openai": "^2.0.67",
         "@bprogress/next": "^3.2.12",
