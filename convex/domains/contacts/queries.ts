@@ -47,3 +47,26 @@ export const getContacts = query({
       .paginate(args.paginationOpts);
   },
 });
+
+export const getContactById = query({
+  args: {
+    id: v.id("contacts"),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthUserWithOrgId({ ctx });
+    if (!user) {
+      return null;
+    }
+
+    const contact = await ctx.db.get(args.id);
+    if (!contact) {
+      return null;
+    }
+
+    if (contact.organizationId !== user.organizationId) {
+      return null;
+    }
+
+    return contact;
+  },
+});

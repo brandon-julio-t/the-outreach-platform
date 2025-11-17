@@ -1,15 +1,24 @@
-import { paginationOptsValidator } from "convex/server";
+import { paginationOptsValidator, PaginationResult } from "convex/server";
 import { v } from "convex/values";
 import { workflow } from "../..";
+import { Doc } from "../../_generated/dataModel";
 import { query } from "../../_generated/server";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
+import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
 export const getTwilioMessages = query({
   args: {
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await ensureUserWithOrgId({ ctx });
+    const user = await getAuthUserWithOrgId({ ctx });
+    if (!user) {
+      return {
+        page: [],
+        isDone: true,
+        continueCursor: "",
+      } satisfies PaginationResult<Doc<"twilioMessages">>;
+    }
 
     const paginated = await ctx.db
       .query("twilioMessages")
@@ -72,6 +81,46 @@ export const getTwilioMessagesByBroadcastId = query({
             workflowStatus: message.workflowId
               ? await workflow.status(ctx, message.workflowId)
               : null,
+          };
+        }),
+      ),
+    };
+  },
+});
+
+export const getTwilioMessagesByContactId = query({
+  args: {
+    contactId: v.id("contacts"),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthUserWithOrgId({ ctx });
+    if (!user) {
+      return {
+        page: [],
+        isDone: true,
+        continueCursor: "",
+      } satisfies PaginationResult<Doc<"twilioMessages">>;
+    }
+
+    const paginated = await ctx.db
+      .query("twilioMessages")
+      .withIndex("by_organizationId_contactId", (q) =>
+        q
+          .eq("organizationId", user.organizationId)
+          .eq("contactId", args.contactId),
+      )
+      .order("desc")
+      .paginate(args.paginationOpts);
+
+    return {
+      ...paginated,
+      page: await Promise.all(
+        paginated.page.map(async (message) => {
+          return {
+            ...message,
+
+            //
           };
         }),
       ),

@@ -9,8 +9,9 @@ export const sendWhatsAppMessageViaTwilio = mutation({
   args: {
     contactId: v.optional(v.id("contacts")),
     receiverPhoneNumber: v.string(),
-    contentSid: v.string(),
-    contentVariables: v.record(v.string(), v.string()),
+    body: v.optional(v.string()),
+    contentSid: v.optional(v.string()),
+    contentVariables: v.optional(v.record(v.string(), v.string())),
   },
   handler: async (ctx, args) => {
     console.log("args", args);
@@ -35,11 +36,13 @@ export const sendWhatsAppMessageViaTwilio = mutation({
         userId: user._id,
         displayName: user.email ?? user.phone ?? "Unknown",
         role: "assistant",
+        contactId: args.contactId,
 
         accountSid: twilioSettings.accountSid,
         authToken: twilioSettings.authToken,
         from: twilioSettings.phoneNumber,
         to: args.receiverPhoneNumber,
+        body: args.body,
         contentSid: args.contentSid,
         contentVariables: args.contentVariables,
       },
