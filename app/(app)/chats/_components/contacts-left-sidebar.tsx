@@ -12,7 +12,7 @@ import {
 import { ItemGroup } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
@@ -20,18 +20,22 @@ import { useDebounceValue } from "usehooks-ts";
 import { ContactsLeftSidebarItem } from "./contacts-left-sidebar-item";
 
 export function ContactsLeftSidebar() {
-  const [search, setSearch] = useQueryState(
-    "search",
-    parseAsString.withDefault(""),
-  );
+  const [search] = useQueryState("search", parseAsString.withDefault(""));
 
   const [debouncedSearch] = useDebounceValue(search, 200);
 
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const contactsQuery = usePaginatedQuery(
     api.domains.contacts.queries.getContacts,
-    {
-      search: debouncedSearch,
-    },
+    currentOrganization?._id
+      ? {
+          search: debouncedSearch,
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },
