@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint-fix:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: bunx eslint --fix --ignore-pattern "convex/_generated/**" {staged_files}
+      stage_fixed: true
+    format:
+      run: bunx prettier --write {staged_files}
+      stage_fixed: true
+pre-push:
+  commands:
+    check:
+      run: bun run check
