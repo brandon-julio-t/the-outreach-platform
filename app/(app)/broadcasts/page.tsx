@@ -27,15 +27,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { format } from "date-fns";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function BroadcastsPage() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const twilioMessageBroadcastsQuery = usePaginatedQuery(
     api.domains.twilioMessageBroadcasts.queries.getTwilioMessageBroadcasts,
-    {},
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },

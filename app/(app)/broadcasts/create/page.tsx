@@ -33,7 +33,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useRouter } from "@bprogress/next/app";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -42,9 +42,17 @@ import { toast } from "sonner";
 import z from "zod";
 
 export default function CreateBroadcastPage() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const contactsQuery = usePaginatedQuery(
     api.domains.contacts.queries.getContacts,
-    {},
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },
@@ -58,7 +66,11 @@ export default function CreateBroadcastPage() {
 
   const twilioMessageTemplatesQuery = usePaginatedQuery(
     api.domains.twilioMessageTemplates.queries.getTwilioMessageTemplates,
-    {},
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },

@@ -1,29 +1,18 @@
-import { paginationOptsValidator, PaginationResult } from "convex/server";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { workflow } from "../..";
-import { Doc } from "../../_generated/dataModel";
 import { query } from "../../_generated/server";
-import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
-import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
 export const getTwilioMessages = query({
   args: {
+    organizationId: v.id("organizations"),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserWithOrgId({ ctx });
-    if (!user) {
-      return {
-        page: [],
-        isDone: true,
-        continueCursor: "",
-      } satisfies PaginationResult<Doc<"twilioMessages">>;
-    }
-
     const paginated = await ctx.db
       .query("twilioMessages")
       .withIndex("by_organizationId", (q) =>
-        q.eq("organizationId", user.organizationId),
+        q.eq("organizationId", args.organizationId),
       )
       .order("desc")
       .paginate(args.paginationOpts);
@@ -51,17 +40,16 @@ export const getTwilioMessages = query({
 
 export const getTwilioMessagesByBroadcastId = query({
   args: {
+    organizationId: v.id("organizations"),
     twilioMessageBroadcastId: v.id("twilioMessageBroadcasts"),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await ensureUserWithOrgId({ ctx });
-
     const paginated = await ctx.db
       .query("twilioMessages")
       .withIndex("by_organizationId_twilioMessageBroadcastId", (q) =>
         q
-          .eq("organizationId", user.organizationId)
+          .eq("organizationId", args.organizationId)
           .eq("twilioMessageBroadcastId", args.twilioMessageBroadcastId),
       )
       .order("desc")
@@ -90,24 +78,16 @@ export const getTwilioMessagesByBroadcastId = query({
 
 export const getTwilioMessagesByContactId = query({
   args: {
+    organizationId: v.id("organizations"),
     contactId: v.id("contacts"),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserWithOrgId({ ctx });
-    if (!user) {
-      return {
-        page: [],
-        isDone: true,
-        continueCursor: "",
-      } satisfies PaginationResult<Doc<"twilioMessages">>;
-    }
-
     const paginated = await ctx.db
       .query("twilioMessages")
       .withIndex("by_organizationId_contactId", (q) =>
         q
-          .eq("organizationId", user.organizationId)
+          .eq("organizationId", args.organizationId)
           .eq("contactId", args.contactId),
       )
       .order("desc")

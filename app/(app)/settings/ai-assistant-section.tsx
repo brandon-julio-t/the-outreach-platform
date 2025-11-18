@@ -29,8 +29,17 @@ import { toast } from "sonner";
 import z from "zod";
 
 export function AiAssistantSection() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const aiAssistantSettings = useQuery(
     api.domains.aiAssistantSettings.queries.getActiveOrgAiAssistantSettings,
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
   );
 
   const form = useForm({

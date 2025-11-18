@@ -26,14 +26,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import Link from "next/link";
 import { MessageTemplateTableRow } from "./_components/message-template-table-row";
 
 export default function MessageTemplatesPage() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const query = usePaginatedQuery(
     api.domains.twilioMessageTemplates.queries.getTwilioMessageTemplates,
-    {},
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },

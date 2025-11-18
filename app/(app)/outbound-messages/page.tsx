@@ -31,13 +31,21 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { format } from "date-fns";
 
 export default function OutboundMessagesPage() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const twilioMessagesQuery = usePaginatedQuery(
     api.domains.twilioMessages.queries.getTwilioMessages,
-    {},
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },

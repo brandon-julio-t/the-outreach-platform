@@ -1,26 +1,17 @@
-import { paginationOptsValidator, PaginationResult } from "convex/server";
-import { Doc } from "../../_generated/dataModel";
+import { paginationOptsValidator } from "convex/server";
+import { v } from "convex/values";
 import { query } from "../../_generated/server";
-import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
 export const getTwilioMessageBroadcasts = query({
   args: {
+    organizationId: v.id("organizations"),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserWithOrgId({ ctx });
-    if (!user) {
-      return {
-        page: [],
-        isDone: true,
-        continueCursor: "",
-      } satisfies PaginationResult<Doc<"twilioMessageBroadcasts">>;
-    }
-
     const paginated = await ctx.db
       .query("twilioMessageBroadcasts")
       .withIndex("by_organizationId", (q) =>
-        q.eq("organizationId", user.organizationId),
+        q.eq("organizationId", args.organizationId),
       )
       .order("desc")
       .paginate(args.paginationOpts);

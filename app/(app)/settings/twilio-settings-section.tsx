@@ -24,8 +24,17 @@ import { toast } from "sonner";
 import z from "zod";
 
 export function TwilioSettingsSection() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const twilioSettings = useQuery(
     api.domains.twilioSettings.queries.getTwilioSettings,
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
   );
 
   const form = useForm({

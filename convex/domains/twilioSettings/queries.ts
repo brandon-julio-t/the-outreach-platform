@@ -1,21 +1,15 @@
+import { v } from "convex/values";
 import { query } from "../../_generated/server";
-import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
 
 export const getTwilioSettings = query({
   args: {
-    //
+    organizationId: v.id("organizations"),
   },
-  handler: async (ctx) => {
-    const user = await ensureUserWithOrgId({ ctx });
-
-    if (!user) {
-      return null;
-    }
-
+  handler: async (ctx, args) => {
     return await ctx.db
       .query("twilioSettings")
       .withIndex("by_organizationId", (q) =>
-        q.eq("organizationId", user.organizationId),
+        q.eq("organizationId", args.organizationId),
       )
       .first();
   },

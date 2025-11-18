@@ -30,8 +30,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
-import { useMutation, useQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
+import { useMutation } from "convex/react";
 import { MessageSquareIcon, SendIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -42,15 +42,28 @@ export function ChatDetailsPageView({
 }: {
   contactId: Id<"contacts">;
 }) {
-  const contact = useQuery(api.domains.contacts.queries.getContactById, {
-    id: contactId,
-  });
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
+  const contact = useQuery(
+    api.domains.contacts.queries.getContactById,
+    currentOrganization?._id
+      ? {
+          id: contactId,
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
+  );
 
   const messagesQuery = usePaginatedQuery(
     api.domains.twilioMessages.queries.getTwilioMessagesByContactId,
-    {
-      contactId: contactId,
-    },
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+          contactId: contactId,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },

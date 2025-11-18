@@ -1,17 +1,18 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator, PaginationResult } from "convex/server";
 import { v } from "convex/values";
 import { Doc } from "../../_generated/dataModel";
 import { query } from "../../_generated/server";
-import { getAuthUserWithOrgId } from "../core/getAuthUserWithOrgId";
 
 export const getContacts = query({
   args: {
     search: v.optional(v.string()),
+    organizationId: v.id("organizations"),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserWithOrgId({ ctx });
-    if (!user) {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
       return {
         page: [],
         isDone: true,
@@ -41,7 +42,7 @@ export const getContacts = query({
     return await ctx.db
       .query("contacts")
       .withIndex("by_organizationId", (q) =>
-        q.eq("organizationId", user.organizationId),
+        q.eq("organizationId", args.organizationId),
       )
       .order("desc")
       .paginate(args.paginationOpts);
@@ -51,10 +52,11 @@ export const getContacts = query({
 export const getContactById = query({
   args: {
     id: v.id("contacts"),
+    organizationId: v.id("organizations"),
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserWithOrgId({ ctx });
-    if (!user) {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
       return null;
     }
 
@@ -63,7 +65,7 @@ export const getContactById = query({
       return null;
     }
 
-    if (contact.organizationId !== user.organizationId) {
+    if (contact.organizationId !== args.organizationId) {
       return null;
     }
 

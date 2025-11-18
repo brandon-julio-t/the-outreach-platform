@@ -26,14 +26,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { AddMemberDialog } from "./_components/add-member-dialog";
 import { MemberTableRow } from "./_components/member-table-row";
 
 export default function OrganizationMembersPage() {
+  const currentOrganization = useQuery(
+    api.domains.organizations.queries.getCurrentUserActiveOrganization,
+  );
+
   const organizationMembersQuery = usePaginatedQuery(
     api.domains.organizationMembers.queries.getOrganizationMembers,
-    {},
+    currentOrganization?._id
+      ? {
+          organizationId: currentOrganization._id,
+        }
+      : "skip",
     {
       initialNumItems: 50,
     },

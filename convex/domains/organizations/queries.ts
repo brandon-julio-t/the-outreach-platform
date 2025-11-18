@@ -32,7 +32,7 @@ export const getCurrentUserOrganizations = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      return null;
+      return [];
     }
 
     const organizationMembers = await ctx.db
