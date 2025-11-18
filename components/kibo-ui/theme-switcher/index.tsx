@@ -1,10 +1,11 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import React, { useCallback } from "react";
+import { useIsMounted } from "usehooks-ts";
 
 const themes = [
   {
@@ -42,19 +43,19 @@ export const ThemeSwitcher = ({
     prop: value,
     onChange,
   });
-  const [mounted, setMounted] = useState(false);
+  const isMounted = useIsMounted();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(isMounted());
+  }, [isMounted]);
 
   const handleThemeClick = useCallback(
     (themeKey: "light" | "dark" | "system") => {
       setTheme(themeKey);
     },
-    [setTheme]
+    [setTheme],
   );
-
-  // Prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   if (!mounted) {
     return null;
@@ -63,8 +64,8 @@ export const ThemeSwitcher = ({
   return (
     <div
       className={cn(
-        "relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border",
-        className
+        "bg-background ring-border relative isolate flex h-8 rounded-full p-1 ring-1",
+        className,
       )}
     >
       {themes.map(({ key, icon: Icon, label }) => {
@@ -80,7 +81,7 @@ export const ThemeSwitcher = ({
           >
             {isActive && (
               <motion.div
-                className="absolute inset-0 rounded-full bg-secondary"
+                className="bg-secondary absolute inset-0 rounded-full"
                 layoutId="activeTheme"
                 transition={{ type: "spring", duration: 0.5 }}
               />
@@ -88,7 +89,7 @@ export const ThemeSwitcher = ({
             <Icon
               className={cn(
                 "relative z-10 m-auto h-4 w-4",
-                isActive ? "text-foreground" : "text-muted-foreground"
+                isActive ? "text-foreground" : "text-muted-foreground",
               )}
             />
           </button>
