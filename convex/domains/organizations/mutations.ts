@@ -1,5 +1,5 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { mutation } from "../../_generated/server";
 
 export const setCurrentUserActiveOrganization = mutation({
@@ -9,7 +9,7 @@ export const setCurrentUserActiveOrganization = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      return null;
+      throw new ConvexError("User not authenticated");
     }
 
     await ctx.db.patch(userId, {
