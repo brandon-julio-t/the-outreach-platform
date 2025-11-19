@@ -133,7 +133,11 @@ export function TwilioSettingsSection() {
             />
 
             <Field orientation="horizontal">
-              <Button type="submit" className="ml-auto">
+              <Button
+                type="submit"
+                className="ml-auto"
+                disabled={form.formState.isSubmitting}
+              >
                 {form.formState.isSubmitting && <Spinner />}
                 Save Settings
               </Button>
