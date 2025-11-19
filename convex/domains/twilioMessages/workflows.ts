@@ -94,6 +94,15 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
         },
       },
     );
+
+    if (args.contactId) {
+      await step.runMutation(internal.domains.contacts.internalCrud.update, {
+        id: args.contactId,
+        patch: {
+          latestMessageTime: Date.now(),
+        },
+      });
+    }
   },
 });
 
@@ -143,8 +152,16 @@ export const handleIncomingWhatsAppMessageWorkflow = workflow.define({
           organizationId: twilioSettings.organizationId,
           name: args.profileName,
           phone: normalizedFromPhone,
+          lastUserReplyTime: Date.now(),
         },
       );
+    } else {
+      await step.runMutation(internal.domains.contacts.internalCrud.update, {
+        id: contact._id,
+        patch: {
+          lastUserReplyTime: Date.now(),
+        },
+      });
     }
 
     const twilioMessage = await step.runMutation(
