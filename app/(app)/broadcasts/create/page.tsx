@@ -18,6 +18,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
+  FieldSeparator,
   FieldSet,
   FieldTitle,
 } from "@/components/ui/field";
@@ -273,6 +274,8 @@ export default function CreateBroadcastPage() {
                 )}
               </FieldGroup>
             </FieldSet>
+
+            <FieldSeparator />
 
             <FieldSet>
               <FieldLegend>Choose Twilio Message Template</FieldLegend>
