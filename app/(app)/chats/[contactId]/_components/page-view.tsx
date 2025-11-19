@@ -187,6 +187,7 @@ export function ChatDetailsPageView({
           name="message"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               <InputGroup>
                 <InputGroupTextarea
                   {...field}
@@ -194,9 +195,6 @@ export function ChatDetailsPageView({
                   aria-invalid={fieldState.invalid}
                   placeholder="Type a message..."
                 />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
                 <InputGroupAddon align="block-end" className="border-t">
                   <InputGroupButton
                     type="submit"
