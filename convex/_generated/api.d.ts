@@ -50,6 +50,7 @@ import type * as domains_twilioSettings_queries from "../domains/twilioSettings/
 import type * as domains_users_internalCrud from "../domains/users/internalCrud.js";
 import type * as http from "../http.js";
 import type * as index from "../index.js";
+import type * as r2 from "../r2.js";
 import type * as tables_aiAssistant from "../tables/aiAssistant.js";
 import type * as tables_contacts from "../tables/contacts.js";
 import type * as tables_organizations from "../tables/organizations.js";
@@ -104,6 +105,7 @@ declare const fullApi: ApiFromModules<{
   "domains/users/internalCrud": typeof domains_users_internalCrud;
   http: typeof http;
   index: typeof index;
+  r2: typeof r2;
   "tables/aiAssistant": typeof tables_aiAssistant;
   "tables/contacts": typeof tables_contacts;
   "tables/organizations": typeof tables_organizations;
@@ -572,6 +574,130 @@ export declare const components: {
               | { type: "canceled" };
             type: "completed";
           }
+      >;
+    };
+  };
+  r2: {
+    lib: {
+      deleteMetadata: FunctionReference<
+        "mutation",
+        "internal",
+        { bucket: string; key: string },
+        null
+      >;
+      deleteObject: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          accessKeyId: string;
+          bucket: string;
+          endpoint: string;
+          key: string;
+          secretAccessKey: string;
+        },
+        null
+      >;
+      deleteR2Object: FunctionReference<
+        "action",
+        "internal",
+        {
+          accessKeyId: string;
+          bucket: string;
+          endpoint: string;
+          key: string;
+          secretAccessKey: string;
+        },
+        null
+      >;
+      getMetadata: FunctionReference<
+        "query",
+        "internal",
+        {
+          accessKeyId: string;
+          bucket: string;
+          endpoint: string;
+          key: string;
+          secretAccessKey: string;
+        },
+        {
+          bucket: string;
+          bucketLink: string;
+          contentType?: string;
+          key: string;
+          lastModified: string;
+          link: string;
+          sha256?: string;
+          size?: number;
+          url: string;
+        } | null
+      >;
+      listMetadata: FunctionReference<
+        "query",
+        "internal",
+        {
+          accessKeyId: string;
+          bucket: string;
+          cursor?: string;
+          endpoint: string;
+          limit?: number;
+          secretAccessKey: string;
+        },
+        {
+          continueCursor: string;
+          isDone: boolean;
+          page: Array<{
+            bucket: string;
+            bucketLink: string;
+            contentType?: string;
+            key: string;
+            lastModified: string;
+            link: string;
+            sha256?: string;
+            size?: number;
+            url: string;
+          }>;
+          pageStatus?: null | "SplitRecommended" | "SplitRequired";
+          splitCursor?: null | string;
+        }
+      >;
+      store: FunctionReference<
+        "action",
+        "internal",
+        {
+          accessKeyId: string;
+          bucket: string;
+          endpoint: string;
+          secretAccessKey: string;
+          url: string;
+        },
+        any
+      >;
+      syncMetadata: FunctionReference<
+        "action",
+        "internal",
+        {
+          accessKeyId: string;
+          bucket: string;
+          endpoint: string;
+          key: string;
+          onComplete?: string;
+          secretAccessKey: string;
+        },
+        null
+      >;
+      upsertMetadata: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          bucket: string;
+          contentType?: string;
+          key: string;
+          lastModified: string;
+          link: string;
+          sha256?: string;
+          size?: number;
+        },
+        { isNew: boolean }
       >;
     };
   };

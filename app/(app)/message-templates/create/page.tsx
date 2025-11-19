@@ -20,8 +20,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "@bprogress/next/app";
+import { useUploadFile } from "@convex-dev/r2/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
+import { ConvexError } from "convex/values";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
@@ -37,7 +39,8 @@ export default function CreateMessageTemplatePage() {
         messageLanguage: z.string().nonempty(),
         messageTemplate: z.string().nonempty(),
         messageVariables: z.record(z.string(), z.string()),
-        messageMedia: z.string().optional(),
+        messageMedia: z.url().optional(),
+        messageMediaFileKey: z.string().optional(),
         messageCategory: z.enum(["marketing", "utility"]),
       }),
     ),
@@ -47,6 +50,7 @@ export default function CreateMessageTemplatePage() {
       messageTemplate: "",
       messageVariables: {},
       messageMedia: "",
+      messageMediaFileKey: "",
       messageCategory: "marketing",
     },
   });
@@ -64,7 +68,10 @@ export default function CreateMessageTemplatePage() {
           loading: "Creating message template...",
           success:
             "Create message template request has been submitted successfully",
-          error: "Failed to submit create message template request",
+          error: (error) =>
+            error instanceof ConvexError
+              ? error.data
+              : "Failed to submit create message template request",
         })
         .unwrap();
 
@@ -77,6 +84,8 @@ export default function CreateMessageTemplatePage() {
       });
     },
   );
+
+  const uploadFile = useUploadFile(api.r2);
 
   return (
     <form onSubmit={onSubmit} className="container mx-auto">
@@ -131,6 +140,70 @@ export default function CreateMessageTemplatePage() {
                           id={field.name}
                           rows={7}
                         />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="messageMedia"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Message Media URL
+                        </FieldLabel>
+
+                        <Input
+                          {...field}
+                          type="url"
+                          aria-invalid={fieldState.invalid}
+                          id={field.name}
+                        />
+
+                        <FieldDescription>
+                          Paste the media URL in the field above or upload an
+                          image below.
+                        </FieldDescription>
+
+                        <Input
+                          type="file"
+                          id={field.name}
+                          aria-invalid={fieldState.invalid}
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) {
+                              toast.error("No file selected", {
+                                description: "Please select a file to upload.",
+                              });
+                              return;
+                            }
+
+                            const fileKey = await toast
+                              .promise(uploadFile(file), {
+                                loading: `Uploading file "${file.name}"...`,
+                                success: `File "${file.name}" uploaded successfully`,
+                                error: `Failed to upload file "${file.name}". Please try again.`,
+                              })
+                              .unwrap();
+
+                            const params = new URLSearchParams({
+                              fileKey,
+                              fileName: file.name,
+                            });
+
+                            const imageUrl = `${process.env.NEXT_PUBLIC_CONVEX_HTTP_URL}/images?${params.toString()}`;
+
+                            field.onChange(imageUrl);
+                            form.setValue("messageMediaFileKey", fileKey);
+
+                            e.target.value = "";
+                          }}
+                        />
+
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}

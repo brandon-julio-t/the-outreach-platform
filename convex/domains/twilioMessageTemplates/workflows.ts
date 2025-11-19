@@ -14,6 +14,7 @@ export const createTwilioMessageTemplateWorkflow = workflow.define({
     messageTemplate: v.string(),
     messageVariables: v.record(v.string(), v.string()),
     messageMedia: v.optional(v.string()),
+    messageMediaFileKey: v.optional(v.string()),
     messageCategory: v.union(v.literal("marketing"), v.literal("utility")),
   },
   handler: async (step, args) => {

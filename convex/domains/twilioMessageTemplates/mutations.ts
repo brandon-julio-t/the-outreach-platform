@@ -2,6 +2,7 @@ import { ConvexError, v } from "convex/values";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";
 import { mutation } from "../../_generated/server";
+import { r2 } from "../../r2";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
 import { getOrgTwilioSettings } from "../core/getOrgTwilioSettings";
 
@@ -12,6 +13,7 @@ export const createTwilioMessageTemplate = mutation({
     messageTemplate: v.string(),
     messageVariables: v.record(v.string(), v.string()),
     messageMedia: v.optional(v.string()),
+    messageMediaFileKey: v.optional(v.string()),
     messageCategory: v.union(v.literal("marketing"), v.literal("utility")),
   },
   handler: async (ctx, args) => {
@@ -57,16 +59,30 @@ export const deleteTwilioMessageTemplate = mutation({
     console.log("args", args);
 
     const user = await ensureUserWithOrgId({ ctx });
-
     console.log("user", user);
 
     const twilioSettings = await getOrgTwilioSettings({
       ctx,
       organizationId: user.organizationId,
     });
-
+    console.log("twilioSettings", twilioSettings);
     if (!twilioSettings) {
       throw new ConvexError("Twilio settings not found");
+    }
+
+    const twilioMessageTemplate = await ctx.db.get(args.id);
+    console.log("twilioMessageTemplate", twilioMessageTemplate);
+    if (!twilioMessageTemplate) {
+      throw new ConvexError("Twilio message template not found");
+    }
+
+    if (twilioMessageTemplate.messageMediaFileKey) {
+      console.log(
+        "deleting media file",
+        twilioMessageTemplate.messageMediaFileKey,
+      );
+      await r2.deleteObject(ctx, twilioMessageTemplate.messageMediaFileKey);
+      console.log("media file deleted");
     }
 
     const jobId = await workflow.start(
