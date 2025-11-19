@@ -54,6 +54,7 @@ export const twilioMessages = defineTable({
   userId: v.optional(v.id("users")),
   contactId: v.optional(v.id("contacts")),
   twilioMessageBroadcastId: v.optional(v.id("twilioMessageBroadcasts")),
+  twilioMessageTemplateId: v.optional(v.id("twilioMessageTemplates")),
 
   from: v.string(),
   to: v.string(),
