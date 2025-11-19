@@ -36,7 +36,7 @@ http.route({
     const { fileKey } = data;
 
     const imageUrl = await r2.getUrl(fileKey);
-    return Response.json({ imageUrl }, { status: 200 });
+    return Response.redirect(imageUrl, 302);
   }),
 });
 
