@@ -162,6 +162,7 @@ export default function CreateBroadcastPage() {
               <FieldDescription>
                 Choose a twilio message template to use for your broadcast.
               </FieldDescription>
+
               <FieldGroup>
                 {twilioMessageTemplatesQuery.status === "LoadingFirstPage" ? (
                   <Empty>
@@ -319,80 +320,112 @@ export default function CreateBroadcastPage() {
                     name="contacts"
                     control={form.control}
                     render={({ field, fieldState }) => {
+                      const areAllSelected =
+                        contactsQuery.results.length === field.value.length;
+
                       return (
-                        <Field className="max-h-96 overflow-y-auto">
-                          {contactsQuery.results.map((contact) => {
-                            const index = field.value.findIndex(
-                              (c) => c.id === contact._id,
-                            );
-                            const isSelected = index !== -1;
+                        <>
+                          <Field orientation="horizontal">
+                            <Checkbox
+                              id="choose-all"
+                              aria-invalid={fieldState.invalid}
+                              value="choose-all"
+                              checked={areAllSelected}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  field.onChange(
+                                    contactsQuery.results.map((contact) => ({
+                                      id: contact._id,
+                                      name: contact.name,
+                                      phone: contact.phone,
+                                    })),
+                                  );
+                                } else {
+                                  field.onChange([]);
+                                }
+                              }}
+                            />
+                            <FieldLabel htmlFor="choose-all">
+                              Choose all ({Number(field.value.length)} selected)
+                            </FieldLabel>
+                          </Field>
 
-                            return (
-                              <FieldLabel
-                                key={contact._id}
-                                htmlFor={contact._id}
-                                aria-invalid={fieldState.invalid}
-                              >
-                                <Field
-                                  orientation="horizontal"
-                                  data-invalid={fieldState.invalid}
+                          <Field className="max-h-96 overflow-y-auto">
+                            {contactsQuery.results.map((contact) => {
+                              const index = field.value.findIndex(
+                                (c) => c.id === contact._id,
+                              );
+                              const isSelected = index !== -1;
+
+                              return (
+                                <FieldLabel
+                                  key={contact._id}
+                                  htmlFor={contact._id}
+                                  aria-invalid={fieldState.invalid}
                                 >
-                                  <Checkbox
-                                    id={contact._id}
-                                    aria-invalid={fieldState.invalid}
-                                    value={contact._id}
-                                    checked={isSelected}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        field.onChange([
-                                          ...field.value,
-                                          {
-                                            id: contact._id,
-                                            name: contact.name,
-                                            phone: contact.phone,
-                                          },
-                                        ]);
-                                      } else {
-                                        const clone = [...field.value];
-                                        clone.splice(index, 1);
-                                        field.onChange(clone);
-                                      }
-                                    }}
-                                  />
+                                  <Field
+                                    orientation="horizontal"
+                                    data-invalid={fieldState.invalid}
+                                  >
+                                    <Checkbox
+                                      id={contact._id}
+                                      aria-invalid={fieldState.invalid}
+                                      value={contact._id}
+                                      checked={isSelected}
+                                      onCheckedChange={(checked) => {
+                                        if (checked) {
+                                          field.onChange([
+                                            ...field.value,
+                                            {
+                                              id: contact._id,
+                                              name: contact.name,
+                                              phone: contact.phone,
+                                            },
+                                          ]);
+                                        } else {
+                                          const clone = [...field.value];
+                                          clone.splice(index, 1);
+                                          field.onChange(clone);
+                                        }
+                                      }}
+                                    />
 
-                                  <FieldContent>
-                                    <FieldTitle>{contact.name}</FieldTitle>
+                                    <FieldContent>
+                                      <FieldTitle>{contact.name}</FieldTitle>
 
-                                    <FieldDescription className="line-clamp-2">
-                                      {contact.phone}
-                                    </FieldDescription>
-                                  </FieldContent>
-                                </Field>
-                              </FieldLabel>
-                            );
-                          })}
+                                      <FieldDescription className="line-clamp-2">
+                                        {contact.phone}
+                                      </FieldDescription>
+                                    </FieldContent>
+                                  </Field>
+                                </FieldLabel>
+                              );
+                            })}
 
-                          <Button
-                            variant="outline"
-                            disabled={
-                              contactsQuery.isLoading ||
-                              contactsQuery.status === "Exhausted"
-                            }
-                            onClick={onLoadMoreContacts}
-                            asChild
-                          >
-                            <motion.button onViewportEnter={onLoadMoreContacts}>
-                              {contactsQuery.isLoading && <Spinner />}
-                              {contactsQuery.status === "Exhausted"
-                                ? "No more contacts"
-                                : "Load More"}
-                            </motion.button>
-                          </Button>
+                            <Button
+                              variant="outline"
+                              disabled={
+                                contactsQuery.isLoading ||
+                                contactsQuery.status === "Exhausted"
+                              }
+                              onClick={onLoadMoreContacts}
+                              asChild
+                            >
+                              <motion.button
+                                onViewportEnter={onLoadMoreContacts}
+                              >
+                                {contactsQuery.isLoading && <Spinner />}
+                                {contactsQuery.status === "Exhausted"
+                                  ? "No more contacts"
+                                  : "Load More"}
+                              </motion.button>
+                            </Button>
 
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        </>
                       );
                     }}
                   />
