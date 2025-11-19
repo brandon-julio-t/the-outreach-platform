@@ -36,7 +36,18 @@ http.route({
     const { fileKey } = data;
 
     const imageUrl = await r2.getUrl(fileKey);
-    return Response.redirect(imageUrl, 302);
+    const imageResponse = await fetch(imageUrl);
+    if (!imageResponse.ok) {
+      return Response.json({ error: "Failed to fetch image" }, { status: 500 });
+    }
+
+    const metadata = await r2.getMetadata(ctx, fileKey);
+
+    return new Response(imageResponse.body, {
+      headers: {
+        "Content-Type": metadata?.contentType || "application/octet-stream",
+      },
+    });
   }),
 });
 
