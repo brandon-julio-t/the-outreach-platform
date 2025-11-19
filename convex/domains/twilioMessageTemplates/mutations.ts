@@ -99,3 +99,47 @@ export const deleteTwilioMessageTemplate = mutation({
     console.log("jobId", jobId);
   },
 });
+
+export const checkWhatsAppApprovalStatus = mutation({
+  args: {
+    id: v.id("twilioMessageTemplates"),
+  },
+  handler: async (ctx, args) => {
+    console.log("args", args);
+
+    const user = await ensureUserWithOrgId({ ctx });
+    console.log("user", user);
+
+    const twilioSettings = await getOrgTwilioSettings({
+      ctx,
+      organizationId: user.organizationId,
+    });
+    console.log("twilioSettings", twilioSettings);
+    if (!twilioSettings) {
+      throw new ConvexError("Twilio settings not found");
+    }
+
+    const twilioMessageTemplate = await ctx.db.get(args.id);
+    console.log("twilioMessageTemplate", twilioMessageTemplate);
+    if (!twilioMessageTemplate) {
+      throw new ConvexError("Twilio message template not found");
+    }
+    if (!twilioMessageTemplate.twilioContentSid) {
+      throw new ConvexError("Twilio content SID not found");
+    }
+
+    const workflowId = await workflow.start(
+      ctx,
+      internal.domains.twilioMessageTemplates.workflows
+        .checkWhatsAppApprovalStatusWorkflow,
+      {
+        accountSid: twilioSettings.accountSid,
+        authToken: twilioSettings.authToken,
+        twilioMessageTemplateId: args.id,
+        twilioContentSid: twilioMessageTemplate.twilioContentSid,
+      },
+    );
+
+    console.log("workflowId", workflowId);
+  },
+});

@@ -25,7 +25,7 @@ import {
 import { useMutation } from "convex/react";
 import { FunctionReturnType } from "convex/server";
 import { format } from "date-fns";
-import { MoreVerticalIcon, TrashIcon } from "lucide-react";
+import { MoreVerticalIcon, RefreshCcwIcon, TrashIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 
@@ -39,6 +39,29 @@ export function MessageTemplateTableRow({
   messageTemplate: RowData;
 }) {
   const [openDelete, setOpenDelete] = React.useState(false);
+
+  const checkWhatsAppApprovalStatus = useMutation(
+    api.domains.twilioMessageTemplates.mutations.checkWhatsAppApprovalStatus,
+  );
+  const [
+    isCheckingWhatsAppApprovalStatus,
+    setIsCheckingWhatsAppApprovalStatus,
+  ] = React.useState(false);
+  const onCheckWhatsAppApprovalStatus = () => {
+    setIsCheckingWhatsAppApprovalStatus(true);
+
+    toast.promise(checkWhatsAppApprovalStatus({ id: messageTemplate._id }), {
+      loading: "Requesting WhatsApp approval status check...",
+      success: () => {
+        setIsCheckingWhatsAppApprovalStatus(false);
+        return "WhatsApp approval status check request submitted successfully";
+      },
+      error: "Failed to request WhatsApp approval status check",
+      finally: () => {
+        setIsCheckingWhatsAppApprovalStatus(false);
+      },
+    });
+  };
 
   const deleteMessageTemplate = useMutation(
     api.domains.twilioMessageTemplates.mutations.deleteTwilioMessageTemplate,
@@ -105,6 +128,20 @@ export function MessageTemplateTableRow({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              {messageTemplate.whatsAppApprovalStatus !== "approved" &&
+                messageTemplate.whatsAppApprovalStatus !== "rejected" && (
+                  <DropdownMenuItem
+                    onClick={() => onCheckWhatsAppApprovalStatus()}
+                    disabled={isCheckingWhatsAppApprovalStatus}
+                  >
+                    {isCheckingWhatsAppApprovalStatus ? (
+                      <Spinner />
+                    ) : (
+                      <RefreshCcwIcon />
+                    )}
+                    Check WhatsApp Approval Status
+                  </DropdownMenuItem>
+                )}
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => setOpenDelete(true)}

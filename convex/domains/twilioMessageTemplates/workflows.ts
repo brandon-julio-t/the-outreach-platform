@@ -158,3 +158,42 @@ export const deleteTwilioMessageTemplateWorkflow = workflow.define({
     );
   },
 });
+
+export const checkWhatsAppApprovalStatusWorkflow = workflow.define({
+  args: {
+    accountSid: v.string(),
+    authToken: v.string(),
+    twilioMessageTemplateId: v.id("twilioMessageTemplates"),
+    twilioContentSid: v.string(),
+  },
+  handler: async (step, args) => {
+    console.log("args", args);
+    console.log("step", step);
+
+    const response = await step.runAction(
+      internal.domains.twilioMessageTemplates.internalActions
+        .fetchWhatsAppApprovalStatusAction,
+      {
+        accountSid: args.accountSid,
+        authToken: args.authToken,
+        twilioContentSid: args.twilioContentSid,
+      },
+    );
+
+    console.log("response", response);
+
+    await step.runMutation(
+      internal.domains.twilioMessageTemplates.internalCrud.update,
+      {
+        id: args.twilioMessageTemplateId,
+        patch: {
+          whatsAppApprovalStatus: response.ok
+            ? response.json.whatsapp?.status
+            : "error",
+          whatsAppApprovalResponseJson: response.json,
+          lastUpdatedAt: Date.now(),
+        },
+      },
+    );
+  },
+});
