@@ -182,8 +182,10 @@ function DrawerBody({
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
-          <Button>
-            <DownloadIcon /> Download Template
+          <Button asChild>
+            <a href="/templates/import-contacts.xlsx" download>
+              <DownloadIcon /> Download Template
+            </a>
           </Button>
         </DrawerFooter>
       </>
