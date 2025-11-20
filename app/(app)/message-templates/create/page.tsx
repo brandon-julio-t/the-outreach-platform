@@ -39,7 +39,7 @@ export default function CreateMessageTemplatePage() {
         messageLanguage: z.string().nonempty(),
         messageTemplate: z.string().nonempty(),
         messageVariables: z.record(z.string(), z.string()),
-        messageMedia: z.url().optional(),
+        messageMedia: z.string().optional(),
         messageMediaFileKey: z.string().optional(),
         messageCategory: z.enum(["marketing", "utility"]),
       }),

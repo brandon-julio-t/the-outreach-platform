@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";
+import { Doc } from "../../_generated/dataModel";
 import { mutation } from "../../_generated/server";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
 import { getOrgTwilioSettings } from "../core/getOrgTwilioSettings";
@@ -9,7 +10,12 @@ export const broadcastWhatsAppMessagesViaTwilio = mutation({
   args: {
     twilioMessageTemplateId: v.id("twilioMessageTemplates"),
     contentVariables: v.record(v.string(), v.string()),
-    contactIds: v.array(v.id("contacts")),
+    contacts: v.array(
+      v.object({
+        id: v.optional(v.id("contacts")),
+        phone: v.string(),
+      }),
+    ),
   },
   handler: async (ctx, args) => {
     console.log("args", args);
@@ -51,11 +57,25 @@ export const broadcastWhatsAppMessagesViaTwilio = mutation({
       },
     );
 
-    for (const contactId of args.contactIds) {
-      const contact = await ctx.db.get(contactId);
+    for (const contactData of args.contacts) {
+      let contact: Doc<"contacts"> | null = null;
+      if (contactData.id) {
+        contact = await ctx.db.get(contactData.id);
+      } else {
+        contact = await ctx.db
+          .query("contacts")
+          .withIndex("by_organizationId_phone", (q) =>
+            q
+              .eq("organizationId", user.organizationId)
+              .eq("phone", contactData.phone),
+          )
+          .first();
+      }
+
       console.log("contact", contact);
+
       if (!contact) {
-        console.error("Contact not found", { contactId });
+        console.error("Contact not found", { contactData });
         continue;
       }
 
@@ -68,7 +88,7 @@ export const broadcastWhatsAppMessagesViaTwilio = mutation({
           userId: user._id,
           displayName: user.email ?? user.phone ?? "Unknown",
           role: "assistant",
-          contactId: contactId,
+          contactId: contact._id,
           twilioMessageBroadcastId,
 
           accountSid: twilioSettings.accountSid,
