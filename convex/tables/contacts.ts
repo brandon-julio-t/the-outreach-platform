@@ -10,6 +10,7 @@ export const contacts = defineTable({
   goalsAchievedTime: v.optional(v.number()),
 })
   .index("by_organizationId", ["organizationId"])
+  .index("by_organizationId_phone", ["organizationId", "phone"])
   .searchIndex("search_name", {
     searchField: "name",
     filterFields: ["organizationId"],

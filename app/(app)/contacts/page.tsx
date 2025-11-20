@@ -2,6 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@/components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -33,11 +43,13 @@ import {
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
-import { SearchIcon, XIcon } from "lucide-react";
+import { ChevronDownIcon, DownloadIcon, SearchIcon, XIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
+import React from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { AddContactDialog } from "./_components/add-contact-dialog";
 import { ContactsTableRow } from "./_components/contacts-table-row";
+import { ImportContactsDrawer } from "./_components/import-contacts-drawer";
 
 const ContactsPage = () => {
   const [search, setSearch] = useQueryState(
@@ -70,6 +82,8 @@ const ContactsPage = () => {
     }
   };
 
+  const [openImportContacts, setOpenImportContacts] = React.useState(false);
+
   return (
     <main className="container mx-auto">
       <ItemGroup>
@@ -81,9 +95,32 @@ const ContactsPage = () => {
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <AddContactDialog>
-              <Button>Add Contact</Button>
-            </AddContactDialog>
+            <ButtonGroup>
+              <AddContactDialog>
+                <Button>Add Contact</Button>
+              </AddContactDialog>
+
+              <ButtonGroupSeparator />
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="icon" className="group">
+                    <ChevronDownIcon className="transition-transform group-data-[state=open]:rotate-180" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setOpenImportContacts(true)}>
+                    <DownloadIcon />
+                    Import contacts
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </ButtonGroup>
+
+            <ImportContactsDrawer
+              open={openImportContacts}
+              setOpen={setOpenImportContacts}
+            />
           </ItemActions>
         </Item>
 
