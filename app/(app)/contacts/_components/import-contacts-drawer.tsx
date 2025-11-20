@@ -39,7 +39,7 @@ import { api } from "@/convex/_generated/api";
 import { parseXlsxToJson } from "@/lib/xlsx";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { useMutation } from "convex/react";
-import { InfoIcon, KeyIcon, XIcon } from "lucide-react";
+import { DownloadIcon, InfoIcon, KeyIcon, XIcon } from "lucide-react";
 import React from "react";
 import { parsePhoneNumber } from "react-phone-number-input";
 import { toast } from "sonner";
@@ -143,7 +143,7 @@ function DrawerBody({
   if (parsed.length <= 0) {
     return (
       <>
-        <div className="px-4">
+        <div className="p-4">
           <Input
             type="file"
             onChange={async (e) => {
@@ -157,10 +157,19 @@ function DrawerBody({
 
               const json = await parseXlsxToJson({ file });
 
+              e.target.value = "";
+
               const parsed = json.map((row) => {
                 const result = rowSchema.safeParse(row);
                 return { ...result, original: row as Record<string, string> };
               });
+
+              if (parsed.length <= 0) {
+                toast.error("No contacts found in the file", {
+                  description: "Please check the file and try again.",
+                });
+                return;
+              }
 
               console.log(parsed);
 
@@ -173,6 +182,9 @@ function DrawerBody({
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
+          <Button>
+            <DownloadIcon /> Download Template
+          </Button>
         </DrawerFooter>
       </>
     );
@@ -180,7 +192,7 @@ function DrawerBody({
 
   return (
     <>
-      <div className="flex-1 overflow-auto px-4">
+      <div className="flex-1 overflow-auto p-4">
         <Item variant="outline" className="mb-4">
           <ItemMedia variant="icon">
             <InfoIcon />
