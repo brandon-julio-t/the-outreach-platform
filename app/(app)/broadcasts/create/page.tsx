@@ -181,7 +181,7 @@ export default function CreateBroadcastPage() {
                     </EmptyHeader>
                   </Empty>
                 ) : twilioMessageTemplatesQuery.results.length === 0 ? (
-                  <Empty>
+                  <Empty className="border">
                     <EmptyHeader>
                       <EmptyTitle>
                         No twilio message templates found.
@@ -278,42 +278,34 @@ export default function CreateBroadcastPage() {
             <FieldSeparator />
 
             <FieldSet>
-              <FieldLegend>Choose Twilio Message Template</FieldLegend>
+              <FieldLegend>Choose Contacts</FieldLegend>
               <FieldDescription>
-                Choose a twilio message template to use for your broadcast.
+                Choose contacts to use for your broadcast.
               </FieldDescription>
               <FieldGroup>
-                {twilioMessageTemplatesQuery.status === "LoadingFirstPage" ? (
+                {contactsQuery.status === "LoadingFirstPage" ? (
                   <Empty>
                     <EmptyHeader>
                       <EmptyMedia variant="icon">
                         <Spinner />
                       </EmptyMedia>
-                      <EmptyTitle>
-                        Loading twilio message templates...
-                      </EmptyTitle>
+                      <EmptyTitle>Loading contacts...</EmptyTitle>
                       <EmptyDescription>
-                        We are loading your twilio message templates. Please
-                        wait a moment.
+                        We are loading your contacts. Please wait a moment.
                       </EmptyDescription>
                     </EmptyHeader>
                   </Empty>
-                ) : twilioMessageTemplatesQuery.results.length === 0 ? (
-                  <Empty>
+                ) : contactsQuery.results.length === 0 ? (
+                  <Empty className="border">
                     <EmptyHeader>
-                      <EmptyTitle>
-                        No twilio message templates found.
-                      </EmptyTitle>
+                      <EmptyTitle>No contacts found.</EmptyTitle>
                       <EmptyDescription>
-                        You don&apos;t have any twilio message templates yet.
-                        You can add a new twilio message template by clicking
-                        the button below.
+                        You don&apos;t have any contacts yet. You can add a new
+                        contact by clicking the button below.
                       </EmptyDescription>
                       <EmptyContent>
                         <Button asChild>
-                          <Link href="/message-templates/create">
-                            Add Twilio Message Template
-                          </Link>
+                          <Link href="/contacts">Add Contact</Link>
                         </Button>
                       </EmptyContent>
                     </EmptyHeader>
