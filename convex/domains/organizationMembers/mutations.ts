@@ -45,8 +45,7 @@ export const addOrganizationMember = mutation({
       .first();
 
     if (existingMembership) {
-      console.log("User is already a member of this organization");
-      return;
+      throw new ConvexError("User is already a member of this organization");
     }
 
     console.log("User exists, adding member...");

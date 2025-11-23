@@ -18,6 +18,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
+import { ConvexError } from "convex/values";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -72,7 +73,10 @@ function DialogBody({
         .promise(addOrganizationMemberMutation(data), {
           loading: "Requesting to add member...",
           success: "Request to add member sent successfully",
-          error: "Failed to request to add member",
+          error: (error) =>
+            error instanceof ConvexError
+              ? error.data
+              : "Failed to request to add member",
         })
         .unwrap();
 
