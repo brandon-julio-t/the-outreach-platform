@@ -37,13 +37,6 @@ export const createUser = internalAction({
       },
     );
 
-    await ctx.runMutation(internal.domains.users.internalCrud.update, {
-      id: response.user._id,
-      patch: {
-        organizationId: organization._id,
-      },
-    });
-
     return response;
   },
 });

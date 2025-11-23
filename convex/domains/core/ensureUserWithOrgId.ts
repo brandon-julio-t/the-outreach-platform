@@ -1,4 +1,4 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { getAuthSessionId } from "@convex-dev/auth/server";
 import { ConvexError } from "convex/values";
 import { MutationCtx, QueryCtx } from "../../_generated/server";
 
@@ -7,19 +7,25 @@ export async function ensureUserWithOrgId({
 }: {
   ctx: QueryCtx | MutationCtx;
 }) {
-  const userId = await getAuthUserId(ctx);
-  console.log("userId", userId);
-  if (!userId) {
-    throw new ConvexError("User not authenticated");
+  const sessionId = await getAuthSessionId(ctx);
+  console.log("sessionId", sessionId);
+  if (!sessionId) {
+    throw new ConvexError("Session not authenticated");
   }
 
-  const user = await ctx.db.get(userId);
+  const session = await ctx.db.get(sessionId);
+  console.log("session", session);
+  if (!session) {
+    throw new ConvexError("User not found");
+  }
+
+  const user = await ctx.db.get(session.userId);
   console.log("user", user);
   if (!user) {
     throw new ConvexError("User not found");
   }
 
-  const organizationId = user.organizationId;
+  const organizationId = session.organizationId;
   console.log("organizationId", organizationId);
   if (!organizationId) {
     throw new ConvexError("User is not associated with an organization");
