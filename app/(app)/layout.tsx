@@ -9,7 +9,9 @@ const AppLayout = async ({ children }: LayoutProps<"/">) => {
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <EnsureOrganizationDialog>
+    <>
+      <EnsureOrganizationDialog />
+
       <SidebarProvider
         defaultOpen={defaultOpen}
         className="[--header-height:--spacing(12)]"
@@ -22,7 +24,7 @@ const AppLayout = async ({ children }: LayoutProps<"/">) => {
           {children}
         </SidebarInset>
       </SidebarProvider>
-    </EnsureOrganizationDialog>
+    </>
   );
 };
 

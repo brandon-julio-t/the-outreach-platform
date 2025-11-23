@@ -1,13 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -33,41 +34,22 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-export function EnsureOrganizationDialog({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function EnsureOrganizationDialog() {
+  const [open, setOpen] = React.useState(false);
+
   const currentOrganization = useQuery(
     api.domains.organizations.queries.getCurrentUserActiveOrganization,
   );
 
-  if (currentOrganization === undefined) {
-    return (
-      <div className="bg-muted grid min-h-svh place-items-center">
-        <Empty className="bg-background">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Spinner />
-            </EmptyMedia>
-            <EmptyTitle>Setting up your app...</EmptyTitle>
-            <EmptyDescription>
-              Please wait while we set up your app.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      </div>
-    );
-  }
+  React.useEffect(
+    function openDialogIfNoOrganization() {
+      if (currentOrganization === null) {
+        setOpen(true);
+      }
+    },
+    [currentOrganization],
+  );
 
-  if (currentOrganization === null) {
-    return <ChooseOrganization />;
-  }
-
-  return children;
-}
-
-function ChooseOrganization() {
   const organizations = useQuery(
     api.domains.organizations.queries.getCurrentUserOrganizations,
   );
@@ -102,6 +84,8 @@ function ChooseOrganization() {
           },
         )
         .unwrap();
+
+      setOpen(false);
     },
     (error) => {
       console.error(error);
@@ -112,96 +96,95 @@ function ChooseOrganization() {
   );
 
   return (
-    <main className="bg-muted grid min-h-svh place-items-center">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Choose your organization</CardTitle>
-          <CardDescription>
-            Select the organization you want to use to continue.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={onSubmit}>
-            <FieldGroup>
-              <Controller
-                name="organizationId"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <RadioGroup
-                    {...field}
-                    value={field.value}
-                    onValueChange={(value) => {
-                      console.log(value);
-                      field.onChange(value as Id<"organizations">);
-                    }}
-                    aria-invalid={fieldState.invalid}
-                  >
-                    {organizations === undefined ? (
-                      <Empty>
-                        <EmptyHeader>
-                          <EmptyMedia variant="icon">
-                            <Spinner />
-                          </EmptyMedia>
-                          <EmptyTitle>Loading organizations...</EmptyTitle>
-                          <EmptyDescription>
-                            We are loading your organizations. Please wait a
-                            moment.
-                          </EmptyDescription>
-                        </EmptyHeader>
-                      </Empty>
-                    ) : organizations.length <= 0 ? (
-                      <Empty className="border">
-                        <EmptyHeader>
-                          <EmptyTitle>No organizations found.</EmptyTitle>
-                          <EmptyDescription>
-                            You don&apos;t have any organizations yet. This
-                            should not happen. Please contact support.
-                          </EmptyDescription>
-                        </EmptyHeader>
-                      </Empty>
-                    ) : (
-                      organizations.map((organization) => (
-                        <FieldLabel
-                          key={organization._id}
-                          htmlFor={organization._id}
-                          aria-invalid={fieldState.invalid}
-                        >
-                          <Field
-                            orientation="horizontal"
-                            data-invalid={fieldState.invalid}
-                          >
-                            <RadioGroupItem
-                              id={organization._id}
-                              value={organization._id}
-                              aria-invalid={fieldState.invalid}
-                            >
-                              {organization.name}
-                            </RadioGroupItem>
-                            <FieldContent>
-                              <FieldTitle>{organization.name}</FieldTitle>
-                            </FieldContent>
-                          </Field>
-                        </FieldLabel>
-                      ))
-                    )}
-                  </RadioGroup>
-                )}
-              />
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Choose Organization</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please choose an organization to continue.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
-              <Field orientation="horizontal">
-                <Button
-                  type="submit"
-                  className="ml-auto"
-                  disabled={form.formState.isSubmitting}
+        <form onSubmit={onSubmit}>
+          <FieldGroup>
+            <Controller
+              name="organizationId"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <RadioGroup
+                  {...field}
+                  value={field.value}
+                  onValueChange={(value) => {
+                    console.log(value);
+                    field.onChange(value as Id<"organizations">);
+                  }}
+                  aria-invalid={fieldState.invalid}
                 >
-                  {form.formState.isSubmitting && <Spinner />}
-                  Continue
-                </Button>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-    </main>
+                  {organizations === undefined ? (
+                    <Empty>
+                      <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                          <Spinner />
+                        </EmptyMedia>
+                        <EmptyTitle>Loading organizations...</EmptyTitle>
+                        <EmptyDescription>
+                          We are loading your organizations. Please wait a
+                          moment.
+                        </EmptyDescription>
+                      </EmptyHeader>
+                    </Empty>
+                  ) : organizations.length <= 0 ? (
+                    <Empty className="border">
+                      <EmptyHeader>
+                        <EmptyTitle>No organizations found.</EmptyTitle>
+                        <EmptyDescription>
+                          You don&apos;t have any organizations yet. This should
+                          not happen. Please contact support.
+                        </EmptyDescription>
+                      </EmptyHeader>
+                    </Empty>
+                  ) : (
+                    organizations.map((organization) => (
+                      <FieldLabel
+                        key={organization._id}
+                        htmlFor={organization._id}
+                        aria-invalid={fieldState.invalid}
+                      >
+                        <Field
+                          orientation="horizontal"
+                          data-invalid={fieldState.invalid}
+                        >
+                          <RadioGroupItem
+                            id={organization._id}
+                            value={organization._id}
+                            aria-invalid={fieldState.invalid}
+                          >
+                            {organization.name}
+                          </RadioGroupItem>
+                          <FieldContent>
+                            <FieldTitle>{organization.name}</FieldTitle>
+                          </FieldContent>
+                        </Field>
+                      </FieldLabel>
+                    ))
+                  )}
+                </RadioGroup>
+              )}
+            />
+
+            <AlertDialogFooter>
+              <Button
+                type="submit"
+                className="ml-auto"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting && <Spinner />}
+                Continue
+              </Button>
+            </AlertDialogFooter>
+          </FieldGroup>
+        </form>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
