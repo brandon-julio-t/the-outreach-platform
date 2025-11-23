@@ -1,5 +1,6 @@
 "use client";
 
+import { PhoneInput } from "@/components/phone-input";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -103,7 +104,7 @@ export function TestTwilioSection() {
                   <FieldLabel htmlFor={field.name}>
                     Receiver Phone Number
                   </FieldLabel>
-                  <Input {...field} id={field.name} type="tel" />
+                  <PhoneInput {...field} id={field.name} type="tel" />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

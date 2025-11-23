@@ -1,3 +1,4 @@
+import { PhoneInput } from "@/components/phone-input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -105,7 +106,7 @@ function DialogBody({
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
-              <Input {...field} id={field.name} type="tel" />
+              <PhoneInput {...field} id={field.name} type="tel" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
