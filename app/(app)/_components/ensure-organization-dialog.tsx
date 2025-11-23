@@ -137,7 +137,28 @@ function ChooseOrganization() {
                     aria-invalid={fieldState.invalid}
                   >
                     {organizations === undefined ? (
-                      <Spinner />
+                      <Empty>
+                        <EmptyHeader>
+                          <EmptyMedia variant="icon">
+                            <Spinner />
+                          </EmptyMedia>
+                          <EmptyTitle>Loading organizations...</EmptyTitle>
+                          <EmptyDescription>
+                            We are loading your organizations. Please wait a
+                            moment.
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
+                    ) : organizations.length <= 0 ? (
+                      <Empty className="border">
+                        <EmptyHeader>
+                          <EmptyTitle>No organizations found.</EmptyTitle>
+                          <EmptyDescription>
+                            You don&apos;t have any organizations yet. This
+                            should not happen. Please contact support.
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
                     ) : (
                       organizations.map((organization) => (
                         <FieldLabel
