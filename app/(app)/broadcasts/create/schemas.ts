@@ -35,3 +35,7 @@ export const importContactsForBroadcastRowSchema = z.object({
       return result.format("E.164");
     }),
 });
+
+export type ImportContactsForBroadcastRowSchema = z.infer<
+  typeof importContactsForBroadcastRowSchema
+>;
