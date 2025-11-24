@@ -1,5 +1,6 @@
 "use client";
 
+import { PhoneInput } from "@/components/phone-input";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -124,7 +125,7 @@ export function TwilioSettingsSection() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Phone Number</FieldLabel>
-                  <Input {...field} id={field.name} />
+                  <PhoneInput {...field} id={field.name} type="tel" />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
