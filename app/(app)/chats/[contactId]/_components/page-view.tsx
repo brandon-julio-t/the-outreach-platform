@@ -41,11 +41,18 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
+import { format, isToday } from "date-fns";
 import {
   MessageSquareIcon,
   MoreVerticalIcon,
@@ -229,10 +236,31 @@ export function ChatDetailsPageView({
                 const reversedRole =
                   message.role === "assistant" ? "user" : "assistant";
 
+                const isMessageToday = isToday(message._creationTime);
+                const displayTime = isMessageToday
+                  ? format(message._creationTime, "p")
+                  : format(message._creationTime, "PPp");
+
                 return (
                   <Message from={reversedRole} key={message._id}>
-                    <MessageContent>
+                    <MessageContent
+                      className={cn(
+                        "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:px-4 group-[.is-user]:py-3",
+                        "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground group-[.is-assistant]:mr-auto group-[.is-assistant]:rounded-lg group-[.is-assistant]:px-4 group-[.is-assistant]:py-3",
+                      )}
+                    >
+                      <div className="text-xs">{message.displayName}</div>
+
                       <MessageResponse>{message.body}</MessageResponse>
+
+                      <Tooltip>
+                        <TooltipTrigger className="ml-auto text-xs">
+                          {displayTime}
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" sideOffset={4}>
+                          {format(message._creationTime, "PPp")}
+                        </TooltipContent>
+                      </Tooltip>
                     </MessageContent>
                   </Message>
                 );
