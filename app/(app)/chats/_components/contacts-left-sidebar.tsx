@@ -78,7 +78,8 @@ export function ContactsLeftSidebar() {
           )}
         </InputGroup>
       </div>
-      <ItemGroup className="flex-1 overflow-y-auto px-1 pb-1">
+
+      <ItemGroup className="flex-1 overflow-y-auto p-1">
         {contactsQuery.status === "LoadingFirstPage" ? (
           <Empty>
             <EmptyHeader>
