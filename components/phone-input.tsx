@@ -36,6 +36,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
     ({ className, onChange, value, ...props }, ref) => {
       return (
         <RPNInput.default
+          international
           ref={ref}
           className={cn("flex", className)}
           flagComponent={FlagComponent}
