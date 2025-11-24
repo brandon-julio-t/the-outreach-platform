@@ -58,7 +58,7 @@ export function ContactsLeftSidebar() {
   };
 
   return (
-    <section className="flex h-full w-80 flex-col border-r">
+    <div className="flex h-(--page-height) flex-col">
       <div className="border-b p-1">
         <InputGroup>
           <InputGroupInput
@@ -131,6 +131,6 @@ export function ContactsLeftSidebar() {
           </>
         )}
       </ItemGroup>
-    </section>
+    </div>
   );
 }
