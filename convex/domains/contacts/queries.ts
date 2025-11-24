@@ -49,6 +49,51 @@ export const getContacts = query({
   },
 });
 
+export const getContactsForChatPage = query({
+  args: {
+    search: v.optional(v.string()),
+    organizationId: v.id("organizations"),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return {
+        page: [],
+        isDone: true,
+        continueCursor: "",
+      } satisfies PaginationResult<Doc<"contacts">>;
+    }
+
+    const search = args.search ?? "";
+    if (search) {
+      const byName = await ctx.db
+        .query("contacts")
+        .withSearchIndex("search_name", (q) => q.search("name", search))
+        .take(10);
+
+      const byPhone = await ctx.db
+        .query("contacts")
+        .withSearchIndex("search_phone", (q) => q.search("phone", search))
+        .take(10);
+
+      return {
+        page: [...byName, ...byPhone],
+        isDone: false,
+        continueCursor: "",
+      } satisfies PaginationResult<Doc<"contacts">>;
+    }
+
+    return await ctx.db
+      .query("contacts")
+      .withIndex("by_organizationId_latestMessageTime", (q) =>
+        q.eq("organizationId", args.organizationId),
+      )
+      .order("desc")
+      .paginate(args.paginationOpts);
+  },
+});
+
 export const getContactById = query({
   args: {
     id: v.id("contacts"),

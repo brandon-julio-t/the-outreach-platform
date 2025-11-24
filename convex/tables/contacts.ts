@@ -11,6 +11,10 @@ export const contacts = defineTable({
 })
   .index("by_organizationId", ["organizationId"])
   .index("by_organizationId_phone", ["organizationId", "phone"])
+  .index("by_organizationId_latestMessageTime", [
+    "organizationId",
+    "latestMessageTime",
+  ])
   .searchIndex("search_name", {
     searchField: "name",
     filterFields: ["organizationId"],

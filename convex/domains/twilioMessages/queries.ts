@@ -136,3 +136,26 @@ export const getTwilioMessagesByContactId = query({
     };
   },
 });
+
+export const getLatestTwilioMessagesByContactId = query({
+  args: {
+    organizationId: v.id("organizations"),
+    contactId: v.id("contacts"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+
+    return await ctx.db
+      .query("twilioMessages")
+      .withIndex("by_organizationId_contactId", (q) =>
+        q
+          .eq("organizationId", args.organizationId)
+          .eq("contactId", args.contactId),
+      )
+      .order("desc")
+      .first();
+  },
+});

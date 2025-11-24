@@ -18,7 +18,7 @@ const AppLayout = async ({ children }: LayoutProps<"/">) => {
       >
         <AppSidebar />
 
-        <SidebarInset className="size-full min-w-0">
+        <SidebarInset className="size-full min-h-svh min-w-0 [--page-height:calc(100vh-var(--header-height))]">
           <AppHeader />
 
           {children}
