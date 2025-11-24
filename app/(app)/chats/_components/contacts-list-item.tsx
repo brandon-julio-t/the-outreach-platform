@@ -53,10 +53,10 @@ export function ContactsListItem({ contact }: { contact: ContactData }) {
       <Link href={`/chats/${contact._id}`}>
         <ItemContent>
           <ItemTitle className="w-full items-baseline">
-            <div>{contact.name}</div>
+            <div className="truncate">{contact.name}</div>
 
             <Tooltip>
-              <TooltipTrigger className="text-muted-foreground ml-auto text-xs">
+              <TooltipTrigger className="text-muted-foreground ml-auto shrink-0 text-xs">
                 {relativeTime}
               </TooltipTrigger>
               <TooltipContent side="right">{humanTime}</TooltipContent>
