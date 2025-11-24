@@ -26,6 +26,12 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -128,8 +134,17 @@ export function ChatDetailsPageView({
   );
 
   return (
-    <div className="flex h-full max-h-(--chat-page-height) flex-col">
-      <Conversation className="flex-1 overflow-y-auto">
+    <section className="flex h-(--page-height) flex-col">
+      <div className="border-b">
+        <Item>
+          <ItemContent>
+            <ItemTitle>{contact?.name}</ItemTitle>
+            <ItemDescription>{contact?.phone}</ItemDescription>
+          </ItemContent>
+        </Item>
+      </div>
+
+      <Conversation className="h-full flex-1 overflow-y-auto">
         <ConversationContent>
           {messagesQuery.status === "LoadingFirstPage" ? (
             <Empty>
@@ -210,6 +225,6 @@ export function ChatDetailsPageView({
           )}
         />
       </form>
-    </div>
+    </section>
   );
 }
