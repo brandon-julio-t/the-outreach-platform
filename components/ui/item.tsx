@@ -131,7 +131,7 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
 
 function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
-    <p
+    <div
       data-slot="item-description"
       className={cn(
         "text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance",
