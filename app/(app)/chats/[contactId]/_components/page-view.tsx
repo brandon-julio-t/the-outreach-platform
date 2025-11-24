@@ -1,5 +1,6 @@
 "use client";
 
+import { EditContactDialog } from "@/app/(app)/contacts/_components/edit-contact-dialog";
 import {
   Conversation,
   ConversationContent,
@@ -12,6 +13,12 @@ import {
   MessageResponse,
 } from "@/components/ai-elements/message";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
@@ -28,6 +35,7 @@ import {
 } from "@/components/ui/input-group";
 import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
@@ -38,7 +46,13 @@ import { Id } from "@/convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
-import { MessageSquareIcon, SendIcon } from "lucide-react";
+import {
+  MessageSquareIcon,
+  MoreVerticalIcon,
+  PencilIcon,
+  SendIcon,
+} from "lucide-react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -52,7 +66,7 @@ export function ChatDetailsPageView({
     api.domains.organizations.queries.getCurrentUserActiveOrganization,
   );
 
-  const contact = useQuery(
+  const contactQuery = useQuery(
     api.domains.contacts.queries.getContactById,
     currentOrganization?._id
       ? {
@@ -101,7 +115,7 @@ export function ChatDetailsPageView({
 
   const onSubmit = form.handleSubmit(
     async (data) => {
-      if (!contact) {
+      if (!contactQuery) {
         toast.error("Contact not found", {
           description: "Please refresh the page and try again.",
         });
@@ -112,7 +126,7 @@ export function ChatDetailsPageView({
         .promise(
           sendWhatsAppMessageViaTwilio({
             contactId,
-            receiverPhoneNumber: contact.phone,
+            receiverPhoneNumber: contactQuery.phone,
             body: data.message,
           }),
           {
@@ -133,14 +147,47 @@ export function ChatDetailsPageView({
     },
   );
 
+  const [openEdit, setOpenEdit] = React.useState(false);
+
   return (
     <section className="flex h-(--page-height) flex-col">
       <div className="border-b">
         <Item>
           <ItemContent>
-            <ItemTitle>{contact?.name}</ItemTitle>
-            <ItemDescription>{contact?.phone}</ItemDescription>
+            <ItemTitle>{contactQuery?.name ?? <>&nbsp;</>}</ItemTitle>
+            <ItemDescription>
+              {contactQuery?.phone ?? <>&nbsp;</>}
+            </ItemDescription>
           </ItemContent>
+          <ItemActions>
+            {contactQuery === undefined ? (
+              <Button variant="ghost" size="icon">
+                <Spinner />
+              </Button>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <MoreVerticalIcon />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setOpenEdit(true)}>
+                    <PencilIcon />
+                    Edit
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            {contactQuery && (
+              <EditContactDialog
+                contact={contactQuery}
+                open={openEdit}
+                setOpen={setOpenEdit}
+              />
+            )}
+          </ItemActions>
         </Item>
       </div>
 
