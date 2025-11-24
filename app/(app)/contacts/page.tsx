@@ -44,6 +44,7 @@ import {
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { ChevronDownIcon, DownloadIcon, SearchIcon, XIcon } from "lucide-react";
+import { motion } from "motion/react";
 import { parseAsString, useQueryState } from "nuqs";
 import React from "react";
 import { useDebounceValue } from "usehooks-ts";
@@ -204,11 +205,14 @@ const ContactsPage = () => {
                     contactsQuery.isLoading ||
                     contactsQuery.status === "Exhausted"
                   }
+                  asChild
                 >
-                  {contactsQuery.isLoading && <Spinner />}
-                  {contactsQuery.status === "Exhausted"
-                    ? "No more contacts"
-                    : "Load More"}
+                  <motion.button onViewportEnter={onLoadMore}>
+                    {contactsQuery.isLoading && <Spinner />}
+                    {contactsQuery.status === "Exhausted"
+                      ? "No more contacts"
+                      : "Load More"}
+                  </motion.button>
                 </Button>
               </>
             )}
