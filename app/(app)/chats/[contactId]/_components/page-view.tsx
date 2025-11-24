@@ -207,7 +207,7 @@ export function ChatDetailsPageView({
         </Item>
       </div>
 
-      <Conversation className="h-full flex-1 overflow-y-auto">
+      <Conversation className="h-full flex-1 overflow-y-auto" initial="instant">
         <ConversationContent>
           {messagesQuery.status === "LoadingFirstPage" ? (
             <Empty>
