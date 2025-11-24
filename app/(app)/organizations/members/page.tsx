@@ -54,7 +54,7 @@ export default function OrganizationMembersPage() {
   };
 
   return (
-    <main className="container mx-auto">
+    <div className="container mx-auto">
       <ItemGroup>
         <Item>
           <ItemContent>
@@ -135,6 +135,6 @@ export default function OrganizationMembersPage() {
           </ItemContent>
         </Item>
       </ItemGroup>
-    </main>
+    </div>
   );
 }

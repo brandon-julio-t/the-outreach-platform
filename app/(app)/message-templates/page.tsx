@@ -54,7 +54,7 @@ export default function MessageTemplatesPage() {
   };
 
   return (
-    <main className="container mx-auto">
+    <div className="container mx-auto">
       <ItemGroup>
         <Item>
           <ItemContent>
@@ -139,6 +139,6 @@ export default function MessageTemplatesPage() {
           </ItemContent>
         </Item>
       </ItemGroup>
-    </main>
+    </div>
   );
 }

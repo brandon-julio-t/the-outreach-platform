@@ -85,7 +85,7 @@ const ContactsPage = () => {
   const [openImportContacts, setOpenImportContacts] = React.useState(false);
 
   return (
-    <main className="container mx-auto">
+    <div className="container mx-auto">
       <ItemGroup>
         <Item>
           <ItemContent>
@@ -215,7 +215,7 @@ const ContactsPage = () => {
           </ItemContent>
         </Item>
       </ItemGroup>
-    </main>
+    </div>
   );
 };
 

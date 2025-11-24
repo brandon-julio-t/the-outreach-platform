@@ -56,7 +56,7 @@ export default function BroadcastsPage() {
   };
 
   return (
-    <main className="container mx-auto">
+    <div className="container mx-auto">
       <ItemGroup>
         <Item>
           <ItemContent>
@@ -151,6 +151,6 @@ export default function BroadcastsPage() {
           </ItemContent>
         </Item>
       </ItemGroup>
-    </main>
+    </div>
   );
 }

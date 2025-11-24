@@ -10,7 +10,7 @@ import {
 
 const AppPage = () => {
   return (
-    <main className="container mx-auto p-4">
+    <div className="container mx-auto p-4">
       <Empty className="border">
         <EmptyHeader>
           <EmptyMedia>👋</EmptyMedia>
@@ -21,7 +21,7 @@ const AppPage = () => {
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
-    </main>
+    </div>
   );
 };
 

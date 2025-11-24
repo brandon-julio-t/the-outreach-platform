@@ -62,7 +62,7 @@ export default function BroadcastDetailsPageView({
   };
 
   return (
-    <main className="container mx-auto">
+    <div className="container mx-auto">
       <ItemGroup>
         <Item>
           <ItemHeader>
@@ -163,6 +163,6 @@ export default function BroadcastDetailsPageView({
           </ItemContent>
         </Item>
       </ItemGroup>
-    </main>
+    </div>
   );
 }
