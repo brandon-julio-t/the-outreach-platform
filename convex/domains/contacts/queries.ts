@@ -82,21 +82,12 @@ export const getContactsForChatPage = query({
 
     const search = args.search ?? "";
     if (search) {
-      const byName = await ctx.db
+      return ctx.db
         .query("contacts")
-        .withSearchIndex("search_name", (q) => q.search("name", search))
-        .take(10);
-
-      const byPhone = await ctx.db
-        .query("contacts")
-        .withSearchIndex("search_phone", (q) => q.search("phone", search))
-        .take(10);
-
-      return {
-        page: [...byName, ...byPhone],
-        isDone: false,
-        continueCursor: "",
-      } satisfies PaginationResult<Doc<"contacts">>;
+        .withSearchIndex("search_name", (q) =>
+          q.search("name", search).eq("organizationId", args.organizationId),
+        )
+        .paginate(args.paginationOpts);
     }
 
     return await ctx.db
