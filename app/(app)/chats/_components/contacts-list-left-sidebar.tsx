@@ -24,9 +24,9 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 import { useDebounceValue } from "usehooks-ts";
-import { ContactsLeftSidebarItem } from "./contacts-left-sidebar-item";
+import { ContactsListItem } from "./contacts-list-item";
 
-export function ContactsLeftSidebar() {
+export function ContactsListLeftSidebar() {
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault(""),
@@ -110,7 +110,7 @@ export function ContactsLeftSidebar() {
         ) : (
           <>
             {contactsQuery.results.map((contact) => (
-              <ContactsLeftSidebarItem key={contact._id} contact={contact} />
+              <ContactsListItem key={contact._id} contact={contact} />
             ))}
 
             <Button

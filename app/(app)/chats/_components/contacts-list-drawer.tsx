@@ -32,7 +32,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 import { useDebounceValue } from "usehooks-ts";
-import { ContactsLeftSidebarItem } from "./contacts-left-sidebar-item";
+import { ContactsListItem } from "./contacts-list-item";
 
 export function ContactsListDrawer({
   children,
@@ -131,7 +131,7 @@ export function ContactsListDrawer({
           ) : (
             <>
               {contactsQuery.results.map((contact) => (
-                <ContactsLeftSidebarItem key={contact._id} contact={contact} />
+                <ContactsListItem key={contact._id} contact={contact} />
               ))}
 
               <Button

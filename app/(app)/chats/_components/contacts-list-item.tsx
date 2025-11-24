@@ -21,7 +21,7 @@ type ContactData = FunctionReturnType<
   typeof api.domains.contacts.queries.getContacts
 >["page"][number];
 
-export function ContactsLeftSidebarItem({ contact }: { contact: ContactData }) {
+export function ContactsListItem({ contact }: { contact: ContactData }) {
   const params = useParams();
   const contactId = params.contactId?.toString();
 

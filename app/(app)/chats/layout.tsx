@@ -5,7 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { ContactsLeftSidebar } from "./_components/contacts-left-sidebar";
+import { ContactsListLeftSidebar } from "./_components/contacts-list-left-sidebar";
 
 export default function ChatLayout({ children }: LayoutProps<"/chats">) {
   return (
@@ -14,7 +14,7 @@ export default function ChatLayout({ children }: LayoutProps<"/chats">) {
       className="flex size-full h-(--page-height) min-w-0 flex-row"
     >
       <ResizablePanel defaultSize={25} className="hidden md:block">
-        <ContactsLeftSidebar />
+        <ContactsListLeftSidebar />
       </ResizablePanel>
 
       <ResizableHandle />
