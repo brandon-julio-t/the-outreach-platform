@@ -20,7 +20,13 @@ import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { FunctionReturnType } from "convex/server";
 import { format } from "date-fns";
-import { MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
+import {
+  MessageCircleIcon,
+  MoreVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
+import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
 import { EditContactDialog } from "./edit-contact-dialog";
@@ -69,6 +75,12 @@ export function ContactsTableRow({ contact }: { contact: RowData }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href={`/chats/${contact._id}`}>
+                  <MessageCircleIcon />
+                  Chat
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setOpenEdit(true)}>
                 <PencilIcon />
                 Edit
