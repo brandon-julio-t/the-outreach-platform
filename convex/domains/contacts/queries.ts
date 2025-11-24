@@ -49,7 +49,7 @@ export const getContacts = query({
 
       return {
         page: uniqueContacts,
-        isDone: false,
+        isDone: true,
         continueCursor: "",
       } satisfies PaginationResult<Doc<"contacts">>;
     }
@@ -82,12 +82,36 @@ export const getContactsForChatPage = query({
 
     const search = args.search ?? "";
     if (search) {
-      return ctx.db
+      const byName = await ctx.db
         .query("contacts")
         .withSearchIndex("search_name", (q) =>
           q.search("name", search).eq("organizationId", args.organizationId),
         )
-        .paginate(args.paginationOpts);
+        .take(10);
+
+      const byPhone = await ctx.db
+        .query("contacts")
+        .withSearchIndex("search_phone", (q) =>
+          q.search("phone", search).eq("organizationId", args.organizationId),
+        )
+        .take(10);
+
+      const addedIds = new Set<string>();
+
+      const uniqueContacts: Doc<"contacts">[] = [];
+
+      [...byName, ...byPhone].forEach((contact) => {
+        if (!addedIds.has(contact._id)) {
+          addedIds.add(contact._id);
+          uniqueContacts.push(contact);
+        }
+      });
+
+      return {
+        page: uniqueContacts,
+        isDone: true,
+        continueCursor: "",
+      } satisfies PaginationResult<Doc<"contacts">>;
     }
 
     return await ctx.db
