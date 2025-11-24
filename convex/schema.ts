@@ -17,20 +17,6 @@ import {
 export default defineSchema({
   ...authTables,
 
-  /** DELETEME: when we have migrated organizationId to authSessions and all fields are unset in convex dashboard */
-  users: defineTable({
-    name: v.optional(v.string()),
-    image: v.optional(v.string()),
-    email: v.optional(v.string()),
-    emailVerificationTime: v.optional(v.number()),
-    phone: v.optional(v.string()),
-    phoneVerificationTime: v.optional(v.number()),
-    isAnonymous: v.optional(v.boolean()),
-    organizationId: v.optional(v.id("organizations")),
-  })
-    .index("email", ["email"])
-    .index("phone", ["phone"]),
-
   authSessions: defineTable({
     userId: v.id("users"),
     expirationTime: v.number(),
