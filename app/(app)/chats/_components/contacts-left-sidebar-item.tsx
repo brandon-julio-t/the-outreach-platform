@@ -1,3 +1,4 @@
+import { Message, MessageResponse } from "@/components/ai-elements/message";
 import {
   Item,
   ItemContent,
@@ -65,11 +66,22 @@ export function ContactsLeftSidebarItem({ contact }: { contact: ContactData }) {
           <Tooltip>
             <TooltipTrigger asChild>
               <ItemDescription className="line-clamp-1">
-                {latestMessage?.body ?? contact.phone}
+                {latestMessage?.body ? (
+                  <MessageResponse>{latestMessage.body}</MessageResponse>
+                ) : (
+                  contact.phone
+                )}
               </ItemDescription>
             </TooltipTrigger>
             <TooltipContent side="right">
-              {latestMessage?.body ?? contact.phone}
+              {latestMessage?.body ? (
+                <Message from="assistant">
+                  <div className="text-xs">{latestMessage.displayName}</div>
+                  <MessageResponse>{latestMessage.body}</MessageResponse>
+                </Message>
+              ) : (
+                contact.phone
+              )}
             </TooltipContent>
           </Tooltip>
         </ItemContent>
