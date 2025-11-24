@@ -24,16 +24,31 @@ export const getContacts = query({
     if (search) {
       const byName = await ctx.db
         .query("contacts")
-        .withSearchIndex("search_name", (q) => q.search("name", search))
+        .withSearchIndex("search_name", (q) =>
+          q.search("name", search).eq("organizationId", args.organizationId),
+        )
         .take(10);
 
       const byPhone = await ctx.db
         .query("contacts")
-        .withSearchIndex("search_phone", (q) => q.search("phone", search))
+        .withSearchIndex("search_phone", (q) =>
+          q.search("phone", search).eq("organizationId", args.organizationId),
+        )
         .take(10);
 
+      const addedIds = new Set<string>();
+
+      const uniqueContacts: Doc<"contacts">[] = [];
+
+      [...byName, ...byPhone].forEach((contact) => {
+        if (!addedIds.has(contact._id)) {
+          addedIds.add(contact._id);
+          uniqueContacts.push(contact);
+        }
+      });
+
       return {
-        page: [...byName, ...byPhone],
+        page: uniqueContacts,
         isDone: false,
         continueCursor: "",
       } satisfies PaginationResult<Doc<"contacts">>;
