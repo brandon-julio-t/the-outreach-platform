@@ -58,11 +58,13 @@ import {
   MoreVerticalIcon,
   PencilIcon,
   SendIcon,
+  SidebarOpenIcon,
 } from "lucide-react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { ContactsListDrawer } from "../../_components/contacts-list-drawer";
 
 export function ChatDetailsPageView({
   contactId,
@@ -160,6 +162,13 @@ export function ChatDetailsPageView({
     <section className="flex h-(--page-height) flex-col">
       <div className="border-b">
         <Item>
+          <ItemActions className="flex md:hidden">
+            <ContactsListDrawer>
+              <Button size="icon-sm" variant="ghost">
+                <SidebarOpenIcon className="rotate-270" />
+              </Button>
+            </ContactsListDrawer>
+          </ItemActions>
           <ItemContent>
             <ItemTitle>{contactQuery?.name ?? <>&nbsp;</>}</ItemTitle>
             <ItemDescription>
@@ -284,8 +293,10 @@ export function ChatDetailsPageView({
                   id={field.name}
                   aria-invalid={fieldState.invalid}
                   placeholder="Type a message..."
+                  className="max-h-1"
                 />
-                <InputGroupAddon align="block-end" className="border-t">
+
+                <InputGroupAddon align="block-end">
                   <InputGroupButton
                     type="submit"
                     size="icon-sm"
