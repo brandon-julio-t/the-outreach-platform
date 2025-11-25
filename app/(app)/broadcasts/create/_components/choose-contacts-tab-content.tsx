@@ -27,8 +27,7 @@ import {
 } from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
-import { useQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { SearchIcon, XIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
