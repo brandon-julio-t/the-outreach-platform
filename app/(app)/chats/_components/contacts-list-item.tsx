@@ -67,7 +67,7 @@ export function ContactsListItem({ contact }: { contact: ContactData }) {
             <TooltipTrigger asChild>
               <ItemDescription className="line-clamp-1 break-all">
                 {latestMessage?.body ? (
-                  <MessageResponse>{latestMessage.body}</MessageResponse>
+                  <>{latestMessage.body}</>
                 ) : (
                   contact.phone
                 )}

@@ -22,12 +22,6 @@ import { TwilioMessageStatusIcon } from "@/components/domains/twilio-messages";
 import { ImageZoom } from "@/components/kibo-ui/image-zoom";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Empty,
   EmptyDescription,
   EmptyHeader,
@@ -49,6 +43,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
+import { useSidebar } from "@/components/ui/sidebar";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
@@ -66,9 +61,8 @@ import { format, isToday } from "date-fns";
 import {
   MessageSquareCodeIcon,
   MessageSquareIcon,
-  MoreVerticalIcon,
-  PencilIcon,
   SendIcon,
+  SidebarCloseIcon,
   SidebarOpenIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -171,6 +165,8 @@ export function ChatDetailsPageView({
 
   const [openEdit, setOpenEdit] = React.useState(false);
 
+  const { toggleSidebar } = useSidebar();
+
   return (
     <section className="flex h-(--page-height) flex-col">
       <header className="border-b">
@@ -194,19 +190,13 @@ export function ChatDetailsPageView({
                 <Spinner />
               </Button>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <MoreVerticalIcon />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setOpenEdit(true)}>
-                    <PencilIcon />
-                    Edit
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => toggleSidebar()}
+              >
+                <SidebarCloseIcon className="rotate-180" />
+              </Button>
             )}
 
             {contactQuery && (

@@ -13,7 +13,7 @@ export const contacts = defineTable({
   goalsAchievedNote: v.optional(v.string()),
   goalsAchievedTime: v.optional(v.number()),
 
-  aiAssistantDisabledTime: v.optional(v.number()),
+  aiAssistantDisabledTime: v.optional(v.nullable(v.number())),
   aiAssistantDisabledReason: v.optional(v.string()),
 })
   .index("by_organizationId", ["organizationId"])

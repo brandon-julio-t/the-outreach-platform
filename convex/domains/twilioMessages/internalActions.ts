@@ -55,6 +55,11 @@ export const generateAssistantReply = internalAction({
 
     console.log("contact", contact);
 
+    if (contact?.aiAssistantDisabledTime) {
+      console.log("AI assistant is disabled for contact", contact._id);
+      return;
+    }
+
     const systemPromptBuilder = [
       aiAssistantSettings?.systemPrompt ??
         `You are a helpful assistant that can answer questions and help with tasks.`,
