@@ -54,12 +54,16 @@ import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
 import { format, isToday } from "date-fns";
 import {
+  CheckCheckIcon,
+  CheckIcon,
+  HourglassIcon,
   MessageSquareCodeIcon,
   MessageSquareIcon,
   MoreVerticalIcon,
   PencilIcon,
   SendIcon,
   SidebarOpenIcon,
+  XIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
@@ -263,13 +267,30 @@ export function ChatDetailsPageView({
                 ? format(message._creationTime, "p")
                 : format(message._creationTime, "PPp");
 
+              const isError =
+                message.errorCode ||
+                message.errorMessage ||
+                message.status === "failed";
+
+              const errorMessage =
+                message.errorMessage ||
+                "The message could not be sent. This can happen for various reasons including queue overflows, account suspensions and media errors (in the case of MMS).";
+
               return (
-                <Message from={reversedRole} key={message._id}>
+                <Message
+                  from={reversedRole}
+                  key={message._id}
+                  aria-invalid={!!isError}
+                  aria-errormessage={isError ? errorMessage : undefined}
+                >
                   <MessageContent
                     className={cn(
                       "break-all",
+
                       "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-xl group-[.is-user]:rounded-br-xs group-[.is-user]:px-4 group-[.is-user]:py-3",
                       "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground group-[.is-assistant]:mr-auto group-[.is-assistant]:rounded-xl group-[.is-assistant]:rounded-bl-xs group-[.is-assistant]:px-4 group-[.is-assistant]:py-3",
+
+                      "group-aria-invalid:border-destructive group-aria-invalid:border-2",
                     )}
                   >
                     <div className="text-xs">{message.displayName}</div>
@@ -278,15 +299,68 @@ export function ChatDetailsPageView({
                       {message.body}
                     </MessageResponse>
 
-                    <Tooltip>
-                      <TooltipTrigger className="ml-auto text-xs">
-                        {displayTime}
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" sideOffset={4}>
-                        {format(message._creationTime, "PPp")}
-                      </TooltipContent>
-                    </Tooltip>
+                    <div className="flex flex-row items-center justify-end gap-2 text-xs">
+                      <Tooltip>
+                        <TooltipTrigger>{displayTime}</TooltipTrigger>
+                        <TooltipContent side="bottom" sideOffset={4}>
+                          {format(message._creationTime, "PPp")}
+                        </TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        {message.status === "read" ? (
+                          <TooltipTrigger asChild>
+                            <CheckCheckIcon className="text-success size-(--text-xs)" />
+                          </TooltipTrigger>
+                        ) : message.status === "delivered" ? (
+                          <TooltipTrigger asChild>
+                            <CheckIcon className="text-info size-(--text-xs)" />
+                          </TooltipTrigger>
+                        ) : message.status === "failed" ? (
+                          <TooltipTrigger asChild>
+                            <XIcon className="text-destructive size-(--text-xs)" />
+                          </TooltipTrigger>
+                        ) : (
+                          <TooltipTrigger asChild>
+                            <HourglassIcon className="text-warning size-(--text-xs)" />
+                          </TooltipTrigger>
+                        )}
+                        <TooltipContent side="bottom" sideOffset={4}>
+                          {message.status}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
                   </MessageContent>
+
+                  <div className="text-destructive hidden text-right text-xs group-aria-invalid:block">
+                    {message.errorCode && (
+                      <div>
+                        <a
+                          target="_blank"
+                          href={`https://www.twilio.com/docs/api/errors/${message.errorCode}`}
+                          rel="noreferrer noopener"
+                          className="underline"
+                        >
+                          {message.errorCode}
+                        </a>
+                      </div>
+                    )}
+
+                    {message.errorMessage && <div>{message.errorMessage}</div>}
+
+                    {message.status === "failed" && (
+                      <div>
+                        <a
+                          target="_blank"
+                          href={`https://help.twilio.com/articles/223134347-What-are-the-Possible-SMS-and-MMS-Message-Statuses-and-What-do-They-Mean-`}
+                          rel="noreferrer noopener"
+                          className="underline"
+                        >
+                          {errorMessage}
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </Message>
               );
             })}
