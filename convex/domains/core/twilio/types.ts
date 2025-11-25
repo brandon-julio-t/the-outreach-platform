@@ -11,6 +11,9 @@ export type SendWhatsAppMessageViaTwilioResponse = {
   date_sent: string | null;
   date_updated: string;
   direction: string;
+  code: number | null | undefined;
+  message: string | null | undefined;
+  more_info: string | null | undefined;
   error_code: number | null;
   error_message: string | null;
   from: string;

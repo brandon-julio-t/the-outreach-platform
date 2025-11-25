@@ -53,6 +53,11 @@ export const sendWhatsAppMessageViaTwilioAction = internalAction({
 
     console.log("json", json);
 
-    return json as SendWhatsAppMessageViaTwilioResponse;
+    return {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      json: json as SendWhatsAppMessageViaTwilioResponse,
+    };
   },
 });

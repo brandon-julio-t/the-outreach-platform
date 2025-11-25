@@ -76,20 +76,42 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
 
     console.log("response", response);
 
+    if (!response.ok) {
+      console.error("Failed to send WhatsApp message", { response });
+
+      await step.runMutation(
+        internal.domains.twilioMessages.internalCrud.update,
+        {
+          id: twilioMessage._id,
+          patch: {
+            status: "failed",
+
+            errorCode: response.json.code?.toString(),
+            errorMessage: response.json.message?.toString(),
+
+            rawResponseJson: response.json,
+            lastUpdatedAt: Date.now(),
+          },
+        },
+      );
+
+      return;
+    }
+
     await step.runMutation(
       internal.domains.twilioMessages.internalCrud.update,
       {
         id: twilioMessage._id,
         patch: {
-          body: response.body,
-          messageSid: response.sid,
-          apiVersion: response.api_version,
-          direction: response.direction,
-          errorCode: response.error_code?.toString() ?? undefined,
-          errorMessage: response.error_message ?? undefined,
-          status: response.status,
+          body: response.json.body,
+          messageSid: response.json.sid,
+          apiVersion: response.json.api_version,
+          direction: response.json.direction,
+          errorCode: response.json.error_code?.toString() ?? undefined,
+          errorMessage: response.json.error_message ?? undefined,
+          status: response.json.status,
 
-          rawResponseJson: response,
+          rawResponseJson: response.json,
           lastUpdatedAt: Date.now(),
         },
       },
