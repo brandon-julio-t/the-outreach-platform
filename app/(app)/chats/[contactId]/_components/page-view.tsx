@@ -274,7 +274,9 @@ export function ChatDetailsPageView({
                   >
                     <div className="text-xs">{message.displayName}</div>
 
-                    <MessageResponse>{message.body}</MessageResponse>
+                    <MessageResponse className="list-inside">
+                      {message.body}
+                    </MessageResponse>
 
                     <Tooltip>
                       <TooltipTrigger className="ml-auto text-xs">
