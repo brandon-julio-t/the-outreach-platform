@@ -25,6 +25,12 @@ export default defineConfig([
               message:
                 "Importing useRouter from 'next/navigation' is not allowed. Import from `@bprogress/next/app` instead.",
             },
+            {
+              name: "convex/react",
+              importNames: ["useQuery", "usePaginatedQuery"],
+              message:
+                "Importing useQuery or usePaginatedQuery from 'convex/react' is not allowed. Import from `convex-helpers/react/cache/hooks` instead.",
+            },
           ],
         },
       ],
