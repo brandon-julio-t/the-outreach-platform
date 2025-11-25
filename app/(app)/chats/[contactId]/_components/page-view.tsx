@@ -43,7 +43,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
-import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
@@ -61,8 +61,8 @@ import { format, isToday } from "date-fns";
 import {
   MessageSquareCodeIcon,
   MessageSquareIcon,
+  PanelRightIcon,
   SendIcon,
-  SidebarCloseIcon,
   SidebarOpenIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -165,8 +165,6 @@ export function ChatDetailsPageView({
 
   const [openEdit, setOpenEdit] = React.useState(false);
 
-  const { toggleSidebar } = useSidebar();
-
   return (
     <section className="flex h-(--page-height) flex-col">
       <header className="border-b">
@@ -190,13 +188,9 @@ export function ChatDetailsPageView({
                 <Spinner />
               </Button>
             ) : (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => toggleSidebar()}
-              >
-                <SidebarCloseIcon className="rotate-180" />
-              </Button>
+              <SidebarTrigger>
+                <PanelRightIcon />
+              </SidebarTrigger>
             )}
 
             {contactQuery && (
@@ -279,6 +273,7 @@ export function ChatDetailsPageView({
                         state={
                           toolCall.error ? "output-error" : "output-available"
                         }
+                        className="overflow-auto"
                       />
                       <ToolContent>
                         <ToolInput input={toolCall.input} />

@@ -45,6 +45,14 @@ export const setContactGoalsAchievedTool = ({
         },
       );
 
+      if (prev?.goalsAchievedTime) {
+        return {
+          ok: false,
+          message:
+            "Contact goals have already been achieved, you cannot call this tool again.",
+        };
+      }
+
       await ctx.runMutation(internal.domains.contacts.internalCrud.update, {
         id: contactId,
         patch: {

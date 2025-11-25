@@ -7,28 +7,18 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
 import { BotIcon, BotOffIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import { RightSidebarContactData } from "./types";
 
 export function AiAssistantSwitch({
-  contactId,
-  organizationId,
+  contact,
 }: {
-  contactId: Id<"contacts">;
-  organizationId: Id<"organizations">;
+  contact: RightSidebarContactData;
 }) {
-  const contactQuery = useQuery(
-    api.domains.contacts.queries.getContactById,
-    organizationId && contactId
-      ? { id: contactId, organizationId: organizationId }
-      : "skip",
-  );
-
-  const isAiAssistantDisabled = !!contactQuery?.aiAssistantDisabledTime;
+  const isAiAssistantDisabled = !!contact.aiAssistantDisabledTime;
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -60,7 +50,7 @@ export function AiAssistantSwitch({
             await toast
               .promise(
                 patchContact({
-                  id: contactId,
+                  id: contact._id,
                   patch: {
                     aiAssistantDisabledTime: checked ? null : Date.now(),
                   },

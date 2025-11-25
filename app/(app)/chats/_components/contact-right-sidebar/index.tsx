@@ -2,6 +2,7 @@
 
 import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemMedia,
@@ -17,17 +18,27 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { cn } from "@/lib/utils";
 import { useQuery } from "convex-helpers/react/cache/hooks";
-import { PencilIcon } from "lucide-react";
+import { format } from "date-fns";
+import {
+  CheckIcon,
+  CircleDashedIcon,
+  PanelRightIcon,
+  PencilIcon,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { EditContactDialog } from "../../../contacts/_components/edit-contact-dialog";
+import { AiAssistantDisabledReason } from "./ai-assistant-disabled-reason";
 import { AiAssistantSwitch } from "./ai-assistant-switch";
+import { ContactGoalInformation } from "./contact-goal-information";
 
 export function ContactRightSidebar() {
   const params = useParams();
@@ -56,24 +67,33 @@ export function ContactRightSidebar() {
   }
 
   return (
-    <Sidebar side="right">
-      <SidebarHeader>
-        <Item size="sm">
-          <ItemContent>
-            <ItemTitle>{contactQuery?.name}</ItemTitle>
-            <ItemDescription>{contactQuery?.phone}</ItemDescription>
-          </ItemContent>
-          {isLoading && (
-            <ItemMedia>
-              <Spinner />
-            </ItemMedia>
-          )}
-        </Item>
+    <Sidebar
+      side="right"
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]"
+    >
+      <SidebarHeader className="border-b">
+        <SidebarMenu>
+          <Item size="sm">
+            <ItemContent>
+              <ItemTitle>{contactQuery?.name}</ItemTitle>
+              <ItemDescription>{contactQuery?.phone}</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <SidebarTrigger>
+                  <PanelRightIcon />
+                </SidebarTrigger>
+              )}
+            </ItemActions>
+          </Item>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          {isLoading ? (
+        {isLoading ? (
+          <SidebarGroup>
             <SidebarMenu>
               <SidebarMenuSkeleton />
               <SidebarMenuSkeleton />
@@ -81,22 +101,61 @@ export function ContactRightSidebar() {
               <SidebarMenuSkeleton />
               <SidebarMenuSkeleton />
             </SidebarMenu>
-          ) : (
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <AiAssistantSwitch
-                  contactId={contactQuery._id}
-                  organizationId={currentOrganization._id}
-                />
-              </SidebarMenuItem>
+          </SidebarGroup>
+        ) : (
+          <>
+            <SidebarGroup>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <AiAssistantSwitch contact={contactQuery} />
+                </SidebarMenuItem>
 
-              {/* TODO: display all the notes here */}
-            </SidebarMenu>
-          )}
-        </SidebarGroup>
+                <SidebarMenuItem>
+                  <AiAssistantDisabledReason contact={contactQuery} />
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <Item
+                    variant="outline"
+                    data-state={
+                      contactQuery.goalsAchievedTime ? "achieved" : "pending"
+                    }
+                    className={cn(
+                      "group",
+                      "data-[state=achieved]:bg-success/10 data-[state=achieved]:border-success/40 data-[state=achieved]:text-success",
+                    )}
+                  >
+                    <ItemContent>
+                      <ItemTitle>Goals Achieved?</ItemTitle>
+                      <ItemDescription>
+                        {contactQuery.goalsAchievedTime
+                          ? `Yes, on ${format(contactQuery.goalsAchievedTime, "PPp")}`
+                          : "In Progress"}
+                      </ItemDescription>
+                    </ItemContent>
+                    <ItemMedia
+                      variant="icon"
+                      className="group-data-[state=achieved]:border-success/35 group-data-[state=achieved]:bg-success/5"
+                    >
+                      <CircleDashedIcon className="group-data-[state=achieved]:hidden" />
+                      <CheckIcon className="group-data-[state=pending]:hidden" />
+                    </ItemMedia>
+                  </Item>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <ContactGoalInformation contact={contactQuery} />
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="border-t">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton

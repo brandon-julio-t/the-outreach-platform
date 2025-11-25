@@ -16,7 +16,7 @@ export const askHumanHelpTool = ({
   tool({
     description: [
       "Ask for human help.",
-      "Call this tool when you are stuck or the contact is getting frustrated, etc.",
+      "Call this tool when you are stuck or the contact is getting frustrated, angry, etc.",
       "This tool will send a message to the human to help you with the task.",
     ].join("\n"),
     inputSchema: z.object({
