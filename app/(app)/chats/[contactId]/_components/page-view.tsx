@@ -346,20 +346,7 @@ export function ChatDetailsPageView({
                       </div>
                     )}
 
-                    {message.errorMessage && <div>{message.errorMessage}</div>}
-
-                    {message.status === "failed" && (
-                      <div>
-                        <a
-                          target="_blank"
-                          href={`https://help.twilio.com/articles/223134347-What-are-the-Possible-SMS-and-MMS-Message-Statuses-and-What-do-They-Mean-`}
-                          rel="noreferrer noopener"
-                          className="underline"
-                        >
-                          {errorMessage}
-                        </a>
-                      </div>
-                    )}
+                    {errorMessage && <div>{errorMessage}</div>}
                   </div>
                 </Message>
               );
