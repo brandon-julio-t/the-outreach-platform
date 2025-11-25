@@ -12,6 +12,7 @@ import {
   MessageResponse,
 } from "@/components/ai-elements/message";
 import { TwilioMessageStatusIcon } from "@/components/domains/twilio-messages";
+import { ImageZoom } from "@/components/kibo-ui/image-zoom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -64,6 +65,7 @@ import {
   SidebarOpenIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -272,8 +274,8 @@ export function ChatDetailsPageView({
 
               return (
                 <Message
-                  from={reversedRole}
                   key={message._id}
+                  from={reversedRole}
                   aria-invalid={!!isError}
                   aria-errormessage={errorMessage}
                 >
@@ -287,6 +289,18 @@ export function ChatDetailsPageView({
                       "group-aria-invalid:border-destructive group-aria-invalid:border-2",
                     )}
                   >
+                    {message.twilioMessageTemplate?.messageMedia && (
+                      <ImageZoom className="relative aspect-square size-32 overflow-hidden rounded-lg">
+                        <Image
+                          unoptimized
+                          fill
+                          src={message.twilioMessageTemplate?.messageMedia}
+                          alt="Message media"
+                          className="object-cover"
+                        />
+                      </ImageZoom>
+                    )}
+
                     <div className="text-xs">{message.displayName}</div>
 
                     <MessageResponse className="list-inside">

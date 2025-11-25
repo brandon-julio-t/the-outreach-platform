@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -24,10 +25,9 @@ import {
   FieldSet,
   FieldTitle,
 } from "@/components/ui/field";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
-import { Doc } from "@/convex/_generated/dataModel";
+import { Doc, Id } from "@/convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
@@ -89,11 +89,13 @@ function DrawerBody({
     mode: "onTouched",
     resolver: zodResolver(
       z.object({
-        twilioMessageTemplateId: z.string().min(1),
+        twilioMessageTemplateId: z.string().nonempty(),
+        contentSid: z.string().nonempty(),
       }),
     ),
     defaultValues: {
       twilioMessageTemplateId: "",
+      contentSid: "",
     },
   });
 
@@ -115,7 +117,9 @@ function DrawerBody({
           sendWhatsAppMessageViaTwilio({
             contactId: contact._id,
             receiverPhoneNumber: contact.phone,
-            contentSid: data.twilioMessageTemplateId,
+            twilioMessageTemplateId:
+              data.twilioMessageTemplateId as Id<"twilioMessageTemplates">,
+            contentSid: data.contentSid,
             contentVariables: {},
           }),
           {
@@ -181,25 +185,46 @@ function DrawerBody({
                 name="twilioMessageTemplateId"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <RadioGroup
-                    {...field}
-                    onValueChange={field.onChange}
-                    aria-invalid={fieldState.invalid}
-                  >
+                  <>
                     {twilioMessageTemplatesQuery.results.map(
                       (twilioMessageTemplate) => (
                         <FieldLabel
                           key={twilioMessageTemplate._id}
                           htmlFor={twilioMessageTemplate._id}
                           aria-invalid={fieldState.invalid}
+                          onClick={() => {
+                            if (!twilioMessageTemplate.twilioContentSid) {
+                              toast.error("Twilio content SID not found", {
+                                description:
+                                  "Please refresh the page and try again.",
+                              });
+                              return;
+                            }
+                            form.setValue(
+                              "twilioMessageTemplateId",
+                              twilioMessageTemplate._id as Id<"twilioMessageTemplates">,
+                              {
+                                shouldValidate: true,
+                              },
+                            );
+                            form.setValue(
+                              "contentSid",
+                              twilioMessageTemplate.twilioContentSid,
+                              {
+                                shouldValidate: true,
+                              },
+                            );
+                          }}
                         >
                           <Field
                             orientation="horizontal"
                             data-invalid={fieldState.invalid}
                           >
-                            <RadioGroupItem
+                            <Checkbox
                               id={twilioMessageTemplate._id}
-                              value={twilioMessageTemplate._id}
+                              checked={
+                                field.value === twilioMessageTemplate._id
+                              }
                               aria-invalid={fieldState.invalid}
                             />
                             <FieldContent>
@@ -211,7 +236,7 @@ function DrawerBody({
                         </FieldLabel>
                       ),
                     )}
-                  </RadioGroup>
+                  </>
                 )}
               />
 

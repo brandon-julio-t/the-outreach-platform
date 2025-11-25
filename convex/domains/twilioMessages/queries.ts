@@ -129,7 +129,9 @@ export const getTwilioMessagesByContactId = query({
           return {
             ...message,
 
-            //
+            twilioMessageTemplate: message.twilioMessageTemplateId
+              ? await ctx.db.get(message.twilioMessageTemplateId)
+              : null,
           };
         }),
       ),
