@@ -62,7 +62,7 @@ export function ContactRightSidebar() {
 
   const { toggleSidebar } = useSidebar();
 
-  if (currentOrganization === null || contactQuery === null) {
+  if (!contactId || currentOrganization === null || contactQuery === null) {
     return null;
   }
 
