@@ -106,8 +106,9 @@ export default function BroadcastsPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Name</TableHead>
+                      <TableHead>Message Template Name</TableHead>
                       <TableHead>Created At</TableHead>
+                      <TableHead>Created By</TableHead>
                       <TableHead className="w-1">&nbsp;</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -120,6 +121,7 @@ export default function BroadcastsPage() {
                         <TableCell>
                           {format(broadcast._creationTime, "PPPpp")}
                         </TableCell>
+                        <TableCell>{broadcast.user?.name}</TableCell>
                         <TableCell>
                           <Button variant="ghost" asChild>
                             <Link href={`/broadcasts/${broadcast._id}`}>

@@ -34,6 +34,8 @@ export const getTwilioMessageBroadcasts = query({
           return {
             ...broadcast,
 
+            user: await ctx.db.get(broadcast.userId),
+
             twilioMessageTemplate: await ctx.db.get(
               broadcast.twilioMessageTemplateId,
             ),
