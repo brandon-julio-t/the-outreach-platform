@@ -4,7 +4,6 @@ import { EditContactDialog } from "@/app/(app)/contacts/_components/edit-contact
 import {
   Conversation,
   ConversationContent,
-  ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import {
@@ -207,79 +206,86 @@ export function ChatDetailsPageView({
         </Item>
       </div>
 
-      <Conversation className="h-full flex-1 overflow-y-auto" initial="instant">
-        <ConversationContent>
-          {messagesQuery.status === "LoadingFirstPage" ? (
-            <Empty>
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Spinner />
-                </EmptyMedia>
-                <EmptyTitle>Loading messages...</EmptyTitle>
-                <EmptyDescription>
-                  We are loading the messages for you. Please wait a moment.
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
-          ) : reversedMessages.length === 0 ? (
-            <ConversationEmptyState
-              icon={<MessageSquareIcon className="size-12" />}
-              title="Start a conversation"
-              description="Type a message below to begin chatting"
-            />
-          ) : (
-            <>
-              <Button
-                variant="ghost"
-                disabled={messagesQuery.status !== "CanLoadMore"}
-                onClick={onLoadMore}
-              >
-                {messagesQuery.isLoading && <Spinner />}
-                {messagesQuery.status === "Exhausted"
-                  ? "No more messages"
-                  : "Load More"}
-              </Button>
+      {messagesQuery.status === "LoadingFirstPage" ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Spinner />
+            </EmptyMedia>
+            <EmptyTitle>Loading messages...</EmptyTitle>
+            <EmptyDescription>
+              We are loading the messages for you. Please wait a moment.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : reversedMessages.length <= 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia>
+              <MessageSquareIcon />
+            </EmptyMedia>
+            <EmptyTitle>Start a conversation</EmptyTitle>
+            <EmptyDescription>
+              Type a message below to begin chatting
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <Conversation
+          className="h-full flex-1 overflow-y-auto"
+          initial="instant"
+        >
+          <ConversationContent>
+            <Button
+              variant="ghost"
+              disabled={messagesQuery.status !== "CanLoadMore"}
+              onClick={onLoadMore}
+            >
+              {messagesQuery.isLoading && <Spinner />}
+              {messagesQuery.status === "Exhausted"
+                ? "No more messages"
+                : "Load More"}
+            </Button>
 
-              {reversedMessages.map((message) => {
-                /** because we are the assistant */
-                const reversedRole =
-                  message.role === "assistant" ? "user" : "assistant";
+            {reversedMessages.map((message) => {
+              /** because we are the assistant */
+              const reversedRole =
+                message.role === "assistant" ? "user" : "assistant";
 
-                const isMessageToday = isToday(message._creationTime);
-                const displayTime = isMessageToday
-                  ? format(message._creationTime, "p")
-                  : format(message._creationTime, "PPp");
+              const isMessageToday = isToday(message._creationTime);
+              const displayTime = isMessageToday
+                ? format(message._creationTime, "p")
+                : format(message._creationTime, "PPp");
 
-                return (
-                  <Message from={reversedRole} key={message._id}>
-                    <MessageContent
-                      className={cn(
-                        "break-all",
-                        "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-xl group-[.is-user]:rounded-br-xs group-[.is-user]:px-4 group-[.is-user]:py-3",
-                        "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground group-[.is-assistant]:mr-auto group-[.is-assistant]:rounded-xl group-[.is-assistant]:rounded-bl-xs group-[.is-assistant]:px-4 group-[.is-assistant]:py-3",
-                      )}
-                    >
-                      <div className="text-xs">{message.displayName}</div>
+              return (
+                <Message from={reversedRole} key={message._id}>
+                  <MessageContent
+                    className={cn(
+                      "break-all",
+                      "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-xl group-[.is-user]:rounded-br-xs group-[.is-user]:px-4 group-[.is-user]:py-3",
+                      "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground group-[.is-assistant]:mr-auto group-[.is-assistant]:rounded-xl group-[.is-assistant]:rounded-bl-xs group-[.is-assistant]:px-4 group-[.is-assistant]:py-3",
+                    )}
+                  >
+                    <div className="text-xs">{message.displayName}</div>
 
-                      <MessageResponse>{message.body}</MessageResponse>
+                    <MessageResponse>{message.body}</MessageResponse>
 
-                      <Tooltip>
-                        <TooltipTrigger className="ml-auto text-xs">
-                          {displayTime}
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom" sideOffset={4}>
-                          {format(message._creationTime, "PPp")}
-                        </TooltipContent>
-                      </Tooltip>
-                    </MessageContent>
-                  </Message>
-                );
-              })}
-            </>
-          )}
-        </ConversationContent>
-        <ConversationScrollButton />
-      </Conversation>
+                    <Tooltip>
+                      <TooltipTrigger className="ml-auto text-xs">
+                        {displayTime}
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" sideOffset={4}>
+                        {format(message._creationTime, "PPp")}
+                      </TooltipContent>
+                    </Tooltip>
+                  </MessageContent>
+                </Message>
+              );
+            })}
+          </ConversationContent>
+          <ConversationScrollButton />
+        </Conversation>
+      )}
 
       <form onSubmit={onSubmit} className="p-1 pt-0">
         <Controller
