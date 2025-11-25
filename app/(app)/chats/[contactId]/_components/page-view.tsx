@@ -290,7 +290,7 @@ export function ChatDetailsPageView({
                     )}
                   >
                     {message.twilioMessageTemplate?.messageMedia && (
-                      <ImageZoom className="relative aspect-square size-32 overflow-hidden rounded-lg">
+                      <ImageZoom className="bg-muted relative aspect-square size-32 overflow-hidden rounded-lg">
                         <Image
                           unoptimized
                           fill
