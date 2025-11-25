@@ -24,7 +24,7 @@ export function ContactGoalInformation({
     mode: "onTouched",
     resolver: zodResolver(
       z.object({
-        note: z.string().trim().nonempty(),
+        note: z.string(),
       }),
     ),
     values: {

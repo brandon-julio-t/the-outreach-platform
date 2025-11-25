@@ -24,7 +24,7 @@ export function AiAssistantDisabledReason({
     mode: "onTouched",
     resolver: zodResolver(
       z.object({
-        reason: z.string().trim().nonempty(),
+        reason: z.string(),
       }),
     ),
     values: {
