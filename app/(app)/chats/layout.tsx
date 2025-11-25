@@ -13,6 +13,7 @@ export default function ChatLayout({ children }: LayoutProps<"/chats">) {
   return (
     <SidebarProvider defaultOpen className="min-h-auto">
       <ResizablePanelGroup
+        autoSaveId="chat-layout-resizable-panel-group"
         direction="horizontal"
         className="flex size-full h-(--page-height) min-w-0 flex-row"
         suppressHydrationWarning={process.env.NODE_ENV === "development"}
