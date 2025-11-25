@@ -303,7 +303,11 @@ export function ChatDetailsPageView({
 
                     <div className="text-xs">{message.displayName}</div>
 
-                    <MessageResponse className="list-inside">
+                    <MessageResponse
+                      className="list-inside"
+                      mode="static"
+                      isAnimating={false}
+                    >
                       {message.body}
                     </MessageResponse>
 
