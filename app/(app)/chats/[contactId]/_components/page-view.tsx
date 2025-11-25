@@ -30,6 +30,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
+  InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import {
@@ -53,6 +54,7 @@ import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
 import { format, isToday } from "date-fns";
 import {
+  MessageSquareCodeIcon,
   MessageSquareIcon,
   MoreVerticalIcon,
   PencilIcon,
@@ -65,6 +67,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { ContactsListDrawer } from "../../_components/contacts-list-drawer";
+import { ChooseMessageTemplateDrawer } from "./choose-message-template-drawer";
 
 export function ChatDetailsPageView({
   contactId,
@@ -107,7 +110,6 @@ export function ChatDetailsPageView({
   const reversedMessages = messagesQuery.results.toReversed();
 
   const form = useForm({
-    mode: "onTouched",
     resolver: zodResolver(
       z.object({
         message: z.string().trim().nonempty(),
@@ -297,7 +299,6 @@ export function ChatDetailsPageView({
           name="message"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               <InputGroup>
                 <InputGroupTextarea
                   {...field}
@@ -307,13 +308,38 @@ export function ChatDetailsPageView({
                   className="max-h-1"
                 />
 
-                <InputGroupAddon align="block-end">
+                {fieldState.invalid && (
+                  <InputGroupAddon align="block-end">
+                    <InputGroupText>
+                      <FieldError errors={[fieldState.error]} />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                )}
+
+                <InputGroupAddon align="block-end" className="flex-wrap">
+                  <ChooseMessageTemplateDrawer contact={contactQuery}>
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={form.formState.isSubmitting}
+                      variant="outline"
+                      className="text-foreground"
+                    >
+                      {form.formState.isSubmitting ? (
+                        <Spinner />
+                      ) : (
+                        <MessageSquareCodeIcon />
+                      )}
+                      Send Message Template
+                    </Button>
+                  </ChooseMessageTemplateDrawer>
+
                   <InputGroupButton
                     type="submit"
                     variant="default"
                     size="icon-sm"
                     className="ml-auto"
-                    disabled={!field.value || form.formState.isSubmitting}
+                    disabled={form.formState.isSubmitting}
                   >
                     {form.formState.isSubmitting ? <Spinner /> : <SendIcon />}
                   </InputGroupButton>
