@@ -116,6 +116,7 @@ function DrawerBody({
             contactId: contact._id,
             receiverPhoneNumber: contact.phone,
             contentSid: data.twilioMessageTemplateId,
+            contentVariables: {},
           }),
           {
             loading: "Sending message...",
