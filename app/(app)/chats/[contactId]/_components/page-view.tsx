@@ -265,9 +265,10 @@ export function ChatDetailsPageView({
                 ? format(message._creationTime, "p")
                 : format(message._creationTime, "PPp");
 
-              const { isError, errorMessage, docsUrl } = getTwilioMessageError({
-                message,
-              });
+              const { isError, errorCode, errorMessage, docsUrl } =
+                getTwilioMessageError({
+                  message,
+                });
 
               return (
                 <Message
@@ -325,7 +326,7 @@ export function ChatDetailsPageView({
                             rel="noreferrer noopener"
                             className="underline"
                           >
-                            {message.errorCode}
+                            {errorCode}
                           </a>
                         </div>
                       )}

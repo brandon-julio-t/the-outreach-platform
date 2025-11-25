@@ -31,6 +31,7 @@ export const getTwilioMessageError = ({
 
   return {
     isError: !!isError,
+    errorCode: isError ? message.errorCode : undefined,
     errorMessage: isError ? errorMessage : undefined,
     docsUrl: isError
       ? `https://www.twilio.com/docs/api/errors/${message.errorCode}`

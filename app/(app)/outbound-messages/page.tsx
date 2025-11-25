@@ -32,6 +32,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
+import { getTwilioMessageError } from "@/lib/domains/twilio-messages";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { format } from "date-fns";
 
@@ -108,56 +109,77 @@ export default function OutboundMessagesPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {twilioMessagesQuery.results.map((twilioMessage) => (
-                      <TableRow key={twilioMessage._id}>
-                        <TableCell>{twilioMessage.from}</TableCell>
-                        <TableCell>{twilioMessage.to}</TableCell>
-                        <TableCell>{twilioMessage.contact?.name}</TableCell>
-                        <TableCell>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <div className="line-clamp-2 whitespace-break-spaces">
-                                {twilioMessage.body}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <div className="whitespace-break-spaces">
-                                {twilioMessage.body}
-                              </div>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell>
-                          <Badge>
-                            <TwilioMessageStatusIcon message={twilioMessage} />
-                            {twilioMessage.workflowStatus?.type} /{" "}
-                            {twilioMessage.status}
-                          </Badge>
+                    {twilioMessagesQuery.results.map((twilioMessage) => {
+                      const { isError, errorCode, errorMessage, docsUrl } =
+                        getTwilioMessageError({
+                          message: twilioMessage,
+                        });
 
-                          {twilioMessage.errorCode && (
-                            <div className="text-destructive">
-                              Error Code: {twilioMessage.errorCode}
-                            </div>
-                          )}
+                      return (
+                        <TableRow key={twilioMessage._id}>
+                          <TableCell>{twilioMessage.from}</TableCell>
+                          <TableCell>{twilioMessage.to}</TableCell>
+                          <TableCell>{twilioMessage.contact?.name}</TableCell>
+                          <TableCell>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="line-clamp-1 min-w-64 break-all whitespace-break-spaces">
+                                  {twilioMessage.body}
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <div className="whitespace-break-spaces">
+                                  {twilioMessage.body}
+                                </div>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell>
+                            <Badge>
+                              <TwilioMessageStatusIcon
+                                message={twilioMessage}
+                              />
+                              {twilioMessage.workflowStatus?.type} /{" "}
+                              {twilioMessage.status}
+                            </Badge>
 
-                          {twilioMessage.errorMessage && (
-                            <div className="text-destructive">
-                              Error Message: {twilioMessage.errorMessage}
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {format(twilioMessage._creationTime, "PPPp")}
-                        </TableCell>
-                        <TableCell>
-                          {format(
-                            twilioMessage.lastUpdatedAt ??
-                              twilioMessage._creationTime,
-                            "PPPp",
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                            {isError && (
+                              <div className="text-destructive mt-2 text-xs">
+                                <div>
+                                  <a
+                                    target="_blank"
+                                    href={docsUrl}
+                                    rel="noreferrer noopener"
+                                    className="underline"
+                                  >
+                                    Error Code: {errorCode}
+                                  </a>
+                                </div>
+
+                                <Tooltip>
+                                  <TooltipTrigger className="text-destructive max-w-64 truncate">
+                                    Error Message: {errorMessage}
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    {errorMessage}
+                                  </TooltipContent>
+                                </Tooltip>
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {format(twilioMessage._creationTime, "PPPp")}
+                          </TableCell>
+                          <TableCell>
+                            {format(
+                              twilioMessage.lastUpdatedAt ??
+                                twilioMessage._creationTime,
+                              "PPPp",
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
 
