@@ -11,6 +11,13 @@ import {
   MessageContent,
   MessageResponse,
 } from "@/components/ai-elements/message";
+import {
+  Tool,
+  ToolContent,
+  ToolHeader,
+  ToolInput,
+  ToolOutput,
+} from "@/components/ai-elements/tool";
 import { TwilioMessageStatusIcon } from "@/components/domains/twilio-messages";
 import { ImageZoom } from "@/components/kibo-ui/image-zoom";
 import { Button } from "@/components/ui/button";
@@ -273,86 +280,108 @@ export function ChatDetailsPageView({
                 });
 
               return (
-                <Message
-                  key={message._id}
-                  from={reversedRole}
-                  aria-invalid={!!isError}
-                  aria-errormessage={errorMessage}
-                >
-                  <MessageContent
-                    className={cn(
-                      "break-all",
+                <React.Fragment key={message._id}>
+                  {message.aiSdkToolCalls?.map((toolCall) => (
+                    <Tool key={toolCall.toolName}>
+                      <ToolHeader
+                        title={toolCall.toolName}
+                        type={`tool-${toolCall.toolName}`}
+                        state={
+                          toolCall.error ? "output-error" : "output-available"
+                        }
+                      />
+                      <ToolContent>
+                        <ToolInput input={toolCall.input} />
+                        {toolCall.error && (
+                          <ToolOutput
+                            output={undefined}
+                            errorText={toolCall.error}
+                          />
+                        )}
+                      </ToolContent>
+                    </Tool>
+                  ))}
 
-                      "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-xl group-[.is-user]:rounded-br-xs group-[.is-user]:px-4 group-[.is-user]:py-3",
-                      "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground group-[.is-assistant]:mr-auto group-[.is-assistant]:rounded-xl group-[.is-assistant]:rounded-bl-xs group-[.is-assistant]:px-4 group-[.is-assistant]:py-3",
-
-                      "group-aria-invalid:border-destructive group-aria-invalid:border-2",
-                    )}
+                  <Message
+                    from={reversedRole}
+                    aria-invalid={!!isError}
+                    aria-errormessage={errorMessage}
                   >
-                    {message.twilioMessageTemplate?.messageMedia && (
-                      <ImageZoom className="bg-muted relative aspect-square size-32 overflow-hidden rounded-lg">
-                        <Image
-                          unoptimized
-                          fill
-                          src={message.twilioMessageTemplate?.messageMedia}
-                          alt="Message media"
-                          className="object-cover"
-                        />
-                      </ImageZoom>
-                    )}
+                    <MessageContent
+                      className={cn(
+                        "break-all",
 
-                    <div className="text-xs">{message.displayName}</div>
+                        "group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-xl group-[.is-user]:rounded-br-xs group-[.is-user]:px-4 group-[.is-user]:py-3",
+                        "group-[.is-assistant]:bg-secondary group-[.is-assistant]:text-foreground group-[.is-assistant]:mr-auto group-[.is-assistant]:rounded-xl group-[.is-assistant]:rounded-bl-xs group-[.is-assistant]:px-4 group-[.is-assistant]:py-3",
 
-                    <MessageResponse
-                      className="list-inside"
-                      mode="static"
-                      isAnimating={false}
+                        "group-aria-invalid:border-destructive group-aria-invalid:border-2",
+                      )}
                     >
-                      {message.body}
-                    </MessageResponse>
-
-                    <div className="flex flex-row items-center justify-end gap-2 text-xs">
-                      <Tooltip>
-                        <TooltipTrigger>{displayTime}</TooltipTrigger>
-                        <TooltipContent side="bottom" sideOffset={4}>
-                          {format(message._creationTime, "PPp")}
-                        </TooltipContent>
-                      </Tooltip>
-
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <TwilioMessageStatusIcon message={message} />
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="bottom"
-                          sideOffset={4}
-                          className="capitalize"
-                        >
-                          {message.status}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </MessageContent>
-
-                  {isError && (
-                    <div className="text-destructive text-right text-xs">
-                      {docsUrl && (
-                        <div>
-                          <a
-                            target="_blank"
-                            href={docsUrl}
-                            rel="noreferrer noopener"
-                            className="underline"
-                          >
-                            {errorCode}
-                          </a>
-                        </div>
+                      {message.twilioMessageTemplate?.messageMedia && (
+                        <ImageZoom className="bg-muted relative aspect-square size-32 overflow-hidden rounded-lg">
+                          <Image
+                            unoptimized
+                            fill
+                            src={message.twilioMessageTemplate?.messageMedia}
+                            alt="Message media"
+                            className="object-cover"
+                          />
+                        </ImageZoom>
                       )}
 
-                      {errorMessage && <div>{errorMessage}</div>}
-                    </div>
-                  )}
-                </Message>
+                      <div className="text-xs">{message.displayName}</div>
+
+                      <MessageResponse
+                        className="list-inside"
+                        mode="static"
+                        isAnimating={false}
+                      >
+                        {message.body}
+                      </MessageResponse>
+
+                      <div className="flex flex-row items-center justify-end gap-2 text-xs">
+                        <Tooltip>
+                          <TooltipTrigger>{displayTime}</TooltipTrigger>
+                          <TooltipContent side="bottom" sideOffset={4}>
+                            {format(message._creationTime, "PPp")}
+                          </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <TwilioMessageStatusIcon message={message} />
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="bottom"
+                            sideOffset={4}
+                            className="capitalize"
+                          >
+                            {message.status}
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </MessageContent>
+
+                    {isError && (
+                      <div className="text-destructive text-right text-xs">
+                        {docsUrl && (
+                          <div>
+                            <a
+                              target="_blank"
+                              href={docsUrl}
+                              rel="noreferrer noopener"
+                              className="underline"
+                            >
+                              {errorCode}
+                            </a>
+                          </div>
+                        )}
+
+                        {errorMessage && <div>{errorMessage}</div>}
+                      </div>
+                    )}
+                  </Message>
+                </React.Fragment>
               );
             })}
           </ConversationContent>

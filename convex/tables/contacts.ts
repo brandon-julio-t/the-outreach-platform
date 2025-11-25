@@ -5,10 +5,16 @@ export const contacts = defineTable({
   organizationId: v.id("organizations"),
   name: v.string(),
   phone: v.string(),
+
   latestMessageTime: v.optional(v.number()),
   lastUserReplyTime: v.optional(v.number()),
+  lastUpdateTime: v.optional(v.number()),
+
   goalsAchievedNote: v.optional(v.string()),
   goalsAchievedTime: v.optional(v.number()),
+
+  aiAssistantDisabledTime: v.optional(v.number()),
+  aiAssistantDisabledReason: v.optional(v.string()),
 })
   .index("by_organizationId", ["organizationId"])
   .index("by_organizationId_phone", ["organizationId", "phone"])

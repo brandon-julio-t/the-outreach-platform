@@ -1,5 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { mutation } from "../../_generated/server";
+import schema from "../../schema";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
 
 const vContact = v.object({
@@ -66,15 +67,15 @@ export const createContactsBulk = mutation({
 export const patchContact = mutation({
   args: {
     id: v.id("contacts"),
-    patch: v.object({
-      name: v.optional(v.string()),
-      phone: v.optional(v.string()),
-    }),
+    patch: v.object(schema.tables.contacts.validator.fields).partial(),
   },
   handler: async (ctx, args) => {
     await ensureUserWithOrgId({ ctx });
 
-    await ctx.db.patch(args.id, args.patch);
+    await ctx.db.patch(args.id, {
+      ...args.patch,
+      lastUpdateTime: Date.now(),
+    });
   },
 });
 

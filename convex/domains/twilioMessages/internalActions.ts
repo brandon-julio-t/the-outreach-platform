@@ -1,10 +1,12 @@
 import { openai, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
-import { generateText, ModelMessage, stepCountIs, tool } from "ai";
+import { generateText, ModelMessage, stepCountIs } from "ai";
 import { v } from "convex/values";
-import { z } from "zod";
+import { format } from "date-fns";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";
 import { internalAction } from "../../_generated/server";
+import { askHumanHelpTool } from "./aiAssistantTools/askHumanHelpTool";
+import { setContactGoalsAchievedTool } from "./aiAssistantTools/setContactGoalsAchievedTool";
 
 export const generateAssistantReply = internalAction({
   args: {
@@ -44,6 +46,43 @@ export const generateAssistantReply = internalAction({
       );
     }
 
+    const contact = await ctx.runQuery(
+      internal.domains.contacts.internalCrud.read,
+      {
+        id: args.contactId,
+      },
+    );
+
+    console.log("contact", contact);
+
+    const systemPromptBuilder = [
+      aiAssistantSettings?.systemPrompt ??
+        `You are a helpful assistant that can answer questions and help with tasks.`,
+    ];
+
+    if (contact) {
+      systemPromptBuilder.push(
+        `<contact_data>`,
+
+        `Name: ${contact.name}`,
+        `Phone: ${contact.phone}`,
+
+        `Latest message time: ${contact.latestMessageTime ?? "N/A"}`,
+        `Last user reply time: ${contact.lastUserReplyTime ?? "N/A"}`,
+
+        `Goals achieved: ${contact.goalsAchievedTime ? "Yes" : "No"}`,
+        `Goals achieved note: ${contact.goalsAchievedNote || "N/A"}`,
+        `Goals achieved time: ${contact.goalsAchievedTime || "N/A"}`,
+        `</contact_data>`,
+      );
+    }
+
+    systemPromptBuilder.push(
+      `<system_information>`,
+      `System time: ${format(new Date(), "PPPPpppp")}`,
+      `</system_information>`,
+    );
+
     const response = await generateText({
       model: openai(aiAssistantSettings?.modelId ?? "gpt-5.1"),
 
@@ -53,73 +92,33 @@ export const generateAssistantReply = internalAction({
         } satisfies OpenAIResponsesProviderOptions,
       },
 
-      system:
-        aiAssistantSettings?.systemPrompt ??
-        `You are a helpful assistant that can answer questions and help with tasks.`,
+      system: systemPromptBuilder.join("\n").trim(),
 
       messages: pastMessages.map((message) => {
         return {
           role: message.role,
-          content: message.body,
+          content: [
+            `Message time: ${format(message._creationTime, "PPPPpppp")}`,
+            `---`,
+            message.body,
+          ]
+            .join("\n")
+            .trim(),
         } satisfies ModelMessage;
       }),
 
       stopWhen: stepCountIs(10),
 
       tools: {
-        set_contact_goals_achieved: tool({
-          description: [
-            "Set the contact goals achieved.",
-            "Call this tool when your conversation with the contact has reached the goal set by the system prompt.",
-            "This action is irreversible and cannot be undone, so make sure to only call this tool when you are sure that the contact has achieved the goal, all confirmations have been made, and deals are closed.",
-          ].join("\n"),
-          inputSchema: z.object({
-            note: z
-              .string()
-              .describe(
-                [
-                  "This note describes the details of the goals achieved such as:",
-                  "- the data that was requested by the system prompt and given by the contact.",
-                  "- reason why you think the contact has achieved the goal.",
-                  "- etc.",
-                  "",
-                  "This note will be read by the next team so please make it as detailed as possible.",
-                  "So for example, if the topic is about ordering, then make sure to put the order and shipping details in this note.",
-                ].join("\n"),
-              ),
-          }),
-          execute: async (toolInputArgs) => {
-            console.log("set_contact_goals_achieved", { toolInputArgs });
+        set_contact_goals_achieved: setContactGoalsAchievedTool({
+          ctx,
+          contactId: args.contactId,
+        }),
 
-            const prev = await ctx.runQuery(
-              internal.domains.contacts.internalCrud.read,
-              {
-                id: args.contactId,
-              },
-            );
-
-            await ctx.runMutation(
-              internal.domains.contacts.internalCrud.update,
-              {
-                id: args.contactId,
-                patch: {
-                  goalsAchievedTime: Date.now(),
-                  goalsAchievedNote: [
-                    prev?.goalsAchievedNote ?? "",
-                    toolInputArgs.note,
-                  ]
-                    .join("\n")
-                    .trim(),
-                },
-              },
-            );
-
-            return {
-              ok: true,
-              message:
-                "Contact goals achieved has been set successfully, deals sealed, finalized, and closed.",
-            };
-          },
+        ask_human_help: askHumanHelpTool({
+          ctx,
+          contactId: args.contactId,
+          organizationId: args.organizationId,
         }),
       },
     });
