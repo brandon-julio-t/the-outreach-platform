@@ -11,7 +11,7 @@ export const TwilioMessageStatusIcon = ({
   if (message.status === "read") {
     return <CheckCheckIcon className="text-success size-(--text-xs)" />;
   }
-  if (message.status === "delivered") {
+  if (message.status === "delivered" || message.status === "received") {
     return <CheckIcon className="text-info size-(--text-xs)" />;
   }
   if (message.status === "failed") {
