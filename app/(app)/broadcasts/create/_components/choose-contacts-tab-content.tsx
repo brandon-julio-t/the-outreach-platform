@@ -19,13 +19,22 @@ import {
   FieldLabel,
   FieldTitle,
 } from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
 import { useQuery } from "convex/react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
+import React from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
+import { useDebounceValue } from "usehooks-ts";
 import { CreateBroadcastFormSchema } from "../schemas";
 
 export function ChooseContactsTabContent({
@@ -37,11 +46,16 @@ export function ChooseContactsTabContent({
     api.domains.organizations.queries.getCurrentUserActiveOrganization,
   );
 
+  const [search, setSearch] = React.useState("");
+
+  const [debouncedSearch] = useDebounceValue(search, 200);
+
   const contactsQuery = usePaginatedQuery(
     api.domains.contacts.queries.getContacts,
     currentOrganization?._id
       ? {
           organizationId: currentOrganization._id,
+          search: debouncedSearch,
         }
       : "skip",
     {
@@ -57,6 +71,24 @@ export function ChooseContactsTabContent({
 
   return (
     <FieldGroup>
+      <InputGroup>
+        <InputGroupInput
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search contacts"
+        />
+        <InputGroupAddon>
+          {contactsQuery.isLoading ? <Spinner /> : <SearchIcon />}
+        </InputGroupAddon>
+        {search && (
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton size="icon-xs" onClick={() => setSearch("")}>
+              <XIcon />
+            </InputGroupButton>
+          </InputGroupAddon>
+        )}
+      </InputGroup>
+
       {contactsQuery.status === "LoadingFirstPage" ? (
         <Empty>
           <EmptyHeader>
