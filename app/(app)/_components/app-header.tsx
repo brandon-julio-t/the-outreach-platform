@@ -4,7 +4,7 @@ import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 
-export default function AppHeader() {
+export function AppHeader() {
   const { theme, setTheme } = useTheme();
 
   return (
