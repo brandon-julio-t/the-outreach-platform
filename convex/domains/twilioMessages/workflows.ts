@@ -9,6 +9,7 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     role: v.union(v.literal("user"), v.literal("assistant")),
     userId: v.optional(v.id("users")),
     contactId: v.optional(v.id("contacts")),
+    twilioMessageTemplateId: v.optional(v.id("twilioMessageTemplates")),
     twilioMessageBroadcastId: v.optional(v.id("twilioMessageBroadcasts")),
 
     accountSid: v.string(),
@@ -42,6 +43,7 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
         displayName: args.displayName,
         role: args.role,
         contactId: args.contactId,
+        twilioMessageTemplateId: args.twilioMessageTemplateId,
         twilioMessageBroadcastId: args.twilioMessageBroadcastId,
 
         from: normalizedFrom,

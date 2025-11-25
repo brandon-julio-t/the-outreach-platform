@@ -10,6 +10,7 @@ export const sendWhatsAppMessageViaTwilio = mutation({
     contactId: v.optional(v.id("contacts")),
     receiverPhoneNumber: v.string(),
     body: v.optional(v.string()),
+    twilioMessageTemplateId: v.optional(v.id("twilioMessageTemplates")),
     contentSid: v.optional(v.string()),
     contentVariables: v.optional(v.record(v.string(), v.string())),
   },
@@ -37,6 +38,7 @@ export const sendWhatsAppMessageViaTwilio = mutation({
         displayName: user.email ?? user.phone ?? "Unknown",
         role: "assistant",
         contactId: args.contactId,
+        twilioMessageTemplateId: args.twilioMessageTemplateId,
 
         accountSid: twilioSettings.accountSid,
         authToken: twilioSettings.authToken,
