@@ -170,6 +170,7 @@ export function ContactRightSidebar() {
 
           <SidebarMenuItem className="md:hidden">
             <SidebarMenuButton
+              variant="outline"
               onClick={toggleSidebar}
               className="justify-center"
             >
