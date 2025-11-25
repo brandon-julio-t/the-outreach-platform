@@ -46,6 +46,7 @@ http.route({
     return new Response(imageResponse.body, {
       headers: {
         "Content-Type": metadata?.contentType || "application/octet-stream",
+        "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
   }),
