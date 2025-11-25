@@ -302,7 +302,7 @@ export function ChatDetailsPageView({
                       </Tooltip>
 
                       <Tooltip>
-                        <TooltipTrigger asChild>
+                        <TooltipTrigger>
                           <TwilioMessageStatusIcon message={message} />
                         </TooltipTrigger>
                         <TooltipContent
