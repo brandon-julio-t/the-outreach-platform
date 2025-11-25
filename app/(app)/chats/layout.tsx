@@ -17,13 +17,24 @@ export default function ChatLayout({ children }: LayoutProps<"/chats">) {
         className="flex size-full h-(--page-height) min-w-0 flex-row"
         suppressHydrationWarning={process.env.NODE_ENV === "development"}
       >
-        <ResizablePanel defaultSize={20} className="hidden md:block">
+        <ResizablePanel
+          defaultSize={20}
+          className="hidden md:block"
+          suppressHydrationWarning={process.env.NODE_ENV === "development"}
+        >
           <ContactsListLeftSidebar />
         </ResizablePanel>
 
-        <ResizableHandle />
+        <ResizableHandle
+          suppressHydrationWarning={process.env.NODE_ENV === "development"}
+        />
 
-        <ResizablePanel defaultSize={80}>{children}</ResizablePanel>
+        <ResizablePanel
+          defaultSize={80}
+          suppressHydrationWarning={process.env.NODE_ENV === "development"}
+        >
+          {children}
+        </ResizablePanel>
       </ResizablePanelGroup>
 
       <ContactRightSidebar />
