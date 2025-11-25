@@ -102,13 +102,7 @@ export const generateAssistantReply = internalAction({
       messages: pastMessages.map((message) => {
         return {
           role: message.role,
-          content: [
-            `Message time: ${format(message._creationTime, "PPPPpppp")}`,
-            `---`,
-            message.body,
-          ]
-            .join("\n")
-            .trim(),
+          content: message.body,
         } satisfies ModelMessage;
       }),
 
