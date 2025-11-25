@@ -85,6 +85,16 @@ export const twilioMessages = defineTable({
   lastUpdatedAt: v.optional(v.number()),
   rawResponseJson: v.optional(v.any()),
   workflowId: v.optional(vWorkflowId),
+
+  aiSdkToolCalls: v.optional(
+    v.array(
+      v.object({
+        toolName: v.string(),
+        input: v.optional(v.any()),
+        error: v.optional(v.any()),
+      }),
+    ),
+  ),
 })
   .index("by_accountSid_messageSid", ["accountSid", "messageSid"])
   .index("by_organizationId", ["organizationId"])

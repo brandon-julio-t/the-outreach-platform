@@ -7,6 +7,7 @@ export const contacts = defineTable({
   phone: v.string(),
   latestMessageTime: v.optional(v.number()),
   lastUserReplyTime: v.optional(v.number()),
+  goalsAchievedNote: v.optional(v.string()),
   goalsAchievedTime: v.optional(v.number()),
 })
   .index("by_organizationId", ["organizationId"])

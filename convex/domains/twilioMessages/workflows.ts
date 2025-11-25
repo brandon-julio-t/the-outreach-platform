@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";
+import schema from "../../schema";
 
 export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
   args: {
@@ -19,6 +20,9 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
     body: v.optional(v.string()),
     contentSid: v.optional(v.string()),
     contentVariables: v.optional(v.record(v.string(), v.string())),
+
+    aiSdkToolCalls:
+      schema.tables.twilioMessages.validator.fields.aiSdkToolCalls,
   },
   handler: async (step, args): Promise<void> => {
     console.log("step.workflowId", step.workflowId);
@@ -56,7 +60,10 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
         status: "queued",
 
         workflowId: step.workflowId,
+
         lastUpdatedAt: Date.now(),
+
+        aiSdkToolCalls: args.aiSdkToolCalls,
       },
     );
 
