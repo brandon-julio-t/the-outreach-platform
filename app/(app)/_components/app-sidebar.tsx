@@ -264,7 +264,10 @@ export function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton className="group">
-                    <User2Icon /> {currentUser?.name || currentUser?.email}
+                    <User2Icon />
+                    <span className="truncate">
+                      {currentUser?.name || currentUser?.email}
+                    </span>
                     <ChevronDownIcon className="ml-auto transition-transform group-data-[state=open]:rotate-180" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
