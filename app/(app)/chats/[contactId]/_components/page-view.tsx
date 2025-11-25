@@ -59,6 +59,7 @@ import {
   SendIcon,
   SidebarOpenIcon,
 } from "lucide-react";
+import { motion } from "motion/react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -240,11 +241,14 @@ export function ChatDetailsPageView({
               variant="ghost"
               disabled={messagesQuery.status !== "CanLoadMore"}
               onClick={onLoadMore}
+              asChild
             >
-              {messagesQuery.isLoading && <Spinner />}
-              {messagesQuery.status === "Exhausted"
-                ? "No more messages"
-                : "Load More"}
+              <motion.button onViewportEnter={onLoadMore}>
+                {messagesQuery.isLoading && <Spinner />}
+                {messagesQuery.status === "Exhausted"
+                  ? "No more messages"
+                  : "Load More"}
+              </motion.button>
             </Button>
 
             {reversedMessages.map((message) => {
