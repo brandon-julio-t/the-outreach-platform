@@ -310,6 +310,7 @@ export function ChatDetailsPageView({
                 <InputGroupAddon align="block-end">
                   <InputGroupButton
                     type="submit"
+                    variant="default"
                     size="icon-sm"
                     className="ml-auto"
                     disabled={!field.value || form.formState.isSubmitting}
