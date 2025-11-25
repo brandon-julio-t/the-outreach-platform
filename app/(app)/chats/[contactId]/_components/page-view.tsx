@@ -160,8 +160,8 @@ export function ChatDetailsPageView({
 
   return (
     <section className="flex h-(--page-height) flex-col">
-      <div className="border-b">
-        <Item>
+      <header className="border-b">
+        <Item size="sm">
           <ItemActions className="flex md:hidden">
             <ContactsListDrawer>
               <Button size="icon-sm" variant="ghost">
@@ -205,7 +205,7 @@ export function ChatDetailsPageView({
             )}
           </ItemActions>
         </Item>
-      </div>
+      </header>
 
       {messagesQuery.status === "LoadingFirstPage" ? (
         <Empty>
