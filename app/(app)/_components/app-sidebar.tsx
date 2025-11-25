@@ -36,7 +36,7 @@ import {
   Home,
   LogOutIcon,
   MegaphoneIcon,
-  MessageSquareIcon,
+  MessageSquareCodeIcon,
   MessagesSquareIcon,
   SendIcon,
   SettingsIcon,
@@ -70,7 +70,7 @@ export const navItems = [
       {
         title: "Message Templates",
         url: "/message-templates",
-        icon: MessageSquareIcon,
+        icon: MessageSquareCodeIcon,
       },
       {
         title: "Broadcasts",
