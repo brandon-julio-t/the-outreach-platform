@@ -3,19 +3,6 @@ import React from "react";
 
 type BadgeVariant = React.ComponentProps<typeof Badge>["variant"];
 
-export const getTwilioMessageCategoryBadgeVariant = (
-  category: "marketing" | "utility",
-): BadgeVariant => {
-  switch (category) {
-    case "marketing":
-      return "default";
-    case "utility":
-      return "secondary";
-    default:
-      return "outline";
-  }
-};
-
 export const getWhatsAppApprovalStatusBadgeVariant = (
   status?: "pending" | "received" | "approved" | "rejected" | "error",
 ): BadgeVariant => {

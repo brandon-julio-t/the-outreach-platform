@@ -1,5 +1,6 @@
 "use client";
 
+import { TwilioMessageStatusIcon } from "@/components/domains/twilio-messages";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -128,6 +129,7 @@ export default function OutboundMessagesPage() {
                         </TableCell>
                         <TableCell>
                           <Badge>
+                            <TwilioMessageStatusIcon message={twilioMessage} />
                             {twilioMessage.workflowStatus?.type} /{" "}
                             {twilioMessage.status}
                           </Badge>

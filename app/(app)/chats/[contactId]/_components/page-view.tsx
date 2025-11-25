@@ -11,6 +11,7 @@ import {
   MessageContent,
   MessageResponse,
 } from "@/components/ai-elements/message";
+import { TwilioMessageStatusIcon } from "@/components/domains/twilio-messages";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -48,22 +49,19 @@ import {
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { getTwilioMessageError } from "@/lib/domains/twilio-messages";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { useMutation } from "convex/react";
 import { format, isToday } from "date-fns";
 import {
-  CheckCheckIcon,
-  CheckIcon,
-  HourglassIcon,
   MessageSquareCodeIcon,
   MessageSquareIcon,
   MoreVerticalIcon,
   PencilIcon,
   SendIcon,
   SidebarOpenIcon,
-  XIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
@@ -267,21 +265,16 @@ export function ChatDetailsPageView({
                 ? format(message._creationTime, "p")
                 : format(message._creationTime, "PPp");
 
-              const isError =
-                message.errorCode ||
-                message.errorMessage ||
-                message.status === "failed";
-
-              const errorMessage =
-                message.errorMessage ||
-                "The message could not be sent. This can happen for various reasons including queue overflows, account suspensions and media errors (in the case of MMS).";
+              const { isError, errorMessage, docsUrl } = getTwilioMessageError({
+                message,
+              });
 
               return (
                 <Message
                   from={reversedRole}
                   key={message._id}
                   aria-invalid={!!isError}
-                  aria-errormessage={isError ? errorMessage : undefined}
+                  aria-errormessage={errorMessage}
                 >
                   <MessageContent
                     className={cn(
@@ -308,46 +301,38 @@ export function ChatDetailsPageView({
                       </Tooltip>
 
                       <Tooltip>
-                        {message.status === "read" ? (
-                          <TooltipTrigger asChild>
-                            <CheckCheckIcon className="text-success size-(--text-xs)" />
-                          </TooltipTrigger>
-                        ) : message.status === "delivered" ? (
-                          <TooltipTrigger asChild>
-                            <CheckIcon className="text-info size-(--text-xs)" />
-                          </TooltipTrigger>
-                        ) : message.status === "failed" ? (
-                          <TooltipTrigger asChild>
-                            <XIcon className="text-destructive size-(--text-xs)" />
-                          </TooltipTrigger>
-                        ) : (
-                          <TooltipTrigger asChild>
-                            <HourglassIcon className="text-warning size-(--text-xs)" />
-                          </TooltipTrigger>
-                        )}
-                        <TooltipContent side="bottom" sideOffset={4}>
+                        <TooltipTrigger asChild>
+                          <TwilioMessageStatusIcon message={message} />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="bottom"
+                          sideOffset={4}
+                          className="capitalize"
+                        >
                           {message.status}
                         </TooltipContent>
                       </Tooltip>
                     </div>
                   </MessageContent>
 
-                  <div className="text-destructive hidden text-right text-xs group-aria-invalid:block">
-                    {message.errorCode && (
-                      <div>
-                        <a
-                          target="_blank"
-                          href={`https://www.twilio.com/docs/api/errors/${message.errorCode}`}
-                          rel="noreferrer noopener"
-                          className="underline"
-                        >
-                          {message.errorCode}
-                        </a>
-                      </div>
-                    )}
+                  {isError && (
+                    <div className="text-destructive text-right text-xs">
+                      {docsUrl && (
+                        <div>
+                          <a
+                            target="_blank"
+                            href={docsUrl}
+                            rel="noreferrer noopener"
+                            className="underline"
+                          >
+                            {message.errorCode}
+                          </a>
+                        </div>
+                      )}
 
-                    {errorMessage && <div>{errorMessage}</div>}
-                  </div>
+                      {errorMessage && <div>{errorMessage}</div>}
+                    </div>
+                  )}
                 </Message>
               );
             })}

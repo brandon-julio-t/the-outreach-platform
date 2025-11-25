@@ -18,10 +18,8 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
-import {
-  getTwilioMessageCategoryBadgeVariant,
-  getWhatsAppApprovalStatusBadgeVariant,
-} from "@/lib/badge-variants";
+import { getWhatsAppApprovalStatusBadgeVariant } from "@/lib/domains/twilio-message-templates";
+import { getTwilioMessageCategoryBadgeVariant } from "@/lib/domains/twilio-messages";
 import { useMutation } from "convex/react";
 import { FunctionReturnType } from "convex/server";
 import { format } from "date-fns";
