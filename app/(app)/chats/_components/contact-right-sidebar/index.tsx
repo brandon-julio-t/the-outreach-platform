@@ -71,24 +71,22 @@ export function ContactRightSidebar() {
       side="right"
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]"
     >
-      <SidebarHeader className="debug border-b">
-        <SidebarMenu className="debug">
-          <Item size="sm" className="debug">
-            <ItemContent>
-              <ItemTitle>{contactQuery?.name}</ItemTitle>
-              <ItemDescription>{contactQuery?.phone}</ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              {isLoading ? (
-                <Spinner />
-              ) : (
-                <SidebarTrigger>
-                  <PanelRightIcon />
-                </SidebarTrigger>
-              )}
-            </ItemActions>
-          </Item>
-        </SidebarMenu>
+      <SidebarHeader className="border-b p-0">
+        <Item size="sm">
+          <ItemContent>
+            <ItemTitle>{contactQuery?.name}</ItemTitle>
+            <ItemDescription>{contactQuery?.phone}</ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <SidebarTrigger>
+                <PanelRightIcon />
+              </SidebarTrigger>
+            )}
+          </ItemActions>
+        </Item>
       </SidebarHeader>
 
       <SidebarContent>
