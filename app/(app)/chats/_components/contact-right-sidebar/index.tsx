@@ -137,7 +137,7 @@ export function ContactRightSidebar() {
                     </ItemContent>
                     <ItemMedia
                       variant="icon"
-                      className="group-data-[state=achieved]:border-success/35 group-data-[state=achieved]:bg-success/5"
+                      className="group-data-[state=achieved]:border-none group-data-[state=achieved]:bg-transparent"
                     >
                       <CircleDashedIcon className="group-data-[state=achieved]:hidden" />
                       <CheckIcon className="group-data-[state=pending]:hidden" />
