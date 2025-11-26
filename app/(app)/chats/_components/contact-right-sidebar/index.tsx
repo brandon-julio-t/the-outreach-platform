@@ -71,9 +71,9 @@ export function ContactRightSidebar() {
       side="right"
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]"
     >
-      <SidebarHeader className="border-b">
-        <SidebarMenu>
-          <Item size="sm">
+      <SidebarHeader className="debug border-b">
+        <SidebarMenu className="debug">
+          <Item size="sm" className="debug">
             <ItemContent>
               <ItemTitle>{contactQuery?.name}</ItemTitle>
               <ItemDescription>{contactQuery?.phone}</ItemDescription>

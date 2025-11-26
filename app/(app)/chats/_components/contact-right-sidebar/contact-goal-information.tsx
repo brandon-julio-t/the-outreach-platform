@@ -75,9 +75,7 @@ export function ContactGoalInformation({
 
               <InputGroupAddon align="block-start">
                 <InputGroupText>
-                  <FieldLabel htmlFor={field.name}>
-                    Contact Goal Information
-                  </FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Goal Result</FieldLabel>
                 </InputGroupText>
               </InputGroupAddon>
 
