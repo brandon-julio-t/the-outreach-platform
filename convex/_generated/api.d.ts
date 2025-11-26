@@ -56,7 +56,10 @@ import type * as r2 from "../r2.js";
 import type * as tables_aiAssistant from "../tables/aiAssistant.js";
 import type * as tables_contacts from "../tables/contacts.js";
 import type * as tables_organizations from "../tables/organizations.js";
-import type * as tables_twilio from "../tables/twilio.js";
+import type * as tables_twilioMessageBroadcasts from "../tables/twilioMessageBroadcasts.js";
+import type * as tables_twilioMessageTemplates from "../tables/twilioMessageTemplates.js";
+import type * as tables_twilioMessages from "../tables/twilioMessages.js";
+import type * as tables_twilioSettings from "../tables/twilioSettings.js";
 
 import type {
   ApiFromModules,
@@ -113,7 +116,10 @@ declare const fullApi: ApiFromModules<{
   "tables/aiAssistant": typeof tables_aiAssistant;
   "tables/contacts": typeof tables_contacts;
   "tables/organizations": typeof tables_organizations;
-  "tables/twilio": typeof tables_twilio;
+  "tables/twilioMessageBroadcasts": typeof tables_twilioMessageBroadcasts;
+  "tables/twilioMessageTemplates": typeof tables_twilioMessageTemplates;
+  "tables/twilioMessages": typeof tables_twilioMessages;
+  "tables/twilioSettings": typeof tables_twilioSettings;
 }>;
 
 /**

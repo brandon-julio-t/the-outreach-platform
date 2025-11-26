@@ -4,12 +4,10 @@ import { v } from "convex/values";
 import { aiAssistantSettings } from "./tables/aiAssistant";
 import { contacts } from "./tables/contacts";
 import { organizationMembers, organizations } from "./tables/organizations";
-import {
-  twilioMessageBroadcasts,
-  twilioMessages,
-  twilioMessageTemplates,
-  twilioSettings,
-} from "./tables/twilio";
+import { twilioMessageBroadcasts } from "./tables/twilioMessageBroadcasts";
+import { twilioMessages } from "./tables/twilioMessages";
+import { twilioMessageTemplates } from "./tables/twilioMessageTemplates";
+import { twilioSettings } from "./tables/twilioSettings";
 
 // The schema is normally optional, but Convex Auth
 // requires indexes defined on `authTables`.
