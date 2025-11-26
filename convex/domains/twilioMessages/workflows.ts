@@ -131,6 +131,7 @@ export const sendWhatsAppMessageViaTwilioWorkflow = workflow.define({
         id: args.contactId,
         patch: {
           latestMessageTime: Date.now(),
+          lastUpdateTime: Date.now(),
         },
       });
     }
@@ -191,6 +192,7 @@ export const handleIncomingWhatsAppMessageWorkflow = workflow.define({
         id: contact._id,
         patch: {
           lastUserReplyTime: Date.now(),
+          lastUpdateTime: Date.now(),
         },
       });
     }

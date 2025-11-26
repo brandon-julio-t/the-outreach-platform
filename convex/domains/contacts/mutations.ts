@@ -52,6 +52,7 @@ export const createContactsBulk = mutation({
         if (existingByPhone) {
           await ctx.db.patch(existingByPhone._id, {
             ...contact,
+            lastUpdateTime: Date.now(),
           });
         } else {
           await ctx.db.insert("contacts", {
