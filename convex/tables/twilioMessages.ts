@@ -43,8 +43,10 @@ export const twilioMessages = defineTable({
   aiSdkToolCalls: v.optional(
     v.array(
       v.object({
+        toolCallId: v.string(),
         toolName: v.string(),
         input: v.optional(v.any()),
+        output: v.optional(v.any()),
         error: v.optional(v.any()),
       }),
     ),

@@ -1,5 +1,12 @@
 import { openai, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
-import { generateText, ModelMessage, stepCountIs } from "ai";
+import { LanguageModelV2ToolResultOutput } from "@ai-sdk/provider";
+import {
+  AssistantModelMessage,
+  generateText,
+  ModelMessage,
+  stepCountIs,
+  UserModelMessage,
+} from "ai";
 import { v } from "convex/values";
 import { format } from "date-fns";
 import { workflow } from "../..";
@@ -70,14 +77,18 @@ export const generateAssistantReply = internalAction({
         `<contact_data>`,
 
         `Name: ${contact.name}`,
-        `Phone: ${contact.phone}`,
+        `Phone (E.164): ${contact.phone}`,
+        `Country: infer from the phone number`,
+        `Language: infer from the phone number`,
+        `Timezone: infer from the phone number`,
+        `Currency: infer from the phone number`,
 
         `Latest message time: ${contact.latestMessageTime ?? "N/A"}`,
-        `Last user reply time: ${contact.lastUserReplyTime ?? "N/A"}`,
+        `Last user reply time: ${contact.lastUserReplyTime ? format(contact.lastUserReplyTime, "PPPPpppp") : "N/A"}`,
 
         `Goals achieved: ${contact.goalsAchievedTime ? "Yes" : "No"}`,
         `Goals achieved note: ${contact.goalsAchievedNote || "N/A"}`,
-        `Goals achieved time: ${contact.goalsAchievedTime || "N/A"}`,
+        `Goals achieved time: ${contact.goalsAchievedTime ? format(contact.goalsAchievedTime, "PPPPpppp") : "N/A"}`,
         `</contact_data>`,
       );
     }
@@ -88,23 +99,82 @@ export const generateAssistantReply = internalAction({
       `</system_information>`,
     );
 
+    const systemAiSdk = systemPromptBuilder.join("\n").trim();
+
+    console.log("systemAiSdk", systemAiSdk);
+
+    const messagesAiSdk: ModelMessage[] = pastMessages.flatMap((message) => {
+      if (message.role === "user") {
+        return {
+          role: "user",
+          content: message.body,
+        } satisfies UserModelMessage;
+      }
+
+      const contentBuilder: AssistantModelMessage["content"] = [];
+
+      if (message.aiSdkToolCalls?.length) {
+        message.aiSdkToolCalls.forEach((toolCall) => {
+          const isError = !!toolCall.error;
+          let toolResultOutput: LanguageModelV2ToolResultOutput = {
+            type: "json",
+            value: toolCall.output,
+          };
+
+          if (isError) {
+            const isText = typeof toolCall.error === "string";
+            toolResultOutput = {
+              type: isText ? "error-text" : "error-json",
+              value: toolCall.error,
+            };
+          } else {
+            const isText = typeof toolCall.output === "string";
+            toolResultOutput = {
+              type: isText ? "text" : "json",
+              value: toolCall.output,
+            };
+          }
+
+          contentBuilder.push({
+            type: "tool-result",
+            toolCallId: toolCall.toolCallId,
+            toolName: toolCall.toolName,
+            output: toolResultOutput,
+          });
+        });
+      }
+
+      contentBuilder.push({
+        type: "text",
+        text: message.body,
+      });
+
+      return {
+        role: "assistant",
+        content: contentBuilder,
+      } satisfies AssistantModelMessage;
+    });
+
+    console.log("messagesAiSdk", messagesAiSdk);
+
     const response = await generateText({
       model: openai(aiAssistantSettings?.modelId ?? "gpt-5.1"),
 
       providerOptions: {
         openai: {
-          reasoningEffort: "none",
+          /**
+           * @see https://github.com/vercel/ai/issues/9119
+           * @see https://github.com/vercel/ai/issues/10290
+           * @see https://github.com/vercel/ai/issues/8379
+           * @see https://github.com/vercel/ai/issues/8811
+           */
+          store: false,
         } satisfies OpenAIResponsesProviderOptions,
       },
 
-      system: systemPromptBuilder.join("\n").trim(),
+      system: systemAiSdk,
 
-      messages: pastMessages.map((message) => {
-        return {
-          role: message.role,
-          content: message.body,
-        } satisfies ModelMessage;
-      }),
+      messages: messagesAiSdk,
 
       stopWhen: stepCountIs(10),
 
@@ -129,16 +199,20 @@ export const generateAssistantReply = internalAction({
       .map((c) => {
         if (c.type === "tool-result") {
           return {
+            toolCallId: c.toolCallId,
             toolName: c.toolName,
             input: c.input,
+            output: c.output,
             error: undefined,
           };
         }
 
         if (c.type === "tool-error") {
           return {
+            toolCallId: c.toolCallId,
             toolName: c.toolName,
             input: c.input,
+            output: undefined,
             error: c.error,
           };
         }
