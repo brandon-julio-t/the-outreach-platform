@@ -44,9 +44,13 @@ export const askHumanHelpTool = ({
         },
       });
 
-      return {
+      const repsonse = {
         ok: true,
         message: "Human help has been requested successfully.",
       };
+
+      console.log("askHumanHelpTool repsonse", repsonse);
+
+      return repsonse;
     },
   });

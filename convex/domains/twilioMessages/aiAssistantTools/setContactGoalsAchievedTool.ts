@@ -46,11 +46,15 @@ export const setContactGoalsAchievedTool = ({
       );
 
       if (prev?.goalsAchievedTime) {
-        return {
+        const repsonse = {
           ok: false,
           message:
             "Contact goals have already been achieved, you cannot call this tool again.",
         };
+
+        console.log("setContactGoalsAchievedTool repsonse", repsonse);
+
+        return repsonse;
       }
 
       await ctx.runMutation(internal.domains.contacts.internalCrud.update, {
@@ -64,10 +68,14 @@ export const setContactGoalsAchievedTool = ({
         },
       });
 
-      return {
+      const repsonse = {
         ok: true,
         message:
           "Contact goals achieved has been set successfully, deals sealed, finalized, and closed.",
       };
+
+      console.log("setContactGoalsAchievedTool repsonse", repsonse);
+
+      return repsonse;
     },
   });
