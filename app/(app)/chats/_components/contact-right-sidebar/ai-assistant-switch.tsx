@@ -11,7 +11,7 @@ import { useMutation } from "convex/react";
 import { BotIcon, BotOffIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
-import { RightSidebarContactData } from "./types";
+import type { RightSidebarContactData } from "./types";
 
 export function AiAssistantSwitch({
   contact,

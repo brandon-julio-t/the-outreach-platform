@@ -22,10 +22,8 @@ import { DownloadIcon, UploadIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import z from "zod";
-import {
-  importContactsForBroadcastRowSchema,
-  ImportContactsForBroadcastRowSchema,
-} from "../schemas";
+import type { ImportContactsForBroadcastRowSchema } from "../schemas";
+import { importContactsForBroadcastRowSchema } from "../schemas";
 
 export default function ImportContactsForBroadcastDrawer({
   children,

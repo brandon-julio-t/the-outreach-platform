@@ -51,7 +51,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import type { Id } from "@/convex/_generated/dataModel";
 import { getTwilioMessageError } from "@/lib/domains/twilio-messages";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";

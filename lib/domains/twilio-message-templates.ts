@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge";
-import React from "react";
+import type { Badge } from "@/components/ui/badge";
+import type React from "react";
 
 type BadgeVariant = React.ComponentProps<typeof Badge>["variant"];
 

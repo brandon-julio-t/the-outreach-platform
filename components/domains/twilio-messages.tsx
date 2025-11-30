@@ -1,6 +1,6 @@
 "use client";
 
-import { Doc } from "@/convex/_generated/dataModel";
+import type { Doc } from "@/convex/_generated/dataModel";
 import { CheckCheckIcon, CheckIcon, HourglassIcon, XIcon } from "lucide-react";
 
 export const TwilioMessageStatusIcon = ({

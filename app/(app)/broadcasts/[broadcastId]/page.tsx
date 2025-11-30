@@ -1,4 +1,4 @@
-import { Id } from "@/convex/_generated/dataModel";
+import type { Id } from "@/convex/_generated/dataModel";
 import BroadcastDetailsPageView from "./_components/page-view";
 
 export default async function BroadcastDetailsPage(

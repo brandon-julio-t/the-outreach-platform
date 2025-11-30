@@ -21,7 +21,7 @@ import { api } from "@/convex/_generated/api";
 import { getWhatsAppApprovalStatusBadgeVariant } from "@/lib/domains/twilio-message-templates";
 import { getTwilioMessageCategoryBadgeVariant } from "@/lib/domains/twilio-messages";
 import { useMutation } from "convex/react";
-import { FunctionReturnType } from "convex/server";
+import type { FunctionReturnType } from "convex/server";
 import { format } from "date-fns";
 import { MoreVerticalIcon, RefreshCcwIcon, TrashIcon } from "lucide-react";
 import React from "react";

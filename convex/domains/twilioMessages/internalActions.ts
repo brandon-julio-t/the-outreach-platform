@@ -1,12 +1,8 @@
-import { openai, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
-import { LanguageModelV2ToolResultOutput } from "@ai-sdk/provider";
-import {
-  AssistantModelMessage,
-  generateText,
-  ModelMessage,
-  stepCountIs,
-  UserModelMessage,
-} from "ai";
+import type { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
+import { openai } from "@ai-sdk/openai";
+import type { LanguageModelV2ToolResultOutput } from "@ai-sdk/provider";
+import type { AssistantModelMessage, ModelMessage, UserModelMessage } from "ai";
+import { generateText, stepCountIs } from "ai";
 import { v } from "convex/values";
 import { format } from "date-fns";
 import { workflow } from "../..";

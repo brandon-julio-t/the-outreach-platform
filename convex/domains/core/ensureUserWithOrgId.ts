@@ -1,6 +1,6 @@
 import { getAuthSessionId } from "@convex-dev/auth/server";
 import { ConvexError } from "convex/values";
-import { MutationCtx, QueryCtx } from "../../_generated/server";
+import type { MutationCtx, QueryCtx } from "../../_generated/server";
 
 export async function ensureUserWithOrgId({
   ctx,

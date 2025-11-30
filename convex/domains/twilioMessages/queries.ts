@@ -1,8 +1,9 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { paginationOptsValidator, PaginationResult } from "convex/server";
+import type { PaginationResult } from "convex/server";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { workflow } from "../..";
-import { Doc } from "../../_generated/dataModel";
+import type { Doc } from "../../_generated/dataModel";
 import { query } from "../../_generated/server";
 
 export const getTwilioMessages = query({

@@ -32,9 +32,10 @@ import { SearchIcon, XIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import React from "react";
-import { Controller, UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useDebounceValue } from "usehooks-ts";
-import { CreateBroadcastFormSchema } from "../schemas";
+import type { CreateBroadcastFormSchema } from "../schemas";
 
 export function ChooseContactsTabContent({
   form,

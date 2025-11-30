@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Doc } from "@/convex/_generated/dataModel";
-import React from "react";
+import type { Badge } from "@/components/ui/badge";
+import type { Doc } from "@/convex/_generated/dataModel";
+import type React from "react";
 
 type BadgeVariant = React.ComponentProps<typeof Badge>["variant"];
 

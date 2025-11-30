@@ -18,7 +18,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
-import { FunctionReturnType } from "convex/server";
+import type { FunctionReturnType } from "convex/server";
 import { format } from "date-fns";
 import {
   MessageCircleIcon,

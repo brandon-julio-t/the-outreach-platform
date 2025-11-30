@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex-helpers/react/cache/hooks";
-import { FunctionReturnType } from "convex/server";
+import type { FunctionReturnType } from "convex/server";
 import { format, formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { useParams } from "next/navigation";

@@ -13,7 +13,7 @@ import { useMutation } from "convex/react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { RightSidebarContactData } from "./types";
+import type { RightSidebarContactData } from "./types";
 
 export function AiAssistantDisabledReason({
   contact,

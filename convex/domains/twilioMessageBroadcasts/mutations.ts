@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";
-import { Doc } from "../../_generated/dataModel";
+import type { Doc } from "../../_generated/dataModel";
 import { mutation } from "../../_generated/server";
 import { ensureUserWithOrgId } from "../core/ensureUserWithOrgId";
 import { getOrgTwilioSettings } from "../core/getOrgTwilioSettings";

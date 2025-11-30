@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { internalAction } from "../../_generated/server";
-import { SendWhatsAppMessageViaTwilioResponse } from "../core/twilio/types";
+import type { SendWhatsAppMessageViaTwilioResponse } from "../core/twilio/types";
 
 export const sendWhatsAppMessageViaTwilioAction = internalAction({
   args: {

@@ -1,6 +1,7 @@
-import { ConvexError, Infer, v } from "convex/values";
+import type { Infer } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { internalMutation } from "../../_generated/server";
-import schema from "../../schema";
+import type schema from "../../schema";
 
 type MessageStatus = Infer<
   typeof schema.tables.twilioMessages.validator.fields.status

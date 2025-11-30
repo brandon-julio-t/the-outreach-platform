@@ -18,12 +18,11 @@ import {
 } from "@/components/ui/table";
 import { parseXlsxToJson } from "@/lib/xlsx";
 import { DownloadIcon, InfoIcon, UploadIcon, XIcon } from "lucide-react";
-import { useFieldArray, UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  CreateBroadcastFormSchema,
-  importContactsForBroadcastRowSchema,
-} from "../schemas";
+import type { CreateBroadcastFormSchema } from "../schemas";
+import { importContactsForBroadcastRowSchema } from "../schemas";
 
 export function ImportContactsTabContent({
   form,

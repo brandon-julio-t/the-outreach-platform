@@ -1,5 +1,5 @@
-import { api } from "@/convex/_generated/api";
-import { FunctionReturnType } from "convex/server";
+import type { api } from "@/convex/_generated/api";
+import type { FunctionReturnType } from "convex/server";
 
 export type RowData = FunctionReturnType<
   typeof api.domains.organizationMembers.queries.getOrganizationMembers

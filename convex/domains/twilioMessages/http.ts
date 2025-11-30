@@ -1,4 +1,4 @@
-import { HttpRouter } from "convex/server";
+import type { HttpRouter } from "convex/server";
 import z from "zod";
 import { workflow } from "../..";
 import { internal } from "../../_generated/api";

@@ -25,7 +25,7 @@ import { MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { EditMemberDialog } from "./edit-member-dialog";
-import { RowData } from "./types";
+import type { RowData } from "./types";
 
 export function MemberTableRow({ member }: { member: RowData }) {
   const currentUser = useQuery(api.auth.getCurrentUser);
