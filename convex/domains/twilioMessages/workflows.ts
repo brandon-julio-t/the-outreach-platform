@@ -184,6 +184,7 @@ export const handleIncomingWhatsAppMessageWorkflow = workflow.define({
           organizationId: twilioSettings.organizationId,
           name: args.profileName,
           phone: normalizedFromPhone,
+          latestMessageTime: Date.now(),
           lastUserReplyTime: Date.now(),
         },
       );
@@ -191,6 +192,7 @@ export const handleIncomingWhatsAppMessageWorkflow = workflow.define({
       await step.runMutation(internal.domains.contacts.internalCrud.update, {
         id: contact._id,
         patch: {
+          latestMessageTime: Date.now(),
           lastUserReplyTime: Date.now(),
           lastUpdateTime: Date.now(),
         },
