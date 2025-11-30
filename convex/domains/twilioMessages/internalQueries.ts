@@ -7,7 +7,7 @@ export const getContactPastMessagesForAiAssistant = internalQuery({
     contactId: v.id("contacts"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const latestMessages = await ctx.db
       .query("twilioMessages")
       .withIndex("by_organizationId_contactId", (q) =>
         q
@@ -16,5 +16,10 @@ export const getContactPastMessagesForAiAssistant = internalQuery({
       )
       .order("desc")
       .take(100);
+
+    // AI needs to see the messages in chronological order, so we need to reverse the array
+    latestMessages.reverse();
+
+    return latestMessages;
   },
 });
