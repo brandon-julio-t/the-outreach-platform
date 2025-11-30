@@ -70,7 +70,8 @@ export function ContactGoalInformation({
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
-                className="max-h-56"
+                placeholder="Enter goal result..."
+                className="min-h-56"
               />
 
               <InputGroupAddon align="block-start">
