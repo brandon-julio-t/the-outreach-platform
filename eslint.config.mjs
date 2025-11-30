@@ -9,6 +9,7 @@ export default defineConfig([
   ...convexPlugin.configs.recommended,
   {
     rules: {
+      "@typescript-eslint/consistent-type-imports": "error",
       "no-restricted-imports": [
         "error",
         {

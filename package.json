@@ -9,7 +9,7 @@
     "predev": "convex dev --until-success && convex dev --once --run-sh \"node setup.mjs --once\" && convex dashboard",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ignore-pattern \"convex/_generated/**\"",
+    "lint": "eslint . --fix --ignore-pattern \"convex/_generated/**\"",
     "format": "prettier --write .",
     "check-types": "next typegen && tsc --noEmit",
     "check": "npm-run-all check-types lint format"
