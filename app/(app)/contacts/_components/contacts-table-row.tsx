@@ -1,3 +1,4 @@
+import { BadgePill, BadgePillDot } from "@/components/catalyst-ui/badge";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -14,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
@@ -36,6 +38,10 @@ type RowData = FunctionReturnType<
 >["page"][number];
 
 export function ContactsTableRow({ contact }: { contact: RowData }) {
+  const isInProgress = (contact.goalsAchievedTime ?? 0) <= 0;
+  const isGoalsAchieved = (contact.goalsAchievedTime ?? 0) > 0;
+  const isAiAssistantDisabled = (contact.aiAssistantDisabledTime ?? 0) > 0;
+
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
 
@@ -64,36 +70,62 @@ export function ContactsTableRow({ contact }: { contact: RowData }) {
   return (
     <>
       <TableRow key={contact._id}>
-        <TableCell>{contact.name}</TableCell>
-        <TableCell>{contact.phone}</TableCell>
+        <TableCell>
+          <ItemContent>
+            <ItemTitle>{contact.name}</ItemTitle>
+            <ItemDescription>{contact.phone}</ItemDescription>
+          </ItemContent>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-row items-center gap-1 overflow-x-auto">
+            {isInProgress && (
+              <BadgePillDot color="yellow" size="sm">
+                In Progress
+              </BadgePillDot>
+            )}
+            {isGoalsAchieved && (
+              <BadgePill color="green" size="sm">
+                Goals Achieved
+              </BadgePill>
+            )}
+            {isAiAssistantDisabled && (
+              <BadgePillDot color="red" size="sm">
+                AI Assistant Disabled
+              </BadgePillDot>
+            )}
+          </div>
+        </TableCell>
         <TableCell>{format(contact._creationTime, "PPPpp")}</TableCell>
         <TableCell>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreVerticalIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href={`/chats/${contact._id}`}>
-                  <MessageCircleIcon />
-                  Chat
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpenEdit(true)}>
-                <PencilIcon />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDelete(true)}
-              >
-                <TrashIcon />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex flex-row items-center gap-1">
+            <Button variant="ghost" asChild>
+              <Link href={`/chats/${contact._id}`}>
+                <MessageCircleIcon />
+                Chat
+              </Link>
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreVerticalIcon />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setOpenEdit(true)}>
+                  <PencilIcon />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setOpenDelete(true)}
+                >
+                  <TrashIcon />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </TableCell>
       </TableRow>
 

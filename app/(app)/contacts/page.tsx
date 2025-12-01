@@ -214,7 +214,7 @@ const ContactsPage = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Name</TableHead>
-                      <TableHead>Phone</TableHead>
+                      <TableHead>Status</TableHead>
                       <TableHead>Created At</TableHead>
                       <TableHead className="w-1">&nbsp;</TableHead>
                     </TableRow>

@@ -1,4 +1,5 @@
 import { Message, MessageResponse } from "@/components/ai-elements/message";
+import { BadgePill, BadgePillDot } from "@/components/catalyst-ui/badge";
 import {
   Item,
   ItemContent,
@@ -29,6 +30,10 @@ export function ContactsListItem({ contact }: { contact: ContactData }) {
 
   const isActive = contactId === contact._id;
 
+  const isInProgress = (contact.goalsAchievedTime ?? 0) <= 0;
+  const isGoalsAchieved = (contact.goalsAchievedTime ?? 0) > 0;
+  const isAiAssistantDisabled = (contact.aiAssistantDisabledTime ?? 0) > 0;
+
   const humanTime = contact.latestMessageTime
     ? format(contact.latestMessageTime, "PPp")
     : "";
@@ -54,6 +59,24 @@ export function ContactsListItem({ contact }: { contact: ContactData }) {
     <Item variant={isActive ? "muted" : "default"} asChild>
       <Link href={`/chats/${contact._id}?${searchParams.toString()}`}>
         <ItemContent>
+          <div className="flex flex-row items-center gap-1 overflow-x-auto">
+            {isInProgress && (
+              <BadgePillDot color="yellow" size="sm">
+                In Progress
+              </BadgePillDot>
+            )}
+            {isGoalsAchieved && (
+              <BadgePill color="green" size="sm">
+                Goals Achieved
+              </BadgePill>
+            )}
+            {isAiAssistantDisabled && (
+              <BadgePillDot color="red" size="sm">
+                AI Assistant Disabled
+              </BadgePillDot>
+            )}
+          </div>
+
           <ItemTitle className="w-full items-baseline">
             <div className="truncate">{contact.name}</div>
 
