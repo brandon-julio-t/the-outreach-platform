@@ -57,11 +57,11 @@ export const getContacts = query({
       const filteredContacts = uniqueContacts.filter((contact) => {
         switch (filterType) {
           case "in_progress":
-            return contact.goalsAchievedTime === undefined;
+            return (contact.goalsAchievedTime ?? 0) <= 0;
           case "goals_achieved":
-            return contact.goalsAchievedTime !== undefined;
+            return (contact.goalsAchievedTime ?? 0) > 0;
           case "ai_assistant_disabled":
-            return contact.aiAssistantDisabledTime !== undefined;
+            return (contact.aiAssistantDisabledTime ?? 0) > 0;
           default:
             return true;
         }
