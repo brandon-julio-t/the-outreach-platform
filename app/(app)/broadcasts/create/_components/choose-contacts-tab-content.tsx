@@ -121,8 +121,10 @@ export function ChooseContactsTabContent({
           name="contacts"
           control={form.control}
           render={({ field, fieldState }) => {
+            const selectedContacts = field.value ?? [];
+
             const areAllSelected =
-              contactsQuery.results.length === field.value.length;
+              contactsQuery.results.length === selectedContacts.length;
 
             return (
               <>
@@ -145,16 +147,16 @@ export function ChooseContactsTabContent({
                       }}
                     />
                     <FieldTitle>
-                      Choose all ({Number(field.value.length)} selected)
+                      Choose all ({Number(selectedContacts.length)} selected)
                     </FieldTitle>
                   </FieldLabel>
                 </Field>
 
                 <Field className="max-h-96 overflow-y-auto">
                   {contactsQuery.results.map((contact) => {
-                    const index = field.value.findIndex(
-                      (c) => c.id === contact._id,
-                    );
+                    const index =
+                      selectedContacts.findIndex((c) => c.id === contact._id) ??
+                      -1;
                     const isSelected = index !== -1;
 
                     return (
@@ -175,14 +177,14 @@ export function ChooseContactsTabContent({
                             onCheckedChange={(checked) => {
                               if (checked) {
                                 field.onChange([
-                                  ...field.value,
+                                  ...selectedContacts,
                                   {
                                     id: contact._id,
                                     phone: contact.phone,
                                   },
                                 ]);
                               } else {
-                                const clone = [...field.value];
+                                const clone = [...selectedContacts];
                                 clone.splice(index, 1);
                                 field.onChange(clone);
                               }
