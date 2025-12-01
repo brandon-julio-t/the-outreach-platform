@@ -43,6 +43,7 @@ import {
   User2Icon,
   UsersIcon,
 } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -241,6 +242,12 @@ export function AppSidebar() {
                           onClick={() => setOpenMobile(false)}
                         >
                           <Link href={item.url}>
+                            {isActive && (
+                              <motion.span
+                                layoutId="current-indicator"
+                                className="bg-primary absolute left-0 h-(--text-base) w-0.5 rounded-full"
+                              />
+                            )}
                             <item.icon />
                             <span>{item.title}</span>
                           </Link>
