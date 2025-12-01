@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint . --fix --ignore-pattern \"convex/_generated/**\"",
     "format": "prettier --write .",
-    "check-types": "next typegen && tsc --noEmit",
+    "check-types": "next typegen && tsgo --noEmit",
     "check": "npm-run-all check-types lint format"
   },
   "dependencies": {
@@ -89,6 +89,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@typescript/native-preview": "latest",
     "babel-plugin-react-compiler": "^1.0.0",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.1",
