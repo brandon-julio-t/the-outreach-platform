@@ -58,20 +58,24 @@ export function ContactsListItem({ contact }: { contact: ContactData }) {
   return (
     <Item variant={isActive ? "muted" : "default"} asChild>
       <Link href={`/chats/${contact._id}?${searchParams.toString()}`}>
-        <ItemContent>
+        <ItemContent className="w-full">
           <div className="flex flex-row items-center gap-1 overflow-x-auto">
             {isInProgress && (
-              <BadgePillDot color="yellow" size="sm">
+              <BadgePillDot
+                color="yellow"
+                size="sm"
+                className="whitespace-nowrap"
+              >
                 In Progress
               </BadgePillDot>
             )}
             {isGoalsAchieved && (
-              <BadgePill color="green" size="sm">
+              <BadgePill color="green" size="sm" className="whitespace-nowrap">
                 Goals Achieved
               </BadgePill>
             )}
             {isAiAssistantDisabled && (
-              <BadgePillDot color="red" size="sm">
+              <BadgePillDot color="red" size="sm" className="whitespace-nowrap">
                 AI Assistant Disabled
               </BadgePillDot>
             )}
