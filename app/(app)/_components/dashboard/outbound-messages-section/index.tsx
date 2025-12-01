@@ -86,13 +86,21 @@ export function DashboardOutboundMessagesSection() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>From</TableHead>
-                  <TableHead>To</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Body</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created At</TableHead>
-                  <TableHead>Updated At</TableHead>
+                  <TableHead className="text-muted-foreground">From</TableHead>
+                  <TableHead className="text-muted-foreground">To</TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Contact
+                  </TableHead>
+                  <TableHead className="text-muted-foreground">Body</TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Created At
+                  </TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Updated At
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -87,9 +87,15 @@ export function DashboardBroadcastsSection() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Message Template Name</TableHead>
-                  <TableHead>Created At</TableHead>
-                  <TableHead>Created By</TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Message Template Name
+                  </TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Created At
+                  </TableHead>
+                  <TableHead className="text-muted-foreground">
+                    Created By
+                  </TableHead>
                   <TableHead className="w-1">&nbsp;</TableHead>
                 </TableRow>
               </TableHeader>
