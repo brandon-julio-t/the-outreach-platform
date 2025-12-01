@@ -71,7 +71,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { ContactsListDrawer } from "../../_components/contacts-list-drawer";
+import { ContactsListDrawer } from "../../_components/contacts-list-left-sidebar/contacts-list-drawer";
 import { ChooseMessageTemplateDrawer } from "./choose-message-template-drawer";
 
 export function ChatDetailsPageView({

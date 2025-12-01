@@ -6,7 +6,7 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { ContactsListDrawer } from "./_components/contacts-list-drawer";
+import { ContactsListDrawer } from "./_components/contacts-list-left-sidebar/contacts-list-drawer";
 
 export default function ChatIndexPage() {
   return (
