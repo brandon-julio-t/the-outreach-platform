@@ -30,6 +30,7 @@ import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { format } from "date-fns";
 import { ArrowRightIcon } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 
 export default function BroadcastsPage() {
@@ -142,11 +143,14 @@ export default function BroadcastsPage() {
                     twilioMessageBroadcastsQuery.isLoading ||
                     twilioMessageBroadcastsQuery.status === "Exhausted"
                   }
+                  asChild
                 >
-                  {twilioMessageBroadcastsQuery.isLoading && <Spinner />}
-                  {twilioMessageBroadcastsQuery.status === "Exhausted"
-                    ? "No more broadcasts"
-                    : "Load More"}
+                  <motion.button onViewportEnter={onLoadMore}>
+                    {twilioMessageBroadcastsQuery.isLoading && <Spinner />}
+                    {twilioMessageBroadcastsQuery.status === "Exhausted"
+                      ? "No more broadcasts"
+                      : "Load More"}
+                  </motion.button>
                 </Button>
               </>
             )}

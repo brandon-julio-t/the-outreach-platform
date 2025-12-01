@@ -35,6 +35,7 @@ import { api } from "@/convex/_generated/api";
 import { getTwilioMessageError } from "@/lib/domains/twilio-messages";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { format } from "date-fns";
+import { motion } from "motion/react";
 
 export default function OutboundMessagesPage() {
   const currentOrganization = useQuery(
@@ -191,11 +192,14 @@ export default function OutboundMessagesPage() {
                     twilioMessagesQuery.isLoading ||
                     twilioMessagesQuery.status === "Exhausted"
                   }
+                  asChild
                 >
-                  {twilioMessagesQuery.isLoading && <Spinner />}
-                  {twilioMessagesQuery.status === "Exhausted"
-                    ? "No more outbound messages"
-                    : "Load More"}
+                  <motion.button onViewportEnter={onLoadMore}>
+                    {twilioMessagesQuery.isLoading && <Spinner />}
+                    {twilioMessagesQuery.status === "Exhausted"
+                      ? "No more outbound messages"
+                      : "Load More"}
+                  </motion.button>
                 </Button>
               </>
             )}
