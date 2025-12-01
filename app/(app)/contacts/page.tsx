@@ -214,8 +214,8 @@ const ContactsPage = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Name</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Created At</TableHead>
+                      <TableHead>Goals Achieved Note</TableHead>
+                      <TableHead>AI Assistant Disabled Reason</TableHead>
                       <TableHead className="w-1">&nbsp;</TableHead>
                     </TableRow>
                   </TableHeader>

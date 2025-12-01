@@ -1,3 +1,4 @@
+import { MessageResponse } from "@/components/ai-elements/message";
 import { BadgePill, BadgePillDot } from "@/components/catalyst-ui/badge";
 import {
   AlertDialog,
@@ -10,19 +11,35 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
-import { format } from "date-fns";
 import {
+  EyeIcon,
   MessageCircleIcon,
   MoreVerticalIcon,
   PencilIcon,
@@ -72,30 +89,107 @@ export function ContactsTableRow({ contact }: { contact: RowData }) {
       <TableRow key={contact._id}>
         <TableCell>
           <ItemContent>
+            <div className="flex flex-row items-center gap-1 overflow-x-auto">
+              {isInProgress && (
+                <BadgePillDot color="yellow" size="sm">
+                  In Progress
+                </BadgePillDot>
+              )}
+              {isGoalsAchieved && (
+                <BadgePill color="green" size="sm">
+                  Goals Achieved
+                </BadgePill>
+              )}
+              {isAiAssistantDisabled && (
+                <BadgePillDot color="red" size="sm">
+                  AI Assistant Disabled
+                </BadgePillDot>
+              )}
+            </div>
             <ItemTitle>{contact.name}</ItemTitle>
             <ItemDescription>{contact.phone}</ItemDescription>
           </ItemContent>
         </TableCell>
         <TableCell>
-          <div className="flex flex-row items-center gap-1 overflow-x-auto">
-            {isInProgress && (
-              <BadgePillDot color="yellow" size="sm">
-                In Progress
-              </BadgePillDot>
-            )}
-            {isGoalsAchieved && (
-              <BadgePill color="green" size="sm">
-                Goals Achieved
-              </BadgePill>
-            )}
-            {isAiAssistantDisabled && (
-              <BadgePillDot color="red" size="sm">
-                AI Assistant Disabled
-              </BadgePillDot>
-            )}
-          </div>
+          <Item className="p-0">
+            <ItemContent>
+              <ItemDescription className="max-w-xs">
+                <MessageResponse>{contact.goalsAchievedNote}</MessageResponse>
+              </ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="ghost">
+                    <EyeIcon />
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="mx-auto max-w-xl">
+                  <DrawerHeader>
+                    <DrawerTitle>Goals Achieved Note</DrawerTitle>
+                    <DrawerDescription>
+                      Note about the details of the goals achieved.
+                    </DrawerDescription>
+                  </DrawerHeader>
+
+                  <MessageResponse
+                    mode="static"
+                    className="w-full overflow-auto px-4"
+                  >
+                    {contact.goalsAchievedNote}
+                  </MessageResponse>
+
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline">Close</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </ItemActions>
+          </Item>
         </TableCell>
-        <TableCell>{format(contact._creationTime, "PPPpp")}</TableCell>
+        <TableCell>
+          <Item className="p-0">
+            <ItemContent>
+              <ItemDescription className="max-w-xs">
+                <MessageResponse>
+                  {contact.aiAssistantDisabledReason}
+                </MessageResponse>
+              </ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="ghost">
+                    <EyeIcon />
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="mx-auto max-w-xl">
+                  <DrawerHeader>
+                    <DrawerTitle>AI Assistant Disabled Reason</DrawerTitle>
+                    <DrawerDescription>
+                      Reason for disabling the AI assistant.
+                    </DrawerDescription>
+                  </DrawerHeader>
+
+                  <MessageResponse
+                    mode="static"
+                    className="w-full overflow-auto px-4"
+                  >
+                    {contact.aiAssistantDisabledReason}
+                  </MessageResponse>
+
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline">Close</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </ItemActions>
+          </Item>
+        </TableCell>
         <TableCell>
           <div className="flex flex-row items-center gap-1">
             <Button variant="ghost" asChild>
