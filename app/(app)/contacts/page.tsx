@@ -41,11 +41,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/convex/_generated/api";
+import {
+  contactFilterTypeUiLabels,
+  contactFilterTypes,
+} from "@/convex/domains/contacts/configs";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { ChevronDownIcon, DownloadIcon, SearchIcon, XIcon } from "lucide-react";
 import { motion } from "motion/react";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import React from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { AddContactDialog } from "./_components/add-contact-dialog";
@@ -60,6 +65,11 @@ const ContactsPage = () => {
 
   const [debouncedSearch] = useDebounceValue(search, 200);
 
+  const [filterType, setFilterType] = useQueryState(
+    "filterType",
+    parseAsStringLiteral(contactFilterTypes).withDefault("all"),
+  );
+
   const currentOrganization = useQuery(
     api.domains.organizations.queries.getCurrentUserActiveOrganization,
   );
@@ -69,6 +79,7 @@ const ContactsPage = () => {
     currentOrganization?._id
       ? {
           search: debouncedSearch,
+          filterType,
           organizationId: currentOrganization._id,
         }
       : "skip",
@@ -126,7 +137,7 @@ const ContactsPage = () => {
         </Item>
 
         <Item>
-          <ItemContent>
+          <ItemContent className="w-full">
             <InputGroup>
               <InputGroupInput
                 value={search}
@@ -147,6 +158,24 @@ const ContactsPage = () => {
                 </InputGroupAddon>
               )}
             </InputGroup>
+          </ItemContent>
+
+          <ItemContent className="w-full">
+            <Tabs
+              value={filterType}
+              onValueChange={(value) =>
+                setFilterType(value as typeof filterType)
+              }
+              className="overflow-x-auto"
+            >
+              <TabsList>
+                {contactFilterTypes.map((type) => (
+                  <TabsTrigger key={type} value={type} className="capitalize">
+                    {contactFilterTypeUiLabels[type]}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
           </ItemContent>
         </Item>
 

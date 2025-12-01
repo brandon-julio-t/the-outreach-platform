@@ -13,6 +13,7 @@ import type * as auth from "../auth.js";
 import type * as domains_aiAssistantSettings_internalQueries from "../domains/aiAssistantSettings/internalQueries.js";
 import type * as domains_aiAssistantSettings_mutations from "../domains/aiAssistantSettings/mutations.js";
 import type * as domains_aiAssistantSettings_queries from "../domains/aiAssistantSettings/queries.js";
+import type * as domains_contacts_configs from "../domains/contacts/configs.js";
 import type * as domains_contacts_internalCrud from "../domains/contacts/internalCrud.js";
 import type * as domains_contacts_internalQueries from "../domains/contacts/internalQueries.js";
 import type * as domains_contacts_mutations from "../domains/contacts/mutations.js";
@@ -73,6 +74,7 @@ declare const fullApi: ApiFromModules<{
   "domains/aiAssistantSettings/internalQueries": typeof domains_aiAssistantSettings_internalQueries;
   "domains/aiAssistantSettings/mutations": typeof domains_aiAssistantSettings_mutations;
   "domains/aiAssistantSettings/queries": typeof domains_aiAssistantSettings_queries;
+  "domains/contacts/configs": typeof domains_contacts_configs;
   "domains/contacts/internalCrud": typeof domains_contacts_internalCrud;
   "domains/contacts/internalQueries": typeof domains_contacts_internalQueries;
   "domains/contacts/mutations": typeof domains_contacts_mutations;

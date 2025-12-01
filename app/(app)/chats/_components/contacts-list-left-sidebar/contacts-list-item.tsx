@@ -15,7 +15,7 @@ import { useQuery } from "convex-helpers/react/cache/hooks";
 import type { FunctionReturnType } from "convex/server";
 import { format, formatDistanceToNow } from "date-fns";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 type ContactData = FunctionReturnType<
   typeof api.domains.contacts.queries.getContacts
@@ -24,6 +24,8 @@ type ContactData = FunctionReturnType<
 export function ContactsListItem({ contact }: { contact: ContactData }) {
   const params = useParams();
   const contactId = params.contactId?.toString();
+
+  const searchParams = useSearchParams();
 
   const isActive = contactId === contact._id;
 
@@ -50,7 +52,7 @@ export function ContactsListItem({ contact }: { contact: ContactData }) {
 
   return (
     <Item variant={isActive ? "muted" : "default"} asChild>
-      <Link href={`/chats/${contact._id}`}>
+      <Link href={`/chats/${contact._id}?${searchParams.toString()}`}>
         <ItemContent>
           <ItemTitle className="w-full items-baseline">
             <div className="truncate">{contact.name}</div>

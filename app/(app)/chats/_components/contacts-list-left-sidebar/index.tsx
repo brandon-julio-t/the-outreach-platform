@@ -17,12 +17,17 @@ import {
 } from "@/components/ui/input-group";
 import { ItemGroup } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/convex/_generated/api";
+import {
+  contactFilterTypeUiLabels,
+  contactFilterTypes,
+} from "@/convex/domains/contacts/configs";
 import { usePaginatedQuery, useQuery } from "convex-helpers/react/cache/hooks";
 import { SearchIcon, XIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import { useDebounceValue } from "usehooks-ts";
 import { ContactsListItem } from "./contacts-list-item";
 
@@ -34,15 +39,21 @@ export function ContactsListLeftSidebar() {
 
   const [debouncedSearch] = useDebounceValue(search, 200);
 
+  const [filterType, setFilterType] = useQueryState(
+    "filterType",
+    parseAsStringLiteral(contactFilterTypes).withDefault("all"),
+  );
+
   const currentOrganization = useQuery(
     api.domains.organizations.queries.getCurrentUserActiveOrganization,
   );
 
   const contactsQuery = usePaginatedQuery(
-    api.domains.contacts.queries.getContactsForChatPage,
+    api.domains.contacts.queries.getContacts,
     currentOrganization?._id
       ? {
           search: debouncedSearch,
+          filterType,
           organizationId: currentOrganization._id,
         }
       : "skip",
@@ -59,7 +70,21 @@ export function ContactsListLeftSidebar() {
 
   return (
     <div className="flex h-(--page-height) flex-col">
-      <div className="border-b p-1">
+      <div className="flex flex-col gap-1 border-b p-1">
+        <Tabs
+          value={filterType}
+          onValueChange={(value) => setFilterType(value as typeof filterType)}
+          className="overflow-x-auto"
+        >
+          <TabsList>
+            {contactFilterTypes.map((type) => (
+              <TabsTrigger key={type} value={type} className="capitalize">
+                {contactFilterTypeUiLabels[type]}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+
         <InputGroup>
           <InputGroupInput
             value={search}

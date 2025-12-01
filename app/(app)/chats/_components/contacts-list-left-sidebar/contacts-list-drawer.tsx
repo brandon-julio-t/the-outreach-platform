@@ -51,7 +51,7 @@ export function ContactsListDrawer({
   );
 
   const contactsQuery = usePaginatedQuery(
-    api.domains.contacts.queries.getContactsForChatPage,
+    api.domains.contacts.queries.getContacts,
     currentOrganization?._id
       ? {
           search: debouncedSearch,

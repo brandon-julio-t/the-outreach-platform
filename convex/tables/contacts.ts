@@ -17,11 +17,25 @@ export const contacts = defineTable({
   aiAssistantDisabledReason: v.optional(v.string()),
 })
   .index("by_organizationId", ["organizationId"])
+
   .index("by_organizationId_phone", ["organizationId", "phone"])
+
   .index("by_organizationId_latestMessageTime", [
     "organizationId",
     "latestMessageTime",
   ])
+
+  .index("by_organizationId_goalsAchievedTime", [
+    "organizationId",
+    "goalsAchievedTime",
+  ])
+
+  .index("by_organizationId_aiAssistantDisabledTime", [
+    "organizationId",
+    "aiAssistantDisabledTime",
+    "latestMessageTime",
+  ])
+
   .searchIndex("search_name", {
     searchField: "name",
     filterFields: ["organizationId"],
